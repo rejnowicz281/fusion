@@ -1,0 +1,28 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.096);
+    backdrop-filter: blur(3px);
+    z-index: 4;
+}
+
+.modal {
+    background-color: rgb(28, 27, 34);
+    color: rgb(219, 223, 224);
+    box-shadow: 0 0 1px grey;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 400px;
+    width: 100%;
+    z-index: 4;
+    border-radius: 10px;
+    padding: 20px;
+    overflow: auto;
+}

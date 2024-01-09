@@ -94,3 +94,16 @@ export async function signOut() {
 
     return actionSuccess("signOut", {}, "/login");
 }
+
+export async function deleteUser(id) {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { data: user, error } = await supabase.from("users").delete().eq("id", id);
+
+    if (error) return actionError("deleteUser", { error });
+
+    await supabase.auth.signOut();
+
+    return actionSuccess("deleteUser", { id }, "/login");
+}

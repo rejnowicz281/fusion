@@ -1,0 +1,31 @@
+.button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.1s;
+    background-color: rgb(252, 70, 70);
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button:hover {
+    background-color: rgb(255, 98, 98);
+}
+
+.button:disabled {
+    background-color: rgb(191, 191, 191);
+    color: rgb(127, 127, 127);
+    cursor: not-allowed;
+}
+
+.sure {
+    text-align: center;
+    margin-bottom: 20px;
+}

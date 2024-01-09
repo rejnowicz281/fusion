@@ -1,0 +1,62 @@
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-buttons {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-button {
+    color: #a1a1a1;
+    background-color: rgb(10, 60, 70);
+    font-size: 20px;
+    margin: 0;
+    padding: 15px 0;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    margin-bottom: 1px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.main-button:last-child {
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 0;
+}
+
+.main-button:hover,
+.main-button.active,
+.main-button:disabled {
+    color: #c0c0c0;
+    background-color: rgb(12, 74, 87);
+}
+
+.main-button:disabled {
+    cursor: not-allowed;
+}
+
+.list-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.list {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+}
+
+@media (max-height: 680px) {
+    .list {
+        overflow-y: inherit;
+    }
+}

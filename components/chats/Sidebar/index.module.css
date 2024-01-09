@@ -1,0 +1,51 @@
+.wrapper {
+    position: relative;
+    flex: 1;
+    transition: 0.3s;
+    max-width: 350px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    padding: 100px 50px 50px 50px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.toggle {
+    display: none;
+    background-color: inherit;
+    border: none;
+    color: whitesmoke;
+    font-size: 40px;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+@media (max-width: 1000px) {
+    .wrapper {
+        background-color: #191e1f;
+        border-left: 1px solid #2c2c2c;
+        position: fixed;
+        right: -350px;
+        min-height: 100vh;
+        z-index: 1;
+    }
+    .toggle {
+        display: block;
+    }
+    .open {
+        right: 0;
+    }
+}
