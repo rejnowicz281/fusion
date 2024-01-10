@@ -1,7 +1,6 @@
 import MainSidebar from "@/components/sidebar/MainSidebar";
-import NavbarUsers from "@/components/sidebar/navbars/NavbarUsers";
+import UsersContainer from "@/components/sidebar/MainSidebar/UsersContainer";
 import { AuthProvider } from "@/providers/AuthProvider";
-import { ModalProvider } from "@/providers/ModalContext";
 import { PresenceProvider } from "@/providers/PresenceProvider";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
@@ -17,14 +16,12 @@ export default async function DashboardLayout({ children }) {
 
     return (
         <AuthProvider user={user}>
-            <ModalProvider>
-                <PresenceProvider>
-                    <div className={css.container}>
-                        <MainSidebar NavbarUsers={<NavbarUsers />} />
-                        <main className={css.main}>{children}</main>
-                    </div>
-                </PresenceProvider>
-            </ModalProvider>
+            <PresenceProvider>
+                <div className={css.container}>
+                    <MainSidebar UsersContainer={<UsersContainer />} />
+                    <main className={css.main}>{children}</main>
+                </div>
+            </PresenceProvider>
         </AuthProvider>
     );
 }

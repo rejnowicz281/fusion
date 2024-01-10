@@ -1,0 +1,12 @@
+.container {
+    position: relative;
+}
+
+.marker {
+    border-radius: 50%;
+    background-color: #2ecc71;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 1px solid #000000;
+}

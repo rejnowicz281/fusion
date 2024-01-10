@@ -1,27 +1,25 @@
-import { getUserInfo } from "@/actions/users";
-import DeleteUserButton from "@/components/auth/DeleteUserButton";
-import SendMessageLink from "@/components/general/SendMessageLink";
-import Image from "next/image";
+import { getChat } from "@/actions/chats";
+import MessagesContainer from "@/components/chats/MessagesContainer";
+import Sidebar from "@/components/chats/Sidebar";
+import FreshDataProvider from "@/providers/FreshDataProvider";
 import css from "./page.module.css";
 
-export default async function UserPage({ params: { id } }) {
-    const userInfo = await getUserInfo(id);
+export default async function UserChatPage({ params: { id } }) {
+    const chat = await getChat(id);
 
-    if (userInfo.error)
+    if (chat.error)
         return (
             <div className={css["error-container"]}>
-                An error occured while fetching this user's information. Are you sure the ID is correct? 🤔
+                An error occured while loading the chat. Are you sure this person exists? 🤔
             </div>
         );
 
     return (
-        <div className={css.container}>
-            <div className={css.header}>
-                <h1 className={css["user-name"]}>{userInfo.display_name}</h1>
-                <Image height="200" width="200" src={userInfo.avatar_url} alt="404" />
+        <FreshDataProvider>
+            <div className={css.container}>
+                <MessagesContainer recipient={chat.user} messages={chat.messages} />
+                <Sidebar />
             </div>
-            {id !== process.env.DEMO_USER_ID && <DeleteUserButton id={id} />}
-            <SendMessageLink userId={id} className={css["chat-link"]} />
-        </div>
+        </FreshDataProvider>
     );
 }

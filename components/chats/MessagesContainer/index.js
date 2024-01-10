@@ -1,5 +1,6 @@
 "use client";
 
+import PresenceAvatar from "@/components/general/PresenceAvatar";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useOptimistic, useTransition } from "react";
@@ -7,7 +8,7 @@ import CreateMessage from "./CreateMessage";
 import MessagesList from "./MessagesList";
 import css from "./index.module.css";
 
-export default function MessagesContainer({ messages, recipientId }) {
+export default function MessagesContainer({ messages, recipient }) {
     const [isPending, startTransition] = useTransition();
     const [optimisticMessages, setOptimisticMessages] = useOptimistic(messages);
 
@@ -16,14 +17,14 @@ export default function MessagesContainer({ messages, recipientId }) {
 
     useEffect(() => {
         const messagesChannel = supabase
-            .channel(`messages`)
+            .channel("messages")
             .on(
                 "postgres_changes",
                 {
                     schema: "public",
                     event: "*",
                     table: "messages",
-                    // add filters here
+                    filter: `sender_id=eq.${recipient.id}`,
                 },
                 (payload) => {
                     console.log("Change received", payload.new);
@@ -40,20 +41,41 @@ export default function MessagesContainer({ messages, recipientId }) {
     }, [supabase, router]);
 
     useEffect(() => {
-        // Ensure that the optimistic messages are always up to date
-        startTransition(() => setOptimisticMessages(messages));
+        startTransition(() => {
+            setOptimisticMessages(messages); // Ensure messages update
+        });
     }, [messages]);
 
     function addOptimisticMessage(message) {
-        setOptimisticMessages([...optimisticMessages, message]);
+        setOptimisticMessages((messages) => [...messages, message]);
+    }
+
+    function deleteOptimisticMessage(id) {
+        setOptimisticMessages((messages) => messages.filter((message) => message.id !== id));
     }
 
     return (
         <div className={css.wrapper}>
             <div className={css.container}>
-                <MessagesList messages={optimisticMessages} />
+                <div className={css.top}>
+                    <PresenceAvatar
+                        className={css["recipient-avatar"]}
+                        width={60}
+                        height={60}
+                        src={recipient.avatar_url}
+                        userId={recipient.id}
+                        alt={recipient.display_name}
+                    />
+                    <div className={css["recipient-info"]}>
+                        <div className={css["recipient-name"]}>{recipient.display_name}</div>
+                        {recipient.email !== recipient.display_name && (
+                            <div className={css["recipient-email"]}>{recipient.email}</div>
+                        )}
+                    </div>
+                </div>
+                <MessagesList messages={optimisticMessages} deleteOptimisticMessage={deleteOptimisticMessage} />
 
-                <CreateMessage addOptimisticMessage={addOptimisticMessage} recipientId={recipientId} />
+                <CreateMessage recipientId={recipient.id} addOptimisticMessage={addOptimisticMessage} />
             </div>
         </div>
     );

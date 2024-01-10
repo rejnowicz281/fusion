@@ -14,18 +14,3 @@ export async function getAllUsers() {
 
     return users;
 }
-
-export async function getUserInfo(id) {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { data: user, error } = await supabase
-        .from("users")
-        .select("id, email, display_name, avatar_url")
-        .eq("id", id)
-        .single();
-
-    if (error) return actionError("getUserInfo", { error });
-
-    return user;
-}

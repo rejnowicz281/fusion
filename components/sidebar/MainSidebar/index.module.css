@@ -1,14 +1,11 @@
 .wrapper {
     position: relative;
     transition: 0.3s;
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
 .container {
-    padding: 100px 50px 50px 50px;
     position: absolute;
     top: 0;
     left: 0;
@@ -17,6 +14,55 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    background-color: #000000;
+    color: white;
+    border-right: 1px solid #202020;
+}
+
+.current-user-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 50px 20px 0 20px;
+    word-break: break-all;
+    text-align: center;
+}
+
+.current-user-avatar {
+    border-radius: 50%;
+}
+
+.current-user-name {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.current-user-email {
+    color: #ccc;
+}
+
+.settings-wrapper {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.settings-link {
+    display: inline-block;
+    border: none;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 40px;
+    border-radius: 5px;
+    background-color: #202020;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.settings-link:hover,
+.settings-link-active {
+    background-color: #303030;
 }
 
 .toggle {
@@ -26,54 +72,22 @@
     color: whitesmoke;
     font-size: 40px;
     position: fixed;
+    padding: 0;
     top: 15px;
     left: 15px;
     cursor: pointer;
     z-index: 4;
-}
-
-.current-user-wrapper {
-    text-align: center;
-}
-
-.buttons {
-    display: flex;
-    margin-top: 15px;
-    border-bottom: 1px solid #a1a1a1;
-}
-
-.buttons > button {
-    flex: 1;
-    background-color: inherit;
-    border: none;
-    color: white;
-    font-weight: bold;
-    padding: 20px 10px;
-    cursor: pointer;
     transition: 0.1s;
 }
 
-.buttons > button:hover {
-    background-color: rgb(17, 70, 70);
-}
-
-.buttons > button:first-child {
-    border-top-left-radius: 20px;
-}
-
-.buttons > button:last-child {
-    border-top-right-radius: 20px;
-}
-
-#active-button {
-    background-color: #30302f;
+.toggle:hover {
+    background-color: inherit;
+    color: #ccc;
 }
 
 @media (max-width: 1500px) {
     .wrapper {
-        background-color: #1a1a1a;
-        border-right: 1px solid #2c2c2c;
-        left: -500px;
+        left: -400px;
         position: fixed;
         z-index: 3;
         min-height: 100vh;
@@ -83,21 +97,5 @@
     }
     .open {
         left: 0;
-    }
-}
-
-/* for devices up to 350px */
-@media (max-width: 350px) {
-    .container {
-        padding: 100px 20px 20px 20px;
-    }
-    .buttons {
-        flex-direction: column;
-    }
-    .buttons > button:first-child {
-        border-top-right-radius: 20px;
-    }
-    .buttons > button:last-child {
-        border-top-right-radius: 0;
     }
 }

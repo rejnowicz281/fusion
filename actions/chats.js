@@ -3,6 +3,7 @@
 import actionError from "@/utils/actions/actionError";
 import actionSuccess from "@/utils/actions/actionSuccess";
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function getChat(userId) {
@@ -54,6 +55,8 @@ export async function createMessage(formData) {
 
     if (messageError) return actionError("createMessage", { messageError });
 
+    revalidatePath(`/users/${recipient_id}`);
+
     return actionSuccess("createMessage", { text, sender: user.id, recipient: recipient_id });
 }
 
@@ -61,9 +64,16 @@ export async function deleteMessage(id) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const { data: message, error } = await supabase.from("messages").delete().eq("id", id);
+    const { data: message, error } = await supabase
+        .from("messages")
+        .delete()
+        .eq("id", id)
+        .select("recipient_id")
+        .single();
 
     if (error) return actionError("deleteMessage", { error });
+
+    revalidatePath(`/users/${message.recipient_id}`);
 
     return actionSuccess("deleteMessage", { id });
 }

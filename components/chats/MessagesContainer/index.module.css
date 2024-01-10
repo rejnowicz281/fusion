@@ -6,7 +6,6 @@
 }
 
 .container {
-    padding: 100px 50px 50px 50px;
     box-sizing: border-box;
     position: absolute;
     top: 0;
@@ -19,15 +18,27 @@
     flex-direction: column;
 }
 
-@media (max-width: 700px) {
-    .container {
-        padding: 100px 20px 20px 20px;
-    }
+.top {
+    display: flex;
+    gap: 20px;
+    padding: 40px 20px 20px 40px;
+    border-bottom: 1px solid #202020;
 }
 
-@media (max-height: 550px) {
-    .container {
-        padding-top: 0;
-        margin-top: 100px;
-    }
+.recipient-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.recipient-avatar {
+    border-radius: 50%;
+}
+
+.recipient-name {
+    font-weight: bold;
+}
+
+.recipient-email {
+    color: #ccc;
 }
