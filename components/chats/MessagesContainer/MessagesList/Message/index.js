@@ -32,7 +32,7 @@ export default function Message({ message, deleteOptimisticMessage }) {
                     isSender ? css["message-box-black"] : css["message-box-grey"]
                 }`}`}
             >
-                <div className={css.text}>{message.text}</div>
+                <div className={isSender ? css["text-reverse"] : ""}>{message.text}</div>
                 <div className={css.bottom}>
                     {message.loading ? (
                         <div className={css.loading}>
