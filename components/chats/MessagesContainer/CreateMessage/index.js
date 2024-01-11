@@ -18,6 +18,7 @@ export default function CreateMessage({ recipientId, addOptimisticMessage }) {
             text,
             sender: user,
             loading: true,
+            created_at: Date.now(),
         };
 
         addOptimisticMessage(optimisticMessage);

@@ -1,6 +1,7 @@
 "use client";
 
 import PresenceAvatar from "@/components/general/PresenceAvatar";
+import { assignTimestamp } from "@/utils/general/generateTimestamps";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useOptimistic, useTransition } from "react";
@@ -47,11 +48,21 @@ export default function MessagesContainer({ messages, recipient }) {
     }, [messages]);
 
     function addOptimisticMessage(message) {
-        setOptimisticMessages((messages) => [...messages, message]);
+        setOptimisticMessages((messages) => {
+            const lastMessage = messages[messages.length - 1];
+            assignTimestamp(message, lastMessage);
+
+            return [...messages, message];
+        });
     }
 
     function deleteOptimisticMessage(id) {
-        setOptimisticMessages((messages) => messages.filter((message) => message.id !== id));
+        setOptimisticMessages((messages) => {
+            const messageIndex = messages.findIndex((message) => message.id === id);
+            assignTimestamp(messages[messageIndex + 1], messages[messageIndex - 1]);
+
+            return messages.filter((message) => message.id !== id);
+        });
     }
 
     return (

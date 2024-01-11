@@ -1,15 +1,15 @@
 .message {
     display: flex;
     flex-direction: row;
-    padding: 40px 40px 0 40px;
+    padding: 0 40px;
     gap: 15px;
 }
 
-.messsage-row {
+.flex-row {
     flex-direction: row;
 }
 
-.message-row-reverse {
+.flex-row-reverse {
     flex-direction: row-reverse;
 }
 
@@ -17,61 +17,42 @@
     border-radius: 50%;
 }
 
-.message-box {
+.text-box {
     padding: 15px;
     border-radius: 5px;
     max-width: 500px;
 }
 
-.message-box-grey {
+.text-box-grey {
     background-color: #2c2c2c;
 }
 
-.message-box-black {
+.text-box-black {
     background-color: rgb(0, 0, 0);
 }
 
-.text-reverse {
-    text-align: end;
+.options {
+    align-self: center;
 }
 
-.bottom {
-    margin-top: 20px;
-    gap: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.delete,
-.loading {
-    border: none;
-    background-color: inherit;
-    padding: 0;
-    display: block;
-    font-size: 20px;
+.message:hover .delete {
+    opacity: 1;
 }
 
 .delete {
-    color: rgb(255, 132, 132);
-    cursor: pointer;
-    transition: 0.1s;
+    opacity: 0;
+    background-color: inherit;
+    padding: 0;
+    transition: 0.2s;
 }
 
 .delete:hover {
-    color: rgb(255, 69, 69);
+    color: #ccc;
     background-color: inherit;
 }
 
 .delete:disabled {
     background-color: inherit;
-}
-
-.date {
-    color: #ccc;
-    font-size: 12px;
-    font-weight: bold;
 }
 
 .loading-spin {

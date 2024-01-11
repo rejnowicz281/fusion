@@ -1,5 +1,6 @@
 "use client";
 
+import formatMessageDate from "@/utils/general/formatMessageDate";
 import { useEffect, useRef } from "react";
 import Message from "./Message";
 import css from "./index.module.css";
@@ -28,7 +29,12 @@ export default function MessagesList({ messages, deleteOptimisticMessage }) {
             <div ref={messagesRef} className={css.container}>
                 {messages.length > 0 ? (
                     messages.map((message) => (
-                        <Message message={message} deleteOptimisticMessage={deleteOptimisticMessage} />
+                        <>
+                            {message.timestamp && (
+                                <div className={css.timestamp}>{formatMessageDate(message.created_at)}</div>
+                            )}
+                            <Message message={message} deleteOptimisticMessage={deleteOptimisticMessage} />
+                        </>
                     ))
                 ) : (
                     <div className={css["no-messages"]}>

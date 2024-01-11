@@ -12,11 +12,19 @@
     left: 0;
     bottom: 0;
     overflow-y: auto;
-    padding-bottom: 30px;
-    word-break: break-all;
+    word-break: break-word;
     display: flex;
     flex-direction: column;
+    padding: 40px 0;
+    gap: 40px;
     flex: 1;
+}
+
+.timestamp {
+    text-align: center;
+    color: #ccc;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .no-messages {

@@ -2,6 +2,7 @@
 
 import actionError from "@/utils/actions/actionError";
 import actionSuccess from "@/utils/actions/actionSuccess";
+import generateTimestamps from "@/utils/general/generateTimestamps";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -30,8 +31,11 @@ export async function getChat(userId) {
     if (messagesData.error) return actionError("getMessages", { error: messagesData.error });
     if (userData.error) return actionError("getMessages", { error: userData.error });
 
+    const messages = messagesData.data;
+    generateTimestamps(messages);
+
     const result = {
-        messages: messagesData.data,
+        messages,
         user: userData.data,
     };
 
