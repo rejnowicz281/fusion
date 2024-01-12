@@ -86,7 +86,7 @@ export default function MessagesContainer({ messages, recipient }) {
                 </div>
                 <MessagesList messages={optimisticMessages} deleteOptimisticMessage={deleteOptimisticMessage} />
 
-                <CreateMessage recipientId={recipient.id} addOptimisticMessage={addOptimisticMessage} />
+                <CreateMessage recipient={recipient} messages={messages} addOptimisticMessage={addOptimisticMessage} />
             </div>
         </div>
     );

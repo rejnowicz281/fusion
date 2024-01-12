@@ -1,5 +1,23 @@
-.form {
+.container {
     border-top: 1px solid #222528;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.prompt-button {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: inherit;
+    font-size: 30px;
+}
+
+.prompt-button:disabled {
+    background-color: inherit;
+}
+
+.form {
+    flex: 1;
     display: flex;
     align-items: center;
 }
@@ -7,7 +25,7 @@
 .input {
     flex: 1;
     border: none;
-    padding: 35px;
+    padding: 30px;
     background-color: inherit;
     border-top-left-radius: 25px;
     font-weight: 500;
@@ -17,4 +35,17 @@
 
 .input:focus {
     outline: none;
+}
+
+.prompt-loading {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
