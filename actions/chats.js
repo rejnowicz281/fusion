@@ -15,7 +15,7 @@ export async function getChat(userId) {
         data: { user },
     } = await supabase.auth.getUser();
 
-    const [messagesData, userData] = await Promise.all([
+    const [messagesData, userData, bookmarkedData] = await Promise.all([
         supabase
             .from("messages")
             .select(
@@ -26,6 +26,7 @@ export async function getChat(userId) {
             )
             .order("created_at", { ascending: true }),
         supabase.from("users").select("id, email, display_name, avatar_url").eq("id", userId).single(),
+        supabase.from("bookmarks").select("id").eq("bookmarked_id", userId).eq("user_id", user.id).single(),
     ]);
 
     if (messagesData.error) return actionError("getMessages", { error: messagesData.error });
@@ -38,6 +39,8 @@ export async function getChat(userId) {
         messages,
         user: userData.data,
     };
+
+    if (bookmarkedData.data) result.user.bookmark = bookmarkedData.data.id;
 
     return result;
 }

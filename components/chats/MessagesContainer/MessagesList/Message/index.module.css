@@ -3,6 +3,7 @@
     flex-direction: row;
     padding: 0 40px;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .flex-row {
@@ -11,6 +12,12 @@
 
 .flex-row-reverse {
     flex-direction: row-reverse;
+}
+
+.avatar-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .avatar {

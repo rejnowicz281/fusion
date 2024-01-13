@@ -15,9 +15,10 @@
     border-bottom: 1px solid #202020;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 15px;
     padding: 20px 20px 20px 15px;
     word-break: break-word;
-    gap: 10px;
     cursor: pointer;
     transition: 0.1s;
 }
@@ -27,10 +28,21 @@
     background-color: #202020;
 }
 
+.user-link-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .avatar {
     border-radius: 50%;
 }
 
 .display-name {
     font-weight: bold;
+}
+
+.bookmark {
+    font-size: 20px;
+    flex-shrink: 0;
 }
