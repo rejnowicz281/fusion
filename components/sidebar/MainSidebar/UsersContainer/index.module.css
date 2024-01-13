@@ -16,6 +16,7 @@
     display: flex;
     align-items: center;
     padding: 20px 20px 20px 15px;
+    word-break: break-word;
     gap: 10px;
     cursor: pointer;
     transition: 0.1s;

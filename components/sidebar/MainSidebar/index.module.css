@@ -30,6 +30,7 @@
 }
 
 .current-user-avatar {
+    flex: 1 0;
     border-radius: 50%;
 }
 

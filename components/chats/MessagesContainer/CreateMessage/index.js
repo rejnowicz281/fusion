@@ -43,7 +43,7 @@ export default function CreateMessage({ recipient, addOptimisticMessage, message
             <form className={css.form} ref={formRef} action={handleAction}>
                 <input type="hidden" name="recipient_id" value={recipient.id} />
                 <input placeholder="Type your message here..." className={css.input} type="text" name="text" />
-                <button>SEND</button>
+                <button className={css.submit}>SEND</button>
             </form>
         </div>
     );
