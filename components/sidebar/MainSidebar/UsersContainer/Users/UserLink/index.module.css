@@ -1,15 +1,4 @@
-.top {
-    padding: 15px;
-    font-size: 20px;
-    border-top: 1px solid #202020;
-    border-bottom: 1px solid #202020;
-}
-
-.contacts-count {
-    color: #8e8e8e;
-}
-
-.user-link {
+.link {
     color: inherit;
     text-decoration: none;
     border-bottom: 1px solid #202020;
@@ -23,12 +12,12 @@
     transition: 0.1s;
 }
 
-.user-link:hover,
-.user-link-active {
+.link:hover,
+.active {
     background-color: #202020;
 }
 
-.user-link-left {
+.info-container {
     display: flex;
     align-items: center;
     gap: 10px;

@@ -1,12 +1,12 @@
 "use client";
 
-import NavLink from "@/components/general/NavLink";
-import PresenceAvatar from "@/components/general/PresenceAvatar";
 import usePresenceContext from "@/providers/PresenceProvider";
-import { IoStar } from "react-icons/io5";
-import css from "./index.module.css";
+import { useState } from "react";
+import ToggableSearch from "./ToggableSearch";
+import UserLink from "./UserLink";
 
 export default function Users({ users }) {
+    const [searchQuery, setSearchQuery] = useState("");
     const { loggedUsers } = usePresenceContext();
 
     users.sort((a, b) => {
@@ -18,36 +18,19 @@ export default function Users({ users }) {
         return a.display_name.localeCompare(b.display_name); // sort by display name
     });
 
+    users = users.filter((user) => {
+        const displayName = user.display_name.toLowerCase();
+        const query = searchQuery.toLowerCase();
+
+        return displayName.includes(query); // filter by display name
+    });
+
     return (
         <>
-            <div className={css.top}>
-                Contacts <span className={css["contacts-count"]}>({users.length})</span>
-            </div>
-            <div className={css.users}>
-                {users.map((user) => (
-                    <NavLink
-                        href={`/users/${user.id}`}
-                        className={css["user-link"]}
-                        activeClassName={css["user-link-active"]}
-                        key={user.id}
-                    >
-                        <div className={css["user-link-left"]}>
-                            <PresenceAvatar
-                                userId={user.id}
-                                width={50}
-                                height={50}
-                                alt={user.display_name}
-                                src={user.avatar_url}
-                                className={css.avatar}
-                            />
-                            <div className={css["user-info"]}>
-                                <div className={css["display-name"]}>{user.display_name}</div>
-                            </div>
-                        </div>
-                        {user.bookmark && <IoStar className={css.bookmark} />}
-                    </NavLink>
-                ))}
-            </div>
+            <ToggableSearch setSearchQuery={setSearchQuery} searchQuery={searchQuery} usersCount={users.length} />
+            {users.map((user) => (
+                <UserLink user={user} key={user.id} />
+            ))}
         </>
     );
 }
