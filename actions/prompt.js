@@ -16,6 +16,7 @@ export default async function generatePrompt(currentUser, recipient, messages) {
 
     try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
+            cache: "no-store",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
