@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteUser } from "@/actions/auth";
-import AsyncButton from "@/components/general/AsyncButton";
+import SubmitButton from "@/components/general/SubmitButton";
 import useAuthContext from "@/providers/AuthProvider";
 
 export default function DeleteAccountButton(demoUserId) {
@@ -10,12 +10,9 @@ export default function DeleteAccountButton(demoUserId) {
     if (user.id === demoUserId || user.email === "demo@demo.demo") return;
 
     return (
-        <AsyncButton
-            content="Delete your account"
-            loading="Deleting..."
-            onClick={async () => {
-                await deleteUser(user.id);
-            }}
-        />
+        <form action={deleteUser}>
+            <input type="hidden" name="id" value={user.id} />
+            <SubmitButton content="Delete your account" loading="Deleting..." />
+        </form>
     );
 }

@@ -6,19 +6,18 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-export async function createBookmark(bookmarked_id) {
+export async function createBookmark(formdata) {
     const actionName = "createBookmark";
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    const bookmarked_id = formdata.get("bookmarked_id");
+    const user_id = formdata.get("user_id");
 
     const { data: bookmark, bookmarkError } = await supabase
         .from("bookmarks")
-        .insert([{ user_id: user.id, bookmarked_id }])
+        .insert([{ user_id, bookmarked_id }])
         .select("id");
 
     if (bookmarkError) return actionError(actionName, { bookmarkError });
@@ -28,11 +27,13 @@ export async function createBookmark(bookmarked_id) {
     return actionSuccess(actionName, { bookmarked: bookmarked_id });
 }
 
-export async function deleteBookmark(id) {
+export async function deleteBookmark(formData) {
     const actionName = "deleteBookmark";
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+
+    const id = formData.get("id");
 
     const { data: bookmark, error } = await supabase
         .from("bookmarks")

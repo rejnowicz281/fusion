@@ -49,27 +49,24 @@ export async function createMessage(formData) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
     const text = formData.get("text");
+    const sender_id = formData.get("sender_id");
     const recipient_id = formData.get("recipient_id");
 
-    const { data: message, messageError } = await supabase
-        .from("messages")
-        .insert([{ text, sender_id: user.id, recipient_id }]);
+    const { data: message, messageError } = await supabase.from("messages").insert([{ text, sender_id, recipient_id }]);
 
     if (messageError) return actionError("createMessage", { messageError });
 
     revalidatePath(`/users/${recipient_id}`);
 
-    return actionSuccess("createMessage", { text, sender: user.id, recipient: recipient_id });
+    return actionSuccess("createMessage", { text, sender_id, recipient_id });
 }
 
-export async function deleteMessage(id) {
+export async function deleteMessage(formData) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+
+    const id = formData.get("id");
 
     const { data: message, error } = await supabase
         .from("messages")

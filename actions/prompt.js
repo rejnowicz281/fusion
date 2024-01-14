@@ -2,23 +2,14 @@
 
 import actionError from "@/utils/actions/actionError";
 import initialPrompt from "@/utils/prompts/initialPrompt";
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 
-export default async function generatePrompt(recipient, messages) {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user.id === recipient.id) return "Am I really talking to myself...?";
+export default async function generatePrompt(currentUser, recipient, messages) {
+    if (currentUser.id === recipient.id) return "Am I really talking to myself...?";
     const actionName = "generatePrompt";
 
     const formattedMessages = messages.map((message) => {
         return {
-            role: message.sender.id === user.id ? "assistant" : "user", // have current user be the assistant
+            role: message.sender.id === currentUser.id ? "assistant" : "user", // have current user be the assistant
             content: message.text,
         };
     });
@@ -32,7 +23,7 @@ export default async function generatePrompt(recipient, messages) {
             method: "POST",
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [initialPrompt(user, recipient), ...formattedMessages],
+                messages: [initialPrompt(currentUser, recipient), ...formattedMessages],
                 temperature: 0.4,
                 top_p: 1,
                 frequency_penalty: 0,

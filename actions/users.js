@@ -1,5 +1,3 @@
-"use server";
-
 import actionError from "@/utils/actions/actionError";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";

@@ -35,12 +35,13 @@ export default function CreateMessage({ recipient, addOptimisticMessage, message
     return (
         <div className={css.container}>
             <AsyncButton
-                onClick={async () => alert(await generatePrompt(recipient, messages))}
+                onClick={async () => alert(await generatePrompt(user, recipient, messages))}
                 className={css["prompt-button"]}
                 content={<TbPrompt />}
                 loading={<AiOutlineLoading className={css["prompt-loading"]} />}
             />
             <form className={css.form} ref={formRef} action={handleAction}>
+                <input type="hidden" name="sender_id" value={user.id} />
                 <input type="hidden" name="recipient_id" value={recipient.id} />
                 <input placeholder="Type your message here..." className={css.input} type="text" name="text" />
                 <button className={css.submit}>SEND</button>

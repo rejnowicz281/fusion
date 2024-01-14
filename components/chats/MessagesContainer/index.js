@@ -1,8 +1,9 @@
 "use client";
 
 import { createBookmark, deleteBookmark } from "@/actions/bookmarks";
-import AsyncButton from "@/components/general/AsyncButton";
 import PresenceAvatar from "@/components/general/PresenceAvatar";
+import SubmitButton from "@/components/general/SubmitButton";
+import useAuthContext from "@/providers/AuthProvider";
 import { assignTimestamp } from "@/utils/general/generateTimestamps";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
@@ -16,6 +17,7 @@ import css from "./index.module.css";
 export default function MessagesContainer({ messages, recipient }) {
     const [isPending, startTransition] = useTransition();
     const [optimisticMessages, setOptimisticMessages] = useOptimistic(messages);
+    const { user } = useAuthContext();
 
     const router = useRouter();
     const supabase = createClientComponentClient();
@@ -90,16 +92,26 @@ export default function MessagesContainer({ messages, recipient }) {
                         </div>
                     </div>
                     <div className={css["top-right"]}>
-                        <AsyncButton
-                            className={css["bookmark-button"]}
-                            content={recipient.bookmark ? <IoStar /> : <IoStarOutline />}
-                            loading={<AiOutlineLoading className={css["bookmark-loading"]} />}
-                            onClick={async () => {
-                                recipient.bookmark
-                                    ? await deleteBookmark(recipient.bookmark)
-                                    : await createBookmark(recipient.id);
-                            }}
-                        />
+                        {recipient.bookmark ? (
+                            <form action={deleteBookmark}>
+                                <input type="hidden" name="id" value={recipient.bookmark} />
+                                <SubmitButton
+                                    className={css["bookmark-button"]}
+                                    content={<IoStar />}
+                                    loading={<AiOutlineLoading className={css["bookmark-loading"]} />}
+                                />
+                            </form>
+                        ) : (
+                            <form action={createBookmark}>
+                                <input type="hidden" name="user_id" value={user.id} />
+                                <input type="hidden" name="bookmarked_id" value={recipient.id} />
+                                <SubmitButton
+                                    className={css["bookmark-button"]}
+                                    content={<IoStarOutline />}
+                                    loading={<AiOutlineLoading className={css["bookmark-loading"]} />}
+                                />
+                            </form>
+                        )}
                     </div>
                 </div>
                 <MessagesList messages={optimisticMessages} deleteOptimisticMessage={deleteOptimisticMessage} />
