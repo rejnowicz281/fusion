@@ -1,0 +1,17 @@
+.link {
+    display: inline-block;
+    border: none;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 40px;
+    border-radius: 5px;
+    background-color: #202020;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.link:hover,
+.active {
+    background-color: #303030;
+}

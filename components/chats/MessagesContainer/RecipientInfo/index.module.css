@@ -1,0 +1,62 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 40px 20px 20px 40px;
+    border-bottom: 1px solid #202020;
+}
+
+.recipient-section {
+    word-break: break-word;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.name-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.avatar {
+    border-radius: 50%;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.email {
+    color: #ccc;
+}
+
+.bookmark-button {
+    font-size: 30px;
+    padding: 0;
+    background-color: inherit;
+}
+
+.bookmark-button:hover {
+    background-color: inherit;
+    color: #ccc;
+}
+
+.bookmark-button:disabled {
+    background-color: inherit;
+}
+
+.bookmark-loading {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

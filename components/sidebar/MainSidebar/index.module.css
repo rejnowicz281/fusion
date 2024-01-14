@@ -16,54 +16,13 @@
     flex-direction: column;
     background-color: #000000;
     color: white;
+    padding-top: 30px;
     border-right: 1px solid #202020;
-}
-
-.current-user-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 50px 20px 0 20px;
-    word-break: break-all;
-    text-align: center;
-}
-
-.current-user-avatar {
-    flex: 1 0;
-    border-radius: 50%;
-}
-
-.current-user-name {
-    margin-top: 20px;
-    font-weight: bold;
-}
-
-.current-user-email {
-    color: #ccc;
 }
 
 .settings-wrapper {
     text-align: center;
-    margin: 20px 0;
-}
-
-.settings-link {
-    display: inline-block;
-    border: none;
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    padding: 10px 40px;
-    border-radius: 5px;
-    background-color: #202020;
-    cursor: pointer;
-    transition: 0.1s;
-}
-
-.settings-link:hover,
-.settings-link-active {
-    background-color: #303030;
+    padding-bottom: 20px;
 }
 
 .toggle {

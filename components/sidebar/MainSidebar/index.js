@@ -1,11 +1,11 @@
 "use client";
 
-import NavLink from "@/components/general/NavLink";
 import useAuthContext from "@/providers/AuthProvider";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
+import CurrentUser from "./CurrentUser";
+import SettingsLink from "./SettingsLink";
 import css from "./index.module.css";
 
 export default function MainSidebar({ UsersContainer }) {
@@ -29,28 +29,12 @@ export default function MainSidebar({ UsersContainer }) {
             </button>
             <div className={`${css.wrapper}${open ? ` ${css.open}` : ""}`}>
                 <aside className={css.container}>
-                    <div className={css["current-user-wrapper"]}>
-                        <Image
-                            className={css["current-user-avatar"]}
-                            width={150}
-                            height={150}
-                            alt="Your avatar"
-                            src={user.avatar_url}
-                        />
-                        <div className={css["current-user-name"]}>{user.display_name}</div>
-                        {user.email !== user.display_name && (
-                            <div className={css["current-user-email"]}>{user.email}</div>
-                        )}
-                    </div>
+                    <CurrentUser user={user} />
+
                     <div className={css["settings-wrapper"]}>
-                        <NavLink
-                            activeClassName={css["settings-link-active"]}
-                            className={css["settings-link"]}
-                            href="/settings"
-                        >
-                            SETTINGS
-                        </NavLink>
+                        <SettingsLink />
                     </div>
+
                     {UsersContainer}
                 </aside>
             </div>
