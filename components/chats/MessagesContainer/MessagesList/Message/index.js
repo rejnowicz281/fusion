@@ -38,7 +38,11 @@ export default function Message({ message, deleteOptimisticMessage }) {
                     message.sender.id === user.id && (
                         <form
                             action={async (formData) => {
-                                deleteMessage(formData);
+                                await deleteMessage(formData);
+
+                                const id = formData.get("id");
+
+                                deleteOptimisticMessage(id);
                             }}
                         >
                             <input type="hidden" name="id" value={message.id} />
