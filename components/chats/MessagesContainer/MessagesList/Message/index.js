@@ -2,8 +2,10 @@ import { deleteMessage } from "@/actions/chats";
 import PresenceAvatar from "@/components/general/PresenceAvatar";
 import SubmitButton from "@/components/general/SubmitButton";
 import useAuthContext from "@/providers/AuthProvider";
+import formatMessageDate from "@/utils/general/formatMessageDate";
 import { AiOutlineLoading } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { Tooltip } from "react-tooltip";
 import css from "./index.module.css";
 
 export default function Message({ message, deleteOptimisticMessage }) {
@@ -16,7 +18,7 @@ export default function Message({ message, deleteOptimisticMessage }) {
             className={`${css.message}${isSender ? ` ${css["flex-row-reverse"]}` : ` ${css["flex-row"]}`}`}
             key={message.id}
         >
-            <div className={css["avatar-wrapper"]}>
+            <div data-tooltip-content={message.sender.display_name} className={css["avatar-wrapper"]}>
                 <PresenceAvatar
                     className={css.avatar}
                     height={50}
@@ -26,9 +28,14 @@ export default function Message({ message, deleteOptimisticMessage }) {
                     userId={message.sender.id}
                 />
             </div>
-            <div className={`${css["text-box"]}${` ${isSender ? css["text-box-black"] : css["text-box-grey"]}`}`}>
+            <Tooltip anchorSelect={`.${css["avatar-wrapper"]}`} />
+            <div
+                data-tooltip-content={formatMessageDate(message.created_at)}
+                className={`${css["text-box"]}${` ${isSender ? css["text-box-black"] : css["text-box-grey"]}`}`}
+            >
                 {message.text}
             </div>
+            <Tooltip anchorSelect={`.${css["text-box"]}`} />
             <div className={css.options}>
                 {message.loading ? (
                     <div className={css.loading}>
