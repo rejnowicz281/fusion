@@ -50,7 +50,7 @@ export async function signUp(formData) {
 
     const avatar_url = avatarFile.type.startsWith("image/")
         ? bucket.getPublicUrl(fileName).data.publicUrl
-        : "https://dlfsmyddxqmebxbgiyck.supabase.co/storage/v1/object/public/avatars/default_avatar.jpg";
+        : process.env.DEFAULT_AVATAR_URL;
 
     const { error } = await supabase.auth.signUp({
         email,
