@@ -1,6 +1,6 @@
 import demoLogin from "@/actions/auth/modify/demo-login";
 import SubmitButton from "@/components/general/submit-button";
-import { BiSolidSkipNextCircle } from "react-icons/bi";
+import { BiSolidSkipNextCircle } from "@react-icons/all-files/bi/BiSolidSkipNextCircle";
 import css from "./index.module.css";
 
 const DemoLoginButton = () => {

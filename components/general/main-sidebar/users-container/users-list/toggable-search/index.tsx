@@ -1,5 +1,5 @@
+import { FiSearch } from "@react-icons/all-files/fi/FiSearch";
 import React, { FC, useState } from "react";
-import { FiSearch } from "react-icons/fi";
 import css from "./index.module.css";
 
 type ToggableSearchProps = {

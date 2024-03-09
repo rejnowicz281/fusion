@@ -1,8 +1,8 @@
 import NavLink from "@/components/general/nav-link";
 import PresenceAvatar from "@/components/general/presence-avatar";
 import { User } from "@/types/user";
+import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { FC } from "react";
-import { IoStar } from "react-icons/io5";
 import css from "./index.module.css";
 
 const UserLink: FC<{ user: User }> = ({ user }) => {

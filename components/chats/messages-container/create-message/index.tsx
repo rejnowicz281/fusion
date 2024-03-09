@@ -6,9 +6,9 @@ import AsyncButton from "@/components/general/async-button";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
+import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
+import { TbPrompt } from "@react-icons/all-files/tb/TbPrompt";
 import { FC, useRef } from "react";
-import { AiOutlineLoading } from "react-icons/ai";
-import { TbPrompt } from "react-icons/tb";
 import css from "./index.module.css";
 
 type CreateMessageProps = {

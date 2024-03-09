@@ -1,7 +1,7 @@
 "use client";
 
+import { FaXmark } from "@react-icons/all-files/fa6/FaXmark";
 import { FC, useRef, useState } from "react";
-import { FaXmark } from "react-icons/fa6";
 import css from "./index.module.css";
 
 type ImagePickerProps = {

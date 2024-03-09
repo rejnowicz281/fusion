@@ -1,7 +1,7 @@
 "use client";
 
+import { AiOutlineInfoCircle } from "@react-icons/all-files/ai/AiOutlineInfoCircle";
 import { useState } from "react";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import css from "./index.module.css";
 
 const Sidebar = () => {

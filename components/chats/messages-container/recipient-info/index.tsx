@@ -4,9 +4,10 @@ import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import useAuthContext from "@/providers/auth-provider";
 import { User } from "@/types/user";
+import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
+import { IoStar } from "@react-icons/all-files/io5/IoStar";
+import { IoStarOutline } from "@react-icons/all-files/io5/IoStarOutline";
 import { FC } from "react";
-import { AiOutlineLoading } from "react-icons/ai";
-import { IoStar, IoStarOutline } from "react-icons/io5";
 import css from "./index.module.css";
 
 const RecipientInfo: FC<{ recipient: User }> = ({ recipient }) => {

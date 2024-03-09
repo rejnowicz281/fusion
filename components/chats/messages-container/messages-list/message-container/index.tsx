@@ -4,9 +4,9 @@ import SubmitButton from "@/components/general/submit-button";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
 import formatMessageDate from "@/utils/general/format-message-date";
+import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
+import { RiDeleteBinLine } from "@react-icons/all-files/ri/RiDeleteBinLine";
 import { FC } from "react";
-import { AiOutlineLoading } from "react-icons/ai";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { Tooltip } from "react-tooltip";
 import css from "./index.module.css";
 

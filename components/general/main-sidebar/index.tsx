@@ -1,9 +1,9 @@
 "use client";
 
 import useAuthContext from "@/providers/auth-provider";
+import { HiMiniBars3BottomLeft } from "@react-icons/all-files/hi2/HiMiniBars3BottomLeft";
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import CurrentUser from "./current-user";
 import css from "./index.module.css";
 import SettingsLink from "./settings-link";
