@@ -45,7 +45,7 @@ const getChat = async (userId: string) => {
         user,
     };
 
-    if (bookmark && bookmark.length > 0) result.user.bookmark = bookmark[0].id;
+    if (bookmark && bookmark.length > 0) result.user.bookmark_id = bookmark[0].id;
 
     return actionSuccess(actionName, result, { logData: false });
 };

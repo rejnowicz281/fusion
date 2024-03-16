@@ -11,9 +11,19 @@ const Users: FC<{ users: User[] }> = ({ users }) => {
     const { loggedUsers } = usePresenceContext();
 
     users.sort((a, b) => {
-        if (a.id === b.id) return 0; // if the users are the same, don't sort them
-        if (a.bookmark && !b.bookmark) return -1; // if a is bookmarked and b is not, put a first
-        if (!a.bookmark && b.bookmark) return 1; // if b is bookmarked and a is not, put b first
+        // if both users have a most_recent_message, sort by the created_at date
+        if (a.most_recent_message && b.most_recent_message) {
+            const aDate = new Date(a.most_recent_message.created_at);
+            const bDate = new Date(b.most_recent_message.created_at);
+            return bDate.getTime() - aDate.getTime(); // sort in descending order
+        }
+
+        // if only one user has a most_recent_message, put that user first
+        if (a.most_recent_message) return -1;
+        if (b.most_recent_message) return 1;
+
+        if (a.bookmark_id && !b.bookmark_id) return -1; // if a is bookmarked and b is not, put a first
+        if (!a.bookmark_id && b.bookmark_id) return 1; // if b is bookmarked and a is not, put b first
         if (loggedUsers.includes(a.id) && !loggedUsers.includes(b.id)) return -1; // if a is logged in and b is not, put a first
         if (!loggedUsers.includes(a.id) && loggedUsers.includes(b.id)) return 1; // if b is logged in and a is not, put b first
         return a.display_name.localeCompare(b.display_name); // sort by display name

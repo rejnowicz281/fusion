@@ -30,9 +30,9 @@ const RecipientInfo: FC<{ recipient: User }> = ({ recipient }) => {
                 </div>
             </div>
             <div className={css["settings-section"]}>
-                {recipient.bookmark ? (
+                {recipient.bookmark_id ? (
                     <form action={deleteBookmark}>
-                        <input type="hidden" name="id" value={recipient.bookmark} />
+                        <input type="hidden" name="id" value={recipient.bookmark_id} />
                         <SubmitButton
                             className={css["bookmark-button"]}
                             content={<IoStar />}

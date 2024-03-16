@@ -13,22 +13,9 @@ const getAllUsers = async () => {
 
     if (!user) return actionError(actionName, { error: "You must be logged in to proceed" });
 
-    const [{ data: users, error: usersError }, { data: bookmarks, error: bookmarksError }] = await Promise.all([
-        supabase.from("users").select("*"),
-        supabase.from("bookmarks").select("id, bookmarked_id").eq("user_id", user.id),
-    ]);
+    const { data: users, error } = await supabase.from("users_with_details").select("*");
 
-    if (usersError || bookmarksError)
-        return actionError(actionName, { error: usersError?.message || bookmarksError?.message });
-
-    if (users && bookmarks) {
-        users.map(async (user) => {
-            // check if user is bookmarked
-            const bookmark = bookmarks.find((bookmark) => bookmark.bookmarked_id === user.id);
-
-            if (bookmark) user.bookmark = bookmark.id;
-        });
-    }
+    if (error) return actionError(actionName, { error: error.message });
 
     return actionSuccess(actionName, { users }, { logData: false });
 };
