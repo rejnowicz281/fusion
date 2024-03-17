@@ -27,8 +27,8 @@ const UserLink: FC<{ user: User }> = ({ user }) => {
 
     return (
         <NavLink
-            className="flex items-center p-4 justify-between gap-4 transition-colors hover:bg-neutral-800"
-            activeClassName="bg-neutral-800"
+            className="flex items-center p-4 justify-between gap-4 transition-colors hover:bg-neutral-300 dark:hover:bg-neutral-800"
+            activeClassName="bg-neutral-300 dark:bg-neutral-800"
             href={`/users/${user.id}`}
             key={user.id}
         >
@@ -39,7 +39,7 @@ const UserLink: FC<{ user: User }> = ({ user }) => {
                     {mostRecentMessageSection()}
                 </div>
             </div>
-            {user.bookmark_id && <IoStar className="shrink-0 text-2xl" />}
+            {user.bookmark_id && <IoStar className="shrink-0 text-2xl text-blue-500 dark:text-white" />}
         </NavLink>
     );
 };

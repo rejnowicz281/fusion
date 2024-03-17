@@ -12,7 +12,7 @@ const ToggableSearch: FC<ToggableSearchProps> = ({ setSearchQuery, searchQuery, 
 
     return (
         <div
-            className="cursor-text text-xl flex items-center border-b border-b-neutral-800"
+            className="cursor-text text-xl flex items-center border-b border-b-neutral-300 dark:border-b-neutral-800"
             onClick={() => setIsSearchOpen(true)}
         >
             {isSearchOpen ? (

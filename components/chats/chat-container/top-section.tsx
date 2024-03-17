@@ -39,7 +39,7 @@ const TopSection: FC<{ recipient: User }> = ({ recipient }) => {
                     <input type="hidden" name="id" value={recipient.bookmark_id} />
                     <Button asChild variant="ghost" size="icon">
                         <SubmitButton
-                            content={<IoStar className="text-2xl" />}
+                            content={<IoStar className="text-2xl text-blue-500 dark:text-white" />}
                             loading={<AiOutlineLoading className="animate-spin text-2xl" />}
                         />
                     </Button>
@@ -50,7 +50,7 @@ const TopSection: FC<{ recipient: User }> = ({ recipient }) => {
                     <input type="hidden" name="bookmarked_id" value={recipient.id} />
                     <Button asChild variant="ghost" size="icon">
                         <SubmitButton
-                            content={<IoStarOutline className="text-2xl" />}
+                            content={<IoStarOutline className="text-2xl text-blue-500 dark:text-white" />}
                             loading={<AiOutlineLoading className="animate-spin text-2xl" />}
                         />
                     </Button>
