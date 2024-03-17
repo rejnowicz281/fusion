@@ -4,24 +4,23 @@ import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Button } from "@/components/ui/button";
 import useAuthContext from "@/providers/auth-provider";
+import useDashboardContext from "@/providers/dashboard-provider";
 import { User } from "@/types/user";
 import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
 import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { IoStarOutline } from "@react-icons/all-files/io5/IoStarOutline";
-import Link from "next/link";
 import { FC } from "react";
 
 const TopSection: FC<{ recipient: User }> = ({ recipient }) => {
     const { user } = useAuthContext();
+    const { setShowMenubar } = useDashboardContext();
 
     return (
         <div className="flex items-center gap-2 justify-between p-4">
             <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" asChild>
-                    <Link href="/">
-                        <FaArrowLeft className="text-xl" />
-                    </Link>
+                <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setShowMenubar(true)}>
+                    <FaArrowLeft className="text-xl" />
                 </Button>
                 <div className="min-w-0 truncate flex items-center gap-3 group">
                     <PresenceAvatar avatarSize={50} src={recipient.avatar_url} userId={recipient.id} />

@@ -16,7 +16,7 @@ export default function ThemeButton() {
 
     return (
         <Button
-            className="z-20 fixed top-4 right-4 text-xl"
+            className="z-20 absolute top-4 right-4 text-xl"
             variant="outline"
             size="icon"
             onClick={() => {

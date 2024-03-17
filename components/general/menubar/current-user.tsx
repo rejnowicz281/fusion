@@ -2,11 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import useAuthContext from "@/providers/auth-provider";
+import { HiOutlineUsers } from "@react-icons/all-files/hi2/HiOutlineUsers";
 import { MdOutlineSettings } from "@react-icons/all-files/md/MdOutlineSettings";
-import Link from "next/link";
+import { FC } from "react";
 import PresenceAvatar from "../presence-avatar";
 
-const CurrentUser = () => {
+const CurrentUser: FC<{
+    showSettings: boolean;
+    toggleSettings: () => void;
+}> = ({ toggleSettings, showSettings }) => {
     const { user } = useAuthContext();
 
     return (
@@ -18,10 +22,12 @@ const CurrentUser = () => {
                     <div className="truncate text-gray-500 text-sm font-semibold">FUSION ACCOUNT</div>
                 </div>
             </div>
-            <Button variant="ghost" size="icon" asChild>
-                <Link href="/settings">
+            <Button variant="ghost" size="icon" onClick={toggleSettings}>
+                {showSettings ? (
+                    <HiOutlineUsers className="shrink-0 text-2xl text-gray-500" />
+                ) : (
                     <MdOutlineSettings className="shrink-0 text-2xl text-gray-500" />
-                </Link>
+                )}
             </Button>
         </div>
     );

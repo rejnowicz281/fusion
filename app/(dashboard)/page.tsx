@@ -1,5 +1,3 @@
-import Menubar from "@/components/general/menubar";
-
-const Home = () => <Menubar />;
+const Home = () => <div>Home</div>;
 
 export default Home;

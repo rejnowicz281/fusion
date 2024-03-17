@@ -2,7 +2,7 @@
 
 import { Message } from "@/types/message";
 import formatMessageDate from "@/utils/general/format-message-date";
-import { FC, useEffect, useRef } from "react";
+import { FC, Fragment, useEffect, useRef } from "react";
 import MessageContainer from "./message-container";
 
 type MessagesListProps = {
@@ -32,19 +32,16 @@ const MessagesList: FC<MessagesListProps> = ({ messages, deleteOptimisticMessage
     return (
         <div className="flex flex-col flex-1 relative">
             {messages.length > 0 ? (
-                <div
-                    ref={messagesRef}
-                    className="p-4 absolute inset-0 overflow-auto word-break flex flex-col flex-1 gap-5"
-                >
+                <div ref={messagesRef} className="p-4 absolute inset-0 overflow-auto flex flex-col flex-1 gap-5">
                     {messages.map((message) => (
-                        <>
+                        <Fragment key={message.id}>
                             {message.timestamp && (
                                 <div className="text-center text-neutral-600">
                                     {formatMessageDate(message.created_at)}
                                 </div>
                             )}
                             <MessageContainer message={message} deleteOptimisticMessage={deleteOptimisticMessage} />
-                        </>
+                        </Fragment>
                     ))}
                 </div>
             ) : (
