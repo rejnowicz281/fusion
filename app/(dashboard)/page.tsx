@@ -1,9 +1,6 @@
-import css from "./page.module.css";
+import Menubar from "@/components/general/menubar";
+import UsersContainer from "@/components/general/menubar/users-container";
 
-export default async function Home() {
-    return (
-        <div className={css.container}>
-            <h1 className={css.heading}>Fusion.</h1>
-        </div>
-    );
-}
+const Home = () => <Menubar UsersContainer={<UsersContainer />} />;
+
+export default Home;

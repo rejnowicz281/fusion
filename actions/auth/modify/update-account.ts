@@ -15,18 +15,16 @@ const updateAccount = async (formData: FormData) => {
 
     if (!user) return actionError(actionName, { error: "You must be logged in to update your account." });
 
-    if (user.id === process.env.DEMO_USER_ID)
+    if (user.id === process.env.DEMO_USER_ID || user.email === "demo@demo.demo")
         return actionError(actionName, { error: "You cannot update this demo account." });
 
     const isEmailProvider = user.app_metadata.provider === "email";
 
-    const firstNameFormData = formData.get("first_name");
-    const lastNameFormData = formData.get("last_name");
+    const displayNameFormData = formData.get("display_name");
     const passwordFormData = formData.get("password");
     const avatarFileFormData = formData.get("avatar");
 
-    const first_name = typeof firstNameFormData === "string" ? firstNameFormData.trim() : null;
-    const last_name = typeof lastNameFormData === "string" ? lastNameFormData.trim() : null;
+    const display_name = typeof displayNameFormData === "string" ? displayNameFormData.trim() : null;
     const password = isEmailProvider && typeof passwordFormData === "string" ? passwordFormData.trim() : null;
     const avatarFile =
         isEmailProvider && avatarFileFormData instanceof File && avatarFileFormData.type.startsWith("image/")
@@ -37,15 +35,14 @@ const updateAccount = async (formData: FormData) => {
 
     let updateData: {
         data: {
-            first_name?: string;
-            last_name?: string;
+            display_name?: string;
             avatar_url?: string;
         };
         password?: string;
     } = { data: {} };
 
-    if (first_name && first_name !== user.user_metadata.first_name) updateData.data["first_name"] = first_name;
-    if (last_name && last_name !== user.user_metadata.last_name) updateData.data["last_name"] = last_name;
+    if (display_name && display_name !== user.user_metadata.display_name)
+        updateData.data["display_name"] = display_name;
     if (password) updateData["password"] = password;
     if (resetAvatar) {
         // get name of current avatar
@@ -92,8 +89,7 @@ const updateAccount = async (formData: FormData) => {
 
     if (password) actionData.password = "********";
 
-    const revalidatePath =
-        updateData.data?.first_name || updateData.data?.last_name || updateData.data?.avatar_url ? "/" : null;
+    const revalidatePath = updateData.data?.display_name || updateData.data?.avatar_url ? "/" : null;
 
     return actionSuccess(actionName, actionData, { revalidatePath });
 };
