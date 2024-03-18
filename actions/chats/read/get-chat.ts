@@ -20,9 +20,7 @@ const getChat = async (userId: string) => {
     ] = await Promise.all([
         supabase
             .from("messages")
-            .select(
-                "id, text, sender: users!messages_sender_id_fkey (id, email, avatar_url, display_name), recipient: users!messages_recipient_id_fkey (id, email, avatar_url, display_name), created_at"
-            )
+            .select("*")
             .or(
                 `and(sender_id.eq.${userId}, recipient_id.eq.${currentUser.id}), and(sender_id.eq.${currentUser.id}, recipient_id.eq.${userId})`
             )
@@ -38,7 +36,14 @@ const getChat = async (userId: string) => {
             error: messagesError?.message || userError?.message || bookmarkError?.message,
         });
 
-    if (messages) generateTimestamps(messages);
+    if (messages) {
+        generateTimestamps(messages);
+
+        messages.forEach((message) => {
+            if (message.sender_id === currentUser.id) message.sender = currentUser;
+            else if (message.sender_id === userId) message.sender = user;
+        });
+    }
 
     const result = {
         messages,
