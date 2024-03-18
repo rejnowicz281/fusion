@@ -2,13 +2,14 @@
 
 import useChatContext from "@/providers/chat-provider";
 import formatMessageDate from "@/utils/general/format-message-date";
+import clsx from "clsx";
 import { Fragment, useEffect, useRef } from "react";
 import MessageContainer from "./message-container";
 
 const MessagesList = () => {
     const messagesRef = useRef<HTMLDivElement>(null);
     const previousMessageCount = useRef(0);
-    const { optimisticMessages: messages } = useChatContext();
+    const { optimisticMessages: messages, expandPrompts } = useChatContext();
 
     useEffect(() => {
         if (messages && messagesRef.current) {
@@ -26,7 +27,7 @@ const MessagesList = () => {
     }, [messages]);
 
     return (
-        <div className="flex flex-col flex-1 relative">
+        <div className={clsx(expandPrompts ? "hidden" : "flex", "flex-col flex-1 relative")}>
             {messages.length > 0 ? (
                 <div ref={messagesRef} className="p-4 absolute inset-0 overflow-auto flex flex-col flex-1 gap-5">
                     {messages.map((message) => (

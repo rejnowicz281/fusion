@@ -4,13 +4,16 @@ import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
 import { assignTimestamp } from "@/utils/general/generate-timestamps";
-import { FC, ReactNode, createContext, useContext, useOptimistic } from "react";
+import { FC, ReactNode, createContext, useContext, useOptimistic, useState } from "react";
 
 const ChatContext = createContext<{
     addOptimisticMessage: (text: string, sender?: any) => void;
     deleteOptimisticMessage: (id: string) => void;
     optimisticMessages: Message[];
     recipient: User;
+    expandPrompts: boolean;
+    setExpandPrompts: React.Dispatch<React.SetStateAction<boolean>>;
+    toggleExpandPrompts: () => void;
 } | null>(null);
 
 export const ChatProvider: FC<{
@@ -20,6 +23,9 @@ export const ChatProvider: FC<{
 }> = ({ initialMessages, recipient, children }) => {
     const { user } = useAuthContext();
     const [optimisticMessages, setOptimisticMessages] = useOptimistic(initialMessages);
+    const [expandPrompts, setExpandPrompts] = useState(false);
+
+    const toggleExpandPrompts = () => setExpandPrompts((expand) => !expand);
 
     function addOptimisticMessage(text: string, sender = user) {
         const message = {
@@ -54,6 +60,9 @@ export const ChatProvider: FC<{
                 deleteOptimisticMessage,
                 optimisticMessages,
                 recipient,
+                toggleExpandPrompts,
+                expandPrompts,
+                setExpandPrompts,
             }}
         >
             {children}

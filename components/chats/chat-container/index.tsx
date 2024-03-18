@@ -1,5 +1,3 @@
-"use client";
-
 import CreateMessage from "./create-message";
 import MessagesList from "./messages-list";
 import TopSection from "./top-section";

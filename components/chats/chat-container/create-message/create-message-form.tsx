@@ -7,7 +7,7 @@ import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
 import { useRef } from "react";
 
-const CreateMessage = () => {
+const CreateMessageForm = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const { user } = useAuthContext();
     const { addOptimisticMessage, recipient } = useChatContext();
@@ -27,7 +27,7 @@ const CreateMessage = () => {
     };
 
     return (
-        <div className="border-t border-t-neutral-300 dark:border-t-neutral-800 flex items-center justify-center">
+        <div className="flex items-center justify-center">
             <form className="flex-1 flex items-center justify-center" ref={formRef} action={handleSend}>
                 <input type="hidden" name="sender_id" value={user.id} />
                 <input type="hidden" name="recipient_id" value={recipient.id} />
@@ -48,4 +48,4 @@ const CreateMessage = () => {
     );
 };
 
-export default CreateMessage;
+export default CreateMessageForm;

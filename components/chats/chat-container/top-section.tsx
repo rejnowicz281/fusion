@@ -1,3 +1,5 @@
+"use client";
+
 import createBookmark from "@/actions/bookmarks/modify/create-bookmark";
 import deleteBookmark from "@/actions/bookmarks/modify/delete-bookmark";
 import PresenceAvatar from "@/components/general/presence-avatar";
