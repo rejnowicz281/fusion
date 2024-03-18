@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { BsMoonStars } from "@react-icons/all-files/bs/BsMoonStars";
 import { BsSun } from "@react-icons/all-files/bs/BsSun";
 import { useTheme } from "next-themes";
@@ -15,16 +16,21 @@ export default function ThemeButton() {
     if (!mounted) return null;
 
     return (
-        <Button
-            className="z-20 absolute top-4 right-4 text-xl"
-            variant="outline"
-            size="icon"
-            onClick={() => {
-                if (theme === "light") setTheme("dark");
-                else setTheme("light");
-            }}
-        >
-            {theme === "light" ? <BsSun /> : <BsMoonStars />}
-        </Button>
+        <Tooltip>
+            <TooltipContent>{theme === "light" ? "Light" : "Dark"}</TooltipContent>
+            <TooltipTrigger asChild>
+                <Button
+                    className="z-20 absolute top-4 right-4 text-xl"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                        if (theme === "light") setTheme("dark");
+                        else setTheme("light");
+                    }}
+                >
+                    {theme === "light" ? <BsSun /> : <BsMoonStars />}
+                </Button>
+            </TooltipTrigger>
+        </Tooltip>
     );
 }

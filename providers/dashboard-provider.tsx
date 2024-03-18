@@ -1,5 +1,6 @@
 "use client";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 import useRealtime from "@/hooks/use-realtime";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
@@ -27,19 +28,21 @@ export const DashboardProvider: FC<{ Menubar: React.JSX.Element; children: React
 
     return (
         <DashboardContext.Provider value={{ showMenubar, setShowMenubar }}>
-            <div className="flex flex-1">
-                <div
-                    className={clsx(
-                        (showMenubar || isHomePage) && "flex-1",
-                        "relative flex lg:flex-[0_0_450px] lg:border-r lg:border-r-neutral-300 lg:dark:border-r-neutral-800"
-                    )}
-                >
-                    <div className="absolute flex-1 inset-0 flex flex-col overflow-y-auto">{Menubar}</div>
+            <TooltipProvider>
+                <div className="flex flex-1">
+                    <div
+                        className={clsx(
+                            (showMenubar || isHomePage) && "flex-1",
+                            "relative flex lg:flex-[0_0_450px] lg:border-r lg:border-r-neutral-300 lg:dark:border-r-neutral-800"
+                        )}
+                    >
+                        <div className="absolute flex-1 inset-0 flex flex-col overflow-y-auto">{Menubar}</div>
+                    </div>
+                    <div className={clsx(showMenubar || isHomePage ? "hidden lg:flex" : "flex", "relative flex-1")}>
+                        <div className="absolute inset-0 flex-1 flex flex-col overflow-y-auto">{children}</div>
+                    </div>
                 </div>
-                <div className={clsx(showMenubar || isHomePage ? "hidden lg:flex" : "flex", "relative flex-1")}>
-                    <div className="absolute inset-0 flex-1 flex flex-col overflow-y-auto">{children}</div>
-                </div>
-            </div>
+            </TooltipProvider>
         </DashboardContext.Provider>
     );
 };

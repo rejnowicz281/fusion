@@ -1,11 +1,12 @@
 "use client";
 
+import PresenceAvatar from "@/components/general/presence-avatar";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import useAuthContext from "@/providers/auth-provider";
 import { HiOutlineUsers } from "@react-icons/all-files/hi2/HiOutlineUsers";
 import { MdOutlineSettings } from "@react-icons/all-files/md/MdOutlineSettings";
 import { FC } from "react";
-import PresenceAvatar from "../presence-avatar";
 
 const CurrentUser: FC<{
     showSettings: boolean;
@@ -22,13 +23,18 @@ const CurrentUser: FC<{
                     <div className="truncate text-gray-500 text-sm font-semibold">FUSION ACCOUNT</div>
                 </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={toggleSettings}>
-                {showSettings ? (
-                    <HiOutlineUsers className="shrink-0 text-2xl text-gray-500" />
-                ) : (
-                    <MdOutlineSettings className="shrink-0 text-2xl text-gray-500" />
-                )}
-            </Button>
+            <Tooltip>
+                <TooltipContent>{showSettings ? "Friends" : "Settings"}</TooltipContent>
+                <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" onClick={toggleSettings}>
+                        {showSettings ? (
+                            <HiOutlineUsers className="shrink-0 text-2xl text-gray-500" />
+                        ) : (
+                            <MdOutlineSettings className="shrink-0 text-2xl text-gray-500" />
+                        )}
+                    </Button>
+                </TooltipTrigger>
+            </Tooltip>
         </div>
     );
 };
