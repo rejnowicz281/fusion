@@ -1,5 +1,6 @@
 "use client";
 
+import useRealtime from "@/hooks/use-realtime";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import React, { FC, ReactNode, createContext, useContext, useEffect, useState } from "react";
@@ -21,6 +22,8 @@ export const DashboardProvider: FC<{ Menubar: React.JSX.Element; children: React
     useEffect(() => {
         setShowMenubar(false);
     }, [pathname]);
+
+    useRealtime(); // Connect to supabase realtime to listen for message changes
 
     return (
         <DashboardContext.Provider value={{ showMenubar, setShowMenubar }}>

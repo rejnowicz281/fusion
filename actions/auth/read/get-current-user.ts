@@ -21,7 +21,7 @@ const getCurrentUser = async () => {
         created_at: data.user.created_at,
     };
 
-    return actionSuccess(actionName, { user }, { logData: false });
+    return actionSuccess(actionName, { user }, { log: false });
 };
 
 export default getCurrentUser;

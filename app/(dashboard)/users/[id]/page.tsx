@@ -1,6 +1,7 @@
 import getChat from "@/actions/chats/read/get-chat";
 import ChatContainer from "@/components/chats/chat-container";
 import ErrorContainer from "@/components/general/error-container";
+import { ChatProvider } from "@/providers/chat-provider";
 import { FC } from "react";
 
 const UserChatPage: FC<{ params: { id: string } }> = async ({ params: { id } }) => {
@@ -9,7 +10,11 @@ const UserChatPage: FC<{ params: { id: string } }> = async ({ params: { id } }) 
     if (error)
         return <ErrorContainer error="An error occured while loading the chat. Are you sure this person exists?" />;
 
-    return <ChatContainer recipient={user} messages={messages} />;
+    return (
+        <ChatProvider recipient={user} initialMessages={messages}>
+            <ChatContainer />
+        </ChatProvider>
+    );
 };
 
 export default UserChatPage;

@@ -1,18 +1,14 @@
 "use client";
 
-import { Message } from "@/types/message";
+import useChatContext from "@/providers/chat-provider";
 import formatMessageDate from "@/utils/general/format-message-date";
-import { FC, Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import MessageContainer from "./message-container";
 
-type MessagesListProps = {
-    messages: Message[];
-    deleteOptimisticMessage: (messageId: string) => void;
-};
-
-const MessagesList: FC<MessagesListProps> = ({ messages, deleteOptimisticMessage }) => {
+const MessagesList = () => {
     const messagesRef = useRef<HTMLDivElement>(null);
     const previousMessageCount = useRef(0);
+    const { optimisticMessages: messages } = useChatContext();
 
     useEffect(() => {
         if (messages && messagesRef.current) {
@@ -40,7 +36,7 @@ const MessagesList: FC<MessagesListProps> = ({ messages, deleteOptimisticMessage
                                     {formatMessageDate(message.created_at)}
                                 </div>
                             )}
-                            <MessageContainer message={message} deleteOptimisticMessage={deleteOptimisticMessage} />
+                            <MessageContainer message={message} />
                         </Fragment>
                     ))}
                 </div>

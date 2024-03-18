@@ -4,19 +4,13 @@ import createMessage from "@/actions/chats/modify/create-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAuthContext from "@/providers/auth-provider";
-import { Message } from "@/types/message";
-import { User } from "@/types/user";
-import { FC, useRef } from "react";
+import useChatContext from "@/providers/chat-provider";
+import { useRef } from "react";
 
-type CreateMessageProps = {
-    recipient: User;
-    addOptimisticMessage: (text: string) => void;
-    messages: Message[];
-};
-
-const CreateMessage: FC<CreateMessageProps> = ({ recipient, addOptimisticMessage, messages }) => {
+const CreateMessage = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const { user } = useAuthContext();
+    const { addOptimisticMessage, recipient } = useChatContext();
 
     const handleSend = (formData: FormData) => {
         const textFormData = formData.get("text");

@@ -4,17 +4,17 @@ import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Button } from "@/components/ui/button";
 import useAuthContext from "@/providers/auth-provider";
+import useChatContext from "@/providers/chat-provider";
 import useDashboardContext from "@/providers/dashboard-provider";
-import { User } from "@/types/user";
 import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
 import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { IoStarOutline } from "@react-icons/all-files/io5/IoStarOutline";
-import { FC } from "react";
 
-const TopSection: FC<{ recipient: User }> = ({ recipient }) => {
+const TopSection = () => {
     const { user } = useAuthContext();
     const { setShowMenubar } = useDashboardContext();
+    const { recipient } = useChatContext();
 
     return (
         <div className="flex items-center gap-2 justify-between p-4">

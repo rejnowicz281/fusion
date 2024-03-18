@@ -2,6 +2,7 @@ import deleteMessage from "@/actions/chats/modify/delete-message";
 import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import useAuthContext from "@/providers/auth-provider";
+import useChatContext from "@/providers/chat-provider";
 import { Message } from "@/types/message";
 import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
 import { RiDeleteBinLine } from "@react-icons/all-files/ri/RiDeleteBinLine";
@@ -10,11 +11,11 @@ import { FC } from "react";
 
 type MessageContainerProps = {
     message: Message;
-    deleteOptimisticMessage: (id: string) => void;
 };
 
-const MessageContainer: FC<MessageContainerProps> = ({ message, deleteOptimisticMessage }) => {
+const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
     const { user } = useAuthContext();
+    const { deleteOptimisticMessage } = useChatContext();
 
     const isSender = message.sender.id === user.id;
 
@@ -22,8 +23,8 @@ const MessageContainer: FC<MessageContainerProps> = ({ message, deleteOptimistic
         const idFormData = formData.get("id");
         const id = typeof idFormData === "string" ? idFormData : "";
         if (id) {
-            await deleteMessage(formData);
             deleteOptimisticMessage(id);
+            deleteMessage(formData);
         }
     };
 
