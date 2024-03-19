@@ -25,8 +25,9 @@ export const config = {
          * - /register (register page)
          * - /auth/callback
          * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
+         * - manifest.json (web app manifest)
          * Feel free to modify this pattern to include more paths.
          */
-        "/((?!_next/static|_next/image|favicon.ico|login|register|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+        "/((?!_next/static|_next/image|favicon.ico|login|register|auth/callback|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
     ],
 };

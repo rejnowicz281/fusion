@@ -1,14 +1,19 @@
 import { ThemeProvider } from "@/providers/theme-provider";
 import clsx from "clsx";
 import { GeistSans } from "geist/font/sans";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { FC, ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
+    manifest: "/manifest.json",
     title: "Fusion",
     description: "Fuse mind and AI for better communication.",
+};
+
+export const viewport: Viewport = {
+    themeColor: "#FFFFFF",
 };
 
 const RootLayout: FC<{ children: ReactNode }> = ({ children }) => {
