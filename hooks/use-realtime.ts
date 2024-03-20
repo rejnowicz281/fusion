@@ -21,7 +21,7 @@ const useRealtime = () => {
                     filter: `sender_id=neq.${currentUser.id}`, // only listen for messages not sent by the current user (those are revalidated on the server-side)
                 },
                 (payload) => {
-                    console.log("Change received, refreshing router", payload.new);
+                    console.log("Change received, refreshing router", payload);
                     router.refresh();
                 }
             )

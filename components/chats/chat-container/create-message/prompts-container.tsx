@@ -1,16 +1,34 @@
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import useChatContext from "@/providers/chat-provider";
 import { MdKeyboardArrowUp } from "@react-icons/all-files/md/MdKeyboardArrowUp";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { FC } from "react";
 
 const PromptsContainer: FC<{
     onPromptClick: (text: string) => void;
 }> = ({ onPromptClick }) => {
-    const { setExpandPrompts, toggleExpandPrompts, expandPrompts } = useChatContext();
+    const { setExpandPrompts, toggleExpandPrompts, expandPrompts, generatePrompt, generateInitialPrompts, recipient } =
+        useChatContext();
 
-    const prompt = (text: string) => (
+    const { data, fetchNextPage, isFetching, isFetchingNextPage, isLoading } = useInfiniteQuery({
+        queryKey: ["prompts", recipient.id],
+        queryFn: async ({ pageParam = 0 }) => {
+            if (pageParam === 0) return generateInitialPrompts();
+            else return generatePrompt();
+        },
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages) {
+            return lastPage.length > 0 ? allPages.length + 1 : undefined;
+        },
+    });
+
+    const prompts = data?.pages.flat();
+
+    const prompt = (text: string, index: number) => (
         <Button
+            key={index}
             onClick={() => {
                 setExpandPrompts(false);
                 onPromptClick(text);
@@ -26,20 +44,39 @@ const PromptsContainer: FC<{
 
     return (
         <div className="flex-1 px-4 pt-4 pb-1 flex gap-3 relative">
+            <Button
+                className={clsx(expandPrompts && "absolute bottom-1 left-4 z-10")}
+                size="icon"
+                variant={expandPrompts ? "outline" : "ghost"}
+                disabled={isFetching || isFetchingNextPage || isLoading}
+                onClick={() => fetchNextPage()}
+            >
+                ?
+            </Button>
             <div
                 className={clsx(
                     expandPrompts ? "p-4 absolute inset-0 overflow-y-auto flex-col items-start" : "truncate",
                     "flex flex-1 gap-3"
                 )}
             >
-                {prompt(
-                    "Soloremque quide,ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae  sequi repudiandae nisi iusto deserunt"
+                {prompts && prompts.length > 0 ? (
+                    expandPrompts ? (
+                        prompts.map((text, index) => prompt(text, index))
+                    ) : (
+                        prompts
+                            .toReversed()
+                            .slice(0, 3)
+                            .map((text, index) => prompt(text, index))
+                    )
+                ) : (
+                    <>
+                        <Skeleton className="h-10 w-1/3 bg-[rgb(197,210,228)]" />
+                        <Skeleton className="h-10 w-1/2 bg-[rgb(197,210,228)]" />
+                        <Skeleton className="h-10 w-1/4 bg-[rgb(197,210,228)]" />
+                    </>
                 )}
-                {prompt(
-                    "Repudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiaRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandRepudiandae nisi iusto deseruntide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandae ide, sequi repudiandndae"
-                )}
-                {prompt("Quidem, velit dolorum sequi?")}
             </div>
+
             <Button
                 className={clsx(expandPrompts && "absolute bottom-1 right-4")}
                 variant={expandPrompts ? "outline" : "ghost"}

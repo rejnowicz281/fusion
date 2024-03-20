@@ -4,7 +4,7 @@ import { FC, ReactNode, useState } from "react";
 
 type AsyncButtonProps = {
     className?: string;
-    onClick: () => Promise<void>;
+    onClick: () => any;
     content: ReactNode | string;
     loading?: ReactNode | string;
     type?: "button" | "submit" | "reset";

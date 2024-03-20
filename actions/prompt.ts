@@ -3,12 +3,41 @@
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
 import actionError from "@/utils/actions/action-error";
+import actionSuccess from "@/utils/actions/action-success";
 import initialPrompt from "@/utils/prompts/initial-prompt";
+import { randomUUID } from "crypto";
+
+const promptTesting = async () => {
+    const actionName = "promptTesting";
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const prompt = randomUUID();
+
+    return actionSuccess(actionName, { prompt }, { logData: false });
+};
+
+export async function generateInitialPrompts(currentUser: User, recipient: User, messages: Message[]) {
+    const actionName = "generateInitialPrompts";
+
+    const [first, second, third] = await Promise.all([
+        generatePrompt(currentUser, recipient, messages).then((res) => res.prompt),
+        generatePrompt(currentUser, recipient, messages).then((res) => res.prompt),
+        generatePrompt(currentUser, recipient, messages).then((res) => res.prompt),
+    ]);
+
+    return actionSuccess(actionName, { prompts: [first, second, third] }, { log: false });
+}
 
 export default async function generatePrompt(currentUser: User, recipient: User, messages: Message[]) {
-    if (currentUser.id === recipient.id) return "Am I really talking to myself...?";
+    // return await promptTesting();
 
     const actionName = "generatePrompt";
+
+    if (currentUser.id === recipient.id)
+        return actionSuccess(
+            actionName,
+            { prompt: "Am I really talking to myself? I need to get some sleep." },
+            { logData: false }
+        );
 
     const formattedMessages = messages.map((message) => {
         return {
@@ -39,9 +68,11 @@ export default async function generatePrompt(currentUser: User, recipient: User,
 
         const data = await res.json();
 
-        const content = data.error ? data.error.message : data.choices[0].message.content;
+        const result = data.error
+            ? actionSuccess(actionName, { prompt: data.error.message }, { logData: false })
+            : actionSuccess(actionName, { prompt: data.choices[0].message.content }, { logData: false });
 
-        return content;
+        return result;
     } catch (error: any) {
         return actionError(actionName, { error: error.message });
     }

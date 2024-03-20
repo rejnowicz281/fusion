@@ -1,5 +1,6 @@
 "use client";
 
+import _generatePrompt, { generateInitialPrompts as _generateInitialPrompts } from "@/actions/prompt";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
@@ -14,6 +15,8 @@ const ChatContext = createContext<{
     expandPrompts: boolean;
     setExpandPrompts: React.Dispatch<React.SetStateAction<boolean>>;
     toggleExpandPrompts: () => void;
+    generatePrompt: () => Promise<string>;
+    generateInitialPrompts: () => Promise<string[]>;
 } | null>(null);
 
 export const ChatProvider: FC<{
@@ -26,6 +29,11 @@ export const ChatProvider: FC<{
     const [expandPrompts, setExpandPrompts] = useState(false);
 
     const toggleExpandPrompts = () => setExpandPrompts((expand) => !expand);
+
+    const generatePrompt = () => _generatePrompt(user, recipient, optimisticMessages).then((res) => res.prompt);
+
+    const generateInitialPrompts = () =>
+        _generateInitialPrompts(user, recipient, optimisticMessages).then((res) => res.prompts);
 
     function addOptimisticMessage(text: string, sender = user) {
         const message = {
@@ -63,6 +71,8 @@ export const ChatProvider: FC<{
                 toggleExpandPrompts,
                 expandPrompts,
                 setExpandPrompts,
+                generatePrompt,
+                generateInitialPrompts,
             }}
         >
             {children}
