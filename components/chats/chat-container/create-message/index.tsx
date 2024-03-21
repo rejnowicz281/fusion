@@ -13,7 +13,17 @@ const CreateMessage = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const { user } = useAuthContext();
-    const { addOptimisticMessage, recipient, expandPrompts } = useChatContext();
+    const { addOptimisticMessage, recipient, expandPrompts, setExpandPrompts } = useChatContext();
+
+    const beforeSend = () => {
+        if (formRef.current) {
+            const formData = new FormData(formRef.current);
+
+            const text = formData.get("text");
+
+            if (typeof text === "string" && text.trim().length > 0) setExpandPrompts(false);
+        }
+    };
 
     const handleSend = (formData: FormData) => {
         const textFormData = formData.get("text");
@@ -58,6 +68,7 @@ const CreateMessage = () => {
                     <Button
                         className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
                         variant="ghost"
+                        onClick={beforeSend}
                     >
                         SEND
                     </Button>

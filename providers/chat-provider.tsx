@@ -15,8 +15,8 @@ const ChatContext = createContext<{
     expandPrompts: boolean;
     setExpandPrompts: React.Dispatch<React.SetStateAction<boolean>>;
     toggleExpandPrompts: () => void;
-    generatePrompt: () => Promise<string>;
-    generateInitialPrompts: () => Promise<string[]>;
+    generatePrompt: () => Promise<string> | string;
+    generateInitialPrompts: () => Promise<string[]> | string[];
 } | null>(null);
 
 export const ChatProvider: FC<{
@@ -28,12 +28,22 @@ export const ChatProvider: FC<{
     const [optimisticMessages, setOptimisticMessages] = useOptimistic(initialMessages);
     const [expandPrompts, setExpandPrompts] = useState(false);
 
+    const talkingToSelf = user.id === recipient.id;
+
     const toggleExpandPrompts = () => setExpandPrompts((expand) => !expand);
 
-    const generatePrompt = () => _generatePrompt(user, recipient, optimisticMessages).then((res) => res.prompt);
+    const generatePrompt = () => {
+        if (talkingToSelf) return "Am I really talking to myself? I need to get some sleep.";
+        else return _generatePrompt(user, recipient, optimisticMessages).then((res) => res.prompt);
+    };
 
-    const generateInitialPrompts = () =>
-        _generateInitialPrompts(user, recipient, optimisticMessages).then((res) => res.prompts);
+    const generateInitialPrompts = () => {
+        if (talkingToSelf) {
+            const prompt = "Am I really talking to myself? I need to get some sleep.";
+
+            return [prompt, prompt, prompt];
+        } else return _generateInitialPrompts(user, recipient, optimisticMessages).then((res) => res.prompts);
+    };
 
     function addOptimisticMessage(text: string, sender = user) {
         const message = {

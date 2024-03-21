@@ -32,13 +32,6 @@ export default async function generatePrompt(currentUser: User, recipient: User,
 
     const actionName = "generatePrompt";
 
-    if (currentUser.id === recipient.id)
-        return actionSuccess(
-            actionName,
-            { prompt: "Am I really talking to myself? I need to get some sleep." },
-            { logData: false }
-        );
-
     const formattedMessages = messages.map((message) => {
         return {
             role: message.sender.id === currentUser.id ? "assistant" : "user", // have current user be the assistant
@@ -68,11 +61,9 @@ export default async function generatePrompt(currentUser: User, recipient: User,
 
         const data = await res.json();
 
-        const result = data.error
-            ? actionSuccess(actionName, { prompt: data.error.message }, { logData: false })
-            : actionSuccess(actionName, { prompt: data.choices[0].message.content }, { logData: false });
+        const prompt = data.error ? data.error.message : data.choices[0].message.content;
 
-        return result;
+        return actionSuccess(actionName, { prompt, previousMessages: formattedMessages }, { logData: false });
     } catch (error: any) {
         return actionError(actionName, { error: error.message });
     }
