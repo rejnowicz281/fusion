@@ -15,19 +15,17 @@ const promptTesting = async () => {
     return actionSuccess(actionName, { prompt }, { logData: false });
 };
 
-export async function generateInitialPrompts(currentUser: User, recipient: User, messages: Message[]) {
+export async function generateInitialPrompts(currentUser: User, recipient: User, messages: Message[], english = true) {
     const actionName = "generateInitialPrompts";
 
-    const [first, second, third] = await Promise.all([
-        generatePrompt(currentUser, recipient, messages).then((res) => res.prompt),
-        generatePrompt(currentUser, recipient, messages).then((res) => res.prompt),
-        generatePrompt(currentUser, recipient, messages).then((res) => res.prompt),
-    ]);
+    const prompt = () => generatePrompt(currentUser, recipient, messages, english).then((res) => res.prompt);
 
-    return actionSuccess(actionName, { prompts: [first, second, third] }, { log: false });
+    const prompts = await Promise.all([prompt(), prompt(), prompt()]);
+
+    return actionSuccess(actionName, { prompts }, { log: false });
 }
 
-export default async function generatePrompt(currentUser: User, recipient: User, messages: Message[]) {
+export default async function generatePrompt(currentUser: User, recipient: User, messages: Message[], english = true) {
     // return await promptTesting();
 
     const actionName = "generatePrompt";
@@ -49,12 +47,11 @@ export default async function generatePrompt(currentUser: User, recipient: User,
             method: "POST",
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [initialPrompt(currentUser, recipient), ...formattedMessages],
+                messages: [initialPrompt(currentUser, recipient, english), ...formattedMessages],
                 temperature: 0.4,
                 top_p: 1,
                 frequency_penalty: 0,
                 presence_penalty: 0,
-                max_tokens: 100,
                 n: 1,
             }),
         });

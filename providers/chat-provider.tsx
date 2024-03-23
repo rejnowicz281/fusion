@@ -6,6 +6,7 @@ import { Message } from "@/types/message";
 import { User } from "@/types/user";
 import { assignTimestamp } from "@/utils/general/generate-timestamps";
 import { FC, ReactNode, createContext, useContext, useOptimistic, useState } from "react";
+import useSettingsContext from "./settings-provider";
 
 const ChatContext = createContext<{
     addOptimisticMessage: (text: string, sender?: any) => void;
@@ -27,6 +28,7 @@ export const ChatProvider: FC<{
     const { user } = useAuthContext();
     const [optimisticMessages, setOptimisticMessages] = useOptimistic(initialMessages);
     const [expandPrompts, setExpandPrompts] = useState(false);
+    const { englishPrompts } = useSettingsContext();
 
     const talkingToSelf = user.id === recipient.id;
 
@@ -34,7 +36,7 @@ export const ChatProvider: FC<{
 
     const generatePrompt = () => {
         if (talkingToSelf) return "Am I really talking to myself? I need to get some sleep.";
-        else return _generatePrompt(user, recipient, optimisticMessages).then((res) => res.prompt);
+        else return _generatePrompt(user, recipient, optimisticMessages, englishPrompts).then((res) => res.prompt);
     };
 
     const generateInitialPrompts = () => {
@@ -42,7 +44,10 @@ export const ChatProvider: FC<{
             const prompt = "Am I really talking to myself? I need to get some sleep.";
 
             return [prompt, prompt, prompt];
-        } else return _generateInitialPrompts(user, recipient, optimisticMessages).then((res) => res.prompts);
+        } else
+            return _generateInitialPrompts(user, recipient, optimisticMessages, englishPrompts).then(
+                (res) => res.prompts
+            );
     };
 
     function addOptimisticMessage(text: string, sender = user) {

@@ -1,18 +1,19 @@
-import signOut from "@/actions/auth/modify/sign-out";
-import SubmitButton from "../../submit-button";
 import DeleteAccountButton from "./delete-account-button";
+import PromptLanguageButton from "./prompt-language-button";
+import SignOutButton from "./sign-out-button";
 import ThemeButton from "./theme-button";
 import TogglePresenceButton from "./toggle-presence-button";
+import UserBar from "./user-bar";
 
 const Settings = () => {
     return (
-        <div className="flex-1 flex flex-col">
-            <ThemeButton />
-            <TogglePresenceButton />
+        <div className="flex-1 flex flex-col justify-center lg:justify-normal lg:p-6">
+            <UserBar />
+            <SignOutButton />
             <DeleteAccountButton demoUserId={process.env.DEMO_USER_ID!} />
-            <form action={signOut}>
-                <SubmitButton content="Logout" loading="Logging out..." />
-            </form>
+            <TogglePresenceButton />
+            <PromptLanguageButton />
+            <ThemeButton />
         </div>
     );
 };
