@@ -16,7 +16,7 @@ type DashboardContextType = {
 const DashboardContext = createContext<DashboardContextType | null>(null);
 
 export const DashboardProvider: FC<{ Menubar: React.JSX.Element; children: ReactNode }> = ({ Menubar, children }) => {
-    const [menubarState, setMenubarState] = useState(false);
+    const [menubarState, setMenubarState] = useState(false); // on small devices: true = open, false = closed | on bigger devices: true = closed, false = open
     const pathname = usePathname();
 
     const isHomePage = pathname === "/";
@@ -34,15 +34,15 @@ export const DashboardProvider: FC<{ Menubar: React.JSX.Element; children: React
                     <div className="flex flex-1">
                         <div
                             className={clsx(
-                                menubarState && "lg:hidden",
+                                menubarState && "xl:hidden",
                                 (menubarState || isHomePage) && "flex-1",
-                                "relative flex lg:flex-[0_0_450px] lg:border-r lg:border-r-neutral-300 lg:dark:border-r-neutral-800"
+                                "relative flex xl:flex-[0_0_450px] xl:border-r xl:border-r-neutral-300 xl:dark:border-r-neutral-800"
                             )}
                         >
                             <div className="absolute flex-1 inset-0 flex flex-col overflow-y-auto">{Menubar}</div>
                         </div>
                         <div
-                            className={clsx(menubarState || isHomePage ? "hidden lg:flex" : "flex", "relative flex-1")}
+                            className={clsx(menubarState || isHomePage ? "hidden xl:flex" : "flex", "relative flex-1")}
                         >
                             <div className="absolute inset-0 flex-1 flex flex-col overflow-y-auto">{children}</div>
                         </div>

@@ -12,20 +12,22 @@ import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
 import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { IoStarOutline } from "@react-icons/all-files/io5/IoStarOutline";
+import { RiOpenaiFill } from "@react-icons/all-files/ri/RiOpenaiFill";
 import clsx from "clsx";
 
 const TopSection = () => {
     const { user } = useAuthContext();
     const { setMenubarState, menubarState } = useDashboardContext();
+    const { toggleHelperSection, showHelperSection, talkingToSelf } = useChatContext();
     const { recipient } = useChatContext();
 
     return (
         <div className="flex items-center gap-2 justify-between p-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 truncate">
                 <Button variant="ghost" size="icon" onClick={() => setMenubarState(!menubarState)}>
-                    <FaArrowLeft className={clsx(menubarState && "lg:rotate-180", "text-xl")} />
+                    <FaArrowLeft className={clsx(menubarState && "xl:rotate-180", "text-xl")} />
                 </Button>
-                <div className="min-w-0 truncate flex items-center gap-3 group">
+                <div className="truncate flex items-center gap-3 group">
                     <PresenceAvatar avatarSize={50} src={recipient.avatar_url} userId={recipient.id} />
                     <div className="truncate flex flex-col justify-evenly p-2 rounded-lg transition-colors">
                         <div className="truncate">{recipient.display_name}</div>
@@ -36,28 +38,41 @@ const TopSection = () => {
                 </div>
             </div>
 
-            {recipient.bookmark_id ? (
-                <form action={deleteBookmark}>
-                    <input type="hidden" name="id" value={recipient.bookmark_id} />
-                    <Button asChild variant="ghost" size="icon">
-                        <SubmitButton
-                            content={<IoStar className="text-2xl text-blue-500 dark:text-white" />}
-                            loading={<AiOutlineLoading className="animate-spin text-2xl" />}
-                        />
-                    </Button>
-                </form>
-            ) : (
-                <form action={createBookmark}>
-                    <input type="hidden" name="user_id" value={user.id} />
-                    <input type="hidden" name="bookmarked_id" value={recipient.id} />
-                    <Button asChild variant="ghost" size="icon">
-                        <SubmitButton
-                            content={<IoStarOutline className="text-2xl text-blue-500 dark:text-white" />}
-                            loading={<AiOutlineLoading className="animate-spin text-2xl" />}
-                        />
-                    </Button>
-                </form>
-            )}
+            <div className="flex items-center gap-2">
+                {recipient.bookmark_id ? (
+                    <form action={deleteBookmark}>
+                        <input type="hidden" name="id" value={recipient.bookmark_id} />
+                        <Button asChild variant="ghost" size="icon">
+                            <SubmitButton
+                                content={<IoStar className="text-2xl text-blue-500 dark:text-white" />}
+                                loading={<AiOutlineLoading className="animate-spin text-2xl" />}
+                            />
+                        </Button>
+                    </form>
+                ) : (
+                    <form action={createBookmark}>
+                        <input type="hidden" name="user_id" value={user.id} />
+                        <input type="hidden" name="bookmarked_id" value={recipient.id} />
+                        <Button asChild variant="ghost" size="icon">
+                            <SubmitButton
+                                content={<IoStarOutline className="text-2xl text-blue-500 dark:text-white" />}
+                                loading={<AiOutlineLoading className="animate-spin text-2xl" />}
+                            />
+                        </Button>
+                    </form>
+                )}
+                <Button
+                    className={clsx(
+                        showHelperSection && "bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                    )}
+                    disabled={talkingToSelf}
+                    onClick={toggleHelperSection}
+                    variant="ghost"
+                    size="icon"
+                >
+                    <RiOpenaiFill className="text-2xl text-blue-500 dark:text-white" />
+                </Button>
+            </div>
         </div>
     );
 };

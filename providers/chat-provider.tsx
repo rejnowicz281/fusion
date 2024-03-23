@@ -18,6 +18,10 @@ const ChatContext = createContext<{
     toggleExpandPrompts: () => void;
     generatePrompt: () => Promise<string> | string;
     generateInitialPrompts: () => Promise<string[]> | string[];
+    showHelperSection: boolean;
+    setShowHelperSection: React.Dispatch<React.SetStateAction<boolean>>;
+    toggleHelperSection: () => void;
+    talkingToSelf: boolean;
 } | null>(null);
 
 export const ChatProvider: FC<{
@@ -28,11 +32,14 @@ export const ChatProvider: FC<{
     const { user } = useAuthContext();
     const [optimisticMessages, setOptimisticMessages] = useOptimistic(initialMessages);
     const [expandPrompts, setExpandPrompts] = useState(false);
+    const [showHelperSection, setShowHelperSection] = useState(false);
     const { englishPrompts } = useSettingsContext();
 
     const talkingToSelf = user.id === recipient.id;
 
     const toggleExpandPrompts = () => setExpandPrompts((expand) => !expand);
+
+    const toggleHelperSection = () => setShowHelperSection((show) => !show);
 
     const generatePrompt = () => {
         if (talkingToSelf) return "Am I really talking to myself? I need to get some sleep.";
@@ -79,6 +86,7 @@ export const ChatProvider: FC<{
     return (
         <ChatContext.Provider
             value={{
+                talkingToSelf,
                 addOptimisticMessage,
                 deleteOptimisticMessage,
                 optimisticMessages,
@@ -88,6 +96,9 @@ export const ChatProvider: FC<{
                 setExpandPrompts,
                 generatePrompt,
                 generateInitialPrompts,
+                showHelperSection,
+                setShowHelperSection,
+                toggleHelperSection,
             }}
         >
             {children}

@@ -8,7 +8,7 @@ const SettingsButton: FC<{ children: ReactNode; onClick?: () => any; asChild?: b
 }) => {
     return (
         <Button
-            className="flex items-center gap-1 rounded-none p-6 lg:rounded-md"
+            className="flex items-center gap-1 rounded-none p-6 xl:rounded-md"
             variant="ghost"
             asChild={asChild}
             onClick={onClick}
