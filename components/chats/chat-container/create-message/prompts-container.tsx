@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useChatContext from "@/providers/chat-provider";
+import { MdAutorenew } from "@react-icons/all-files/md/MdAutorenew";
 import { MdKeyboardArrowUp } from "@react-icons/all-files/md/MdKeyboardArrowUp";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -51,7 +52,9 @@ const PromptsContainer: FC<{
                 disabled={isFetching || isFetchingNextPage || isLoading}
                 onClick={() => fetchNextPage()}
             >
-                ?
+                <MdAutorenew
+                    className={clsx((isFetching || isFetchingNextPage || isLoading) && "animate-spin", "text-xl")}
+                />
             </Button>
             <div
                 className={clsx(

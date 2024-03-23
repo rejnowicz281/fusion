@@ -66,7 +66,7 @@ const CreateMessage = () => {
                         ref={inputRef}
                     />
                     <Button
-                        className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
+                        className="text-md py-8 rounded-none rounded-tl-md text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
                         variant="ghost"
                         onClick={beforeSend}
                     >
