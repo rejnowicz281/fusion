@@ -15,11 +15,11 @@ type NavLinkProps = {
 
 const NavLink: FC<NavLinkProps> = ({ children, href, className, activeClassName, prefetch = true }) => {
     const pathname = usePathname();
-    const { setShowMenubar } = useDashboardContext();
+    const { setMenubarState } = useDashboardContext();
 
     return (
         <Link
-            onClick={pathname === href ? () => setShowMenubar(false) : undefined}
+            onClick={pathname === href ? () => setMenubarState(false) : undefined}
             prefetch={prefetch}
             href={href}
             className={`${className}${pathname == href ? ` ${activeClassName}` : ""}`}

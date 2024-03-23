@@ -12,17 +12,18 @@ import { AiOutlineLoading } from "@react-icons/all-files/ai/AiOutlineLoading";
 import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { IoStarOutline } from "@react-icons/all-files/io5/IoStarOutline";
+import clsx from "clsx";
 
 const TopSection = () => {
     const { user } = useAuthContext();
-    const { setShowMenubar } = useDashboardContext();
+    const { setMenubarState, menubarState } = useDashboardContext();
     const { recipient } = useChatContext();
 
     return (
         <div className="flex items-center gap-2 justify-between p-4">
             <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setShowMenubar(true)}>
-                    <FaArrowLeft className="text-xl" />
+                <Button variant="ghost" size="icon" onClick={() => setMenubarState(!menubarState)}>
+                    <FaArrowLeft className={clsx(menubarState && "lg:rotate-180", "text-xl")} />
                 </Button>
                 <div className="min-w-0 truncate flex items-center gap-3 group">
                     <PresenceAvatar avatarSize={50} src={recipient.avatar_url} userId={recipient.id} />
