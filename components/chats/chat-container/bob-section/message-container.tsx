@@ -1,15 +1,15 @@
 import BobAvatar from "@/components/general/bob-avatar";
 import useAuthContext from "@/providers/auth-provider";
+import { ChatGPTMessage } from "@/types/chat-gpt-message";
 import Image from "next/image";
 import { FC } from "react";
-import { BobMessage } from ".";
 
-const Message: FC<{ message: BobMessage }> = ({ message }) => {
+const MessageContainer: FC<{ message: ChatGPTMessage }> = ({ message }) => {
     const { user } = useAuthContext();
 
     return (
         <div className="flex gap-4">
-            {message.bob ? (
+            {message.role === "assistant" ? (
                 <BobAvatar size={25} />
             ) : (
                 <Image
@@ -26,11 +26,13 @@ const Message: FC<{ message: BobMessage }> = ({ message }) => {
                 />
             )}
             <div>
-                <div className="xl:text-sm font-semibold">{message.bob ? "Bob" : "You"}</div>
-                <div className="xl:text-sm whitespace-pre-line">{message.text}</div>
+                <div className="xl:text-sm font-semibold">{message.role === "assistant" ? "Bob" : "You"}</div>
+                <div className="xl:text-sm whitespace-pre-line word-break leading-7 xl:leading-6">
+                    {message.content}
+                </div>
             </div>
         </div>
     );
 };
 
-export default Message;
+export default MessageContainer;
