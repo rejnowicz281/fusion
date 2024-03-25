@@ -28,7 +28,7 @@ const signUp = async (formData: FormData) => {
     if (!email) queryParams.append("email-error", "Email is required");
     else if (!email.includes("@")) queryParams.append("email-error", "Email must be valid");
 
-    if (!display_name) queryParams.append("display-name-error", "Display name is required");
+    if (!display_name) queryParams.append("display-name-error", "Name is required");
 
     if (!password) queryParams.append("password-error", "Password is required");
     else if (password.length < 6) queryParams.append("password-error", "Password must be at least 6 characters");

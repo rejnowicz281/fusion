@@ -16,7 +16,7 @@ const getCurrentUser = async () => {
     const user: User = {
         id: data.user.id,
         email: data.user.email!,
-        display_name: data.user.user_metadata.display_name,
+        display_name: data.user.user_metadata.display_name || data.user.email,
         avatar_url: data.user.user_metadata.avatar_url,
         created_at: data.user.created_at,
         provider: data.user.app_metadata.provider,

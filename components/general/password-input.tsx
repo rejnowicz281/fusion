@@ -9,12 +9,12 @@ const PasswordInput: FC<{ placeholder?: string; className?: string }> = ({ place
     return (
         <div
             className={clsx(
-                "h-10 flex rounded-md border border-slate-200 ring-offset-white focus-within:ring-2 focus-within:ring-offset-2 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 focus-within:ring-slate-200",
+                "h-10 flex rounded-md border border-zinc-200 ring-offset-white dark:border-zinc-800 dark:bg-zinc-950",
                 className
             )}
         >
             <input
-                className="flex-1 pl-3 rounded-tl-md rounded-bl-md text-sm placeholder:text-slate-500 focus-visible:outline-none"
+                className="min-w-0 flex-1 pl-3 rounded-tl-md rounded-bl-md text-sm placeholder:text-zinc-500 dark:placeholder:text-zinc-500 focus-visible:outline-none bg-inherit"
                 type={type}
                 id="password"
                 name="password"
@@ -22,7 +22,7 @@ const PasswordInput: FC<{ placeholder?: string; className?: string }> = ({ place
             />
             <button
                 type="button"
-                className="px-2 text-gray-500 hover:text-gray-400 transition-colors outline-none focus-visible:text-black"
+                className="shrink px-2 text-gray-500 hover:text-gray-400 transition-colors outline-none focus-visible:text-black"
                 onClick={() => setType((prev) => (prev === "password" ? "text" : "password"))}
             >
                 {type === "password" ? <FaEyeSlash /> : <FaEye />}
