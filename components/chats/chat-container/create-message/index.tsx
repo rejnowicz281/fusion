@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
+import useSettingsContext from "@/providers/settings-provider";
 import clsx from "clsx";
 import { useRef } from "react";
 import PromptsContainer from "./prompts-container";
@@ -14,6 +15,7 @@ const CreateMessage = () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const { user } = useAuthContext();
     const { addOptimisticMessage, recipient, expandPrompts, setExpandPrompts } = useChatContext();
+    const { promptsOn } = useSettingsContext();
 
     const beforeSend = () => {
         if (formRef.current) {
@@ -46,14 +48,16 @@ const CreateMessage = () => {
                 "border-t border-t-neutral-300 dark:border-t-neutral-800"
             )}
         >
-            <PromptsContainer
-                onPromptClick={(text: string) => {
-                    if (inputRef.current) {
-                        inputRef.current.focus();
-                        inputRef.current.value = text;
-                    }
-                }}
-            />
+            {promptsOn && (
+                <PromptsContainer
+                    onPromptClick={(text: string) => {
+                        if (inputRef.current) {
+                            inputRef.current.focus();
+                            inputRef.current.value = text;
+                        }
+                    }}
+                />
+            )}
             <div className="flex items-center justify-center">
                 <form className="flex-1 flex items-center justify-center" ref={formRef} action={handleSend}>
                     <input type="hidden" name="sender_id" value={user.id} />

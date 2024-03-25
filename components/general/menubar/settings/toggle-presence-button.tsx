@@ -12,16 +12,15 @@ const TogglePresenceButton = () => {
         <SettingsButton onClick={togglePresence}>
             {presenceEnabled ? (
                 <>
-                    <FaEyeSlash />
-                    Disable
+                    <FaEye />
+                    Presence Enabled
                 </>
             ) : (
                 <>
-                    <FaEye />
-                    Enable
+                    <FaEyeSlash />
+                    Presence Disabled
                 </>
-            )}{" "}
-            Presence
+            )}
         </SettingsButton>
     );
 };

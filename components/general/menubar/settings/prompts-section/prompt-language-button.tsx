@@ -1,7 +1,7 @@
 "use client";
 
 import useSettingsContext from "@/providers/settings-provider";
-import SettingsButton from "./settings-button";
+import SettingsButton from "../settings-button";
 
 const PromptLanguageButton = () => {
     const { toggleEnglishPrompts, englishPrompts } = useSettingsContext();
