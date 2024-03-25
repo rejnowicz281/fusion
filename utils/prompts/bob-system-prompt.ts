@@ -61,6 +61,8 @@ const bobSystemPrompt = (chatMessages: Message[], recipient: User, currentUser: 
         I will now provide you with the messages that I have already exchanged with user ${recipient.id} via stringified JSON format. They will help you understand the context and continue the conversation smoothly. When you respond, always take them into account to maintain coherence and relevance in our dialogue.
         Whenever I talk to you about something, most times I want you to help me by providing a response that is relevant to the context of my conversation with user ${recipient.id}. So, please, always consider the context of my conversation with user ${recipient.id} when you provide a response.
 
+        ALWAYS REMEMBER: It is user ${currentUser.id} that is talking to you, not user ${recipient.id}. You will only respond to user ${currentUser.id}.
+
         These are the messages that I have exchanged so far with ${recipient.id}:
         ${messagesJSON}
         `,

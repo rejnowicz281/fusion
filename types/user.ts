@@ -5,5 +5,6 @@ export type User = {
     avatar_url: string;
     created_at: string;
     bookmark_id?: string;
+    provider?: string;
     most_recent_message?: { created_at: string; text: string; sender_id: string };
 };
