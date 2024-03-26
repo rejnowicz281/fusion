@@ -1,4 +1,4 @@
-const BobAvatar = ({ size = 55 }) => {
+const BobAvatar = ({ size = 60 }) => {
     return (
         <svg
             className="bg-[rgb(217,221,226)] shrink-0 rounded-[50%]"

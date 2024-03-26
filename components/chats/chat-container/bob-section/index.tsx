@@ -135,7 +135,7 @@ const BobSection = () => {
             </Button>
             <div className="flex-1 relative">
                 <div className="absolute pt-6 inset-0 overflow-y-auto flex flex-col items-center gap-2">
-                    <BobAvatar />
+                    <BobAvatar size={55} />
                     <div className="text-xl tracking-wide text-center">Bob, Your Personal Sufler</div>
                     <div ref={messagesRef} className="flex flex-col gap-5 max-w-[700px] w-full px-3 pt-3 pb-6">
                         <>

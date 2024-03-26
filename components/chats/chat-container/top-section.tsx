@@ -2,6 +2,7 @@
 
 import createBookmark from "@/actions/bookmarks/modify/create-bookmark";
 import deleteBookmark from "@/actions/bookmarks/modify/delete-bookmark";
+import BobAvatar from "@/components/general/bob-avatar";
 import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ const TopSection = () => {
     const { user } = useAuthContext();
     const { setMenubarState, menubarState } = useDashboardContext();
     const { toggleHelperSection, showHelperSection, talkingToSelf } = useChatContext();
-    const { recipient } = useChatContext();
+    const { recipient, talkingToBob } = useChatContext();
 
     return (
         <div className="flex items-center gap-2 justify-between p-4">
@@ -28,12 +29,23 @@ const TopSection = () => {
                     <FaArrowLeft className={clsx(menubarState && "xl:rotate-180", "text-xl")} />
                 </Button>
                 <div className="truncate flex items-center gap-3 group">
-                    <PresenceAvatar avatarSize={50} src={recipient.avatar_url} userId={recipient.id} />
+                    {talkingToBob ? (
+                        <BobAvatar size={50} />
+                    ) : (
+                        <PresenceAvatar
+                            avatarSize={50}
+                            markerSize={12}
+                            src={recipient.avatar_url}
+                            userId={recipient.id}
+                        />
+                    )}
                     <div className="truncate flex flex-col justify-evenly p-2 rounded-lg transition-colors">
                         <div className="truncate">{recipient.display_name}</div>
-                        {recipient.email !== recipient.display_name && (
+                        {talkingToBob ? (
+                            <div className="truncate text-zinc-500">AI Companion</div>
+                        ) : recipient.email !== recipient.display_name ? (
                             <div className="truncate text-zinc-500">{recipient.email}</div>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </div>
@@ -65,7 +77,7 @@ const TopSection = () => {
                     className={clsx(
                         showHelperSection && "bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700"
                     )}
-                    disabled={talkingToSelf}
+                    disabled={talkingToSelf || talkingToBob}
                     onClick={toggleHelperSection}
                     variant="ghost"
                     size="icon"

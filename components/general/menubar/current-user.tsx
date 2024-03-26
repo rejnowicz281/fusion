@@ -17,7 +17,7 @@ const CurrentUser: FC<{
     return (
         <div className="flex items-center p-4 justify-between gap-4 transition-colors border-t border-t-neutral-300 dark:border-t-neutral-800">
             <div className="truncate flex items-center gap-3">
-                <PresenceAvatar avatarSize={40} userId={user.id} src={user.avatar_url} />
+                <PresenceAvatar avatarSize={40} markerSize={12} userId={user.id} src={user.avatar_url} />
                 <div className="truncate flex flex-col">
                     <div className="truncate dark:font-semibold">{user.display_name}</div>
                     <div className="truncate text-gray-500 text-sm font-semibold">FUSION ACCOUNT</div>

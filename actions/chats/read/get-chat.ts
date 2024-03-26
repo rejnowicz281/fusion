@@ -27,7 +27,7 @@ const getChat = async (userId: string) => {
             .order("created_at", { ascending: true }),
         isCurrentUser
             ? { data: currentUser, error: null }
-            : supabase.from("users").select("id, email, display_name, avatar_url").eq("id", userId).single(),
+            : supabase.from("users").select("*").eq("id", userId).single(),
         supabase.from("bookmarks").select("id").eq("bookmarked_id", userId).eq("user_id", currentUser.id),
     ]);
 

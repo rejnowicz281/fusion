@@ -1,5 +1,6 @@
 "use client";
 
+import { bobEmail } from "@/constants/bob";
 import usePresenceContext from "@/providers/presence-provider";
 import { User } from "@/types/user";
 import { FC, useState } from "react";
@@ -9,6 +10,13 @@ import UserLink from "./user-link";
 const Users: FC<{ users: User[] }> = ({ users }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const { loggedUsers } = usePresenceContext();
+
+    users = users.filter((user) => {
+        const displayName = user.display_name.toLowerCase();
+        const query = searchQuery.toLowerCase();
+
+        return displayName.includes(query); // filter by display name
+    });
 
     users.sort((a, b) => {
         // if both users have a most_recent_message, sort by the created_at date
@@ -26,14 +34,8 @@ const Users: FC<{ users: User[] }> = ({ users }) => {
         if (!a.bookmark_id && b.bookmark_id) return 1; // if b is bookmarked and a is not, put b first
         if (loggedUsers.includes(a.id) && !loggedUsers.includes(b.id)) return -1; // if a is logged in and b is not, put a first
         if (!loggedUsers.includes(a.id) && loggedUsers.includes(b.id)) return 1; // if b is logged in and a is not, put b first
+        if (a.email === bobEmail && b.email !== bobEmail) return -1; // if a is Bob and b is not, put a first
         return a.display_name.localeCompare(b.display_name); // sort by display name
-    });
-
-    users = users.filter((user) => {
-        const displayName = user.display_name.toLowerCase();
-        const query = searchQuery.toLowerCase();
-
-        return displayName.includes(query); // filter by display name
     });
 
     return (

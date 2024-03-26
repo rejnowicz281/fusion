@@ -1,6 +1,7 @@
 "use client";
 
 import _generatePrompt, { generateInitialPrompts as _generateInitialPrompts } from "@/actions/prompt";
+import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
@@ -21,6 +22,7 @@ const ChatContext = createContext<{
     showHelperSection: boolean;
     setShowHelperSection: React.Dispatch<React.SetStateAction<boolean>>;
     toggleHelperSection: () => void;
+    talkingToBob: boolean;
     talkingToSelf: boolean;
 } | null>(null);
 
@@ -36,6 +38,7 @@ export const ChatProvider: FC<{
     const { englishPrompts } = useSettingsContext();
 
     const talkingToSelf = user.id === recipient.id;
+    const talkingToBob = recipient.email === bobEmail;
 
     const toggleExpandPrompts = () => setExpandPrompts((expand) => !expand);
 
@@ -98,6 +101,7 @@ export const ChatProvider: FC<{
                 generateInitialPrompts,
                 showHelperSection,
                 setShowHelperSection,
+                talkingToBob,
                 toggleHelperSection,
             }}
         >
