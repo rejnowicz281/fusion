@@ -39,7 +39,7 @@ export const DashboardProvider: FC<{ Menubar: React.JSX.Element; children: React
                                 "relative flex xl:flex-[0_0_450px] xl:border-r xl:border-r-neutral-300 xl:dark:border-r-neutral-800"
                             )}
                         >
-                            <div className="absolute flex-1 inset-0 flex flex-col overflow-y-auto">{Menubar}</div>
+                            <div className="absolute inset-0 flex-1 flex flex-col overflow-y-auto">{Menubar}</div>
                         </div>
                         <div
                             className={clsx(menubarState || isHomePage ? "hidden xl:flex" : "flex", "relative flex-1")}

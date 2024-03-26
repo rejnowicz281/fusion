@@ -16,7 +16,15 @@ const Menubar: FC<{ UsersContainer: React.JSX.Element }> = ({ UsersContainer }) 
 
     return (
         <div className="flex-1 flex flex-col">
-            {showSettings ? <LazySettings /> : UsersContainer}
+            {showSettings ? (
+                <div className="relative flex-1">
+                    <div className="absolute overflow-y-auto inset-0">
+                        <LazySettings />
+                    </div>
+                </div>
+            ) : (
+                UsersContainer
+            )}
             <CurrentUser showSettings={showSettings} toggleSettings={toggleSettings} />
         </div>
     );
