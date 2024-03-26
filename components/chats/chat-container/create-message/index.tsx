@@ -44,7 +44,7 @@ const CreateMessage = () => {
     return (
         <div
             className={clsx(
-                expandPrompts && "flex flex-col flex-1",
+                expandPrompts && promptsOn && "flex flex-col flex-1",
                 "border-t border-t-neutral-300 dark:border-t-neutral-800"
             )}
         >
