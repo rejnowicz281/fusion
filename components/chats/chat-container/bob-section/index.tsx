@@ -5,7 +5,7 @@ import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
 import { ChatGPTMessage } from "@/types/chat-gpt-message";
 import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import MessageContainer from "./message-container";
@@ -20,12 +20,41 @@ const BobSection = () => {
     const [initialPromptClicked, setInitialPromptClicked] = useState<boolean>(false);
     const [isMessageUpdating, setIsMessageUpdating] = useState<boolean>(false);
 
-    const [messages, setMessages] = useState<ChatGPTMessage[]>([
+    const queryClient = useQueryClient();
+
+    const initialData: ChatGPTMessage[] = [
         {
             role: "assistant",
             content: `Hi! I'm Bob, your very own personal AI sufler. I am here to make your conversation with ${recipient.display_name} easier. Here are some of the things I can help you with:\n- Help you find the right words to say\n- Provide tips on how to keep the conversation engaging and flowing\n- Remind you of important details or events to mention\n- Help you navigate cultural or social nuances in your conversation\n- Assist with organizing your thoughts and structuring your messages for better clarity\n- And much more!`,
         },
-    ]);
+    ];
+
+    const { data: messages } = useQuery({
+        queryKey: ["bobMessages", recipient.id],
+        initialData,
+    });
+
+    const addMessage = (message: ChatGPTMessage) => {
+        queryClient.setQueryData(["bobMessages", recipient.id], (prev: ChatGPTMessage[]) => {
+            return [...prev, message];
+        });
+    };
+
+    const concatLastMessage = (text: string) => {
+        queryClient.setQueryData(["bobMessages", recipient.id], (prev: ChatGPTMessage[]) => {
+            const lastMessage = prev[prev.length - 1];
+            return prev.slice(0, -1).concat({
+                ...lastMessage,
+                content: lastMessage.content + text,
+            });
+        });
+    };
+
+    const removeLastMessage = () => {
+        queryClient.setQueryData(["bobMessages", recipient.id], (prev: ChatGPTMessage[]) => {
+            return prev.slice(0, -1);
+        });
+    };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -41,11 +70,11 @@ const BobSection = () => {
         }
     };
 
-    const addMessage = (message: ChatGPTMessage) => setMessages((prev) => [...prev, message]);
-
     const { mutate: sendMessage, isPending } = useMutation({
-        mutationKey: ["sendMessage"],
+        mutationKey: ["sendBobMessage"],
+
         // include message to later use it in onMutate
+
         mutationFn: async (message: ChatGPTMessage) => {
             const response = await fetch("/api/bob-helper", {
                 method: "POST",
@@ -90,20 +119,14 @@ const BobSection = () => {
                 const chunkValue = decoder.decode(value);
 
                 // update last message with new chunks
-                setMessages((prev) => {
-                    const lastMessage = prev[prev.length - 1];
-                    return prev.slice(0, -1).concat({
-                        ...lastMessage,
-                        content: lastMessage.content + chunkValue,
-                    });
-                });
+                concatLastMessage(chunkValue);
             }
 
             // clean up
             setIsMessageUpdating(false);
         },
         onError: (_, message) => {
-            setMessages((prev) => prev.slice(0, -1));
+            removeLastMessage();
             console.log("There was an error sending the message.");
         },
     });
@@ -139,25 +162,23 @@ const BobSection = () => {
                     <div className="text-xl tracking-wide text-center">Bob, Your Personal Sufler</div>
                     <div ref={messagesRef} className="flex flex-col gap-5 max-w-[700px] w-full px-3 pt-3 pb-6">
                         <>
-                            <MessageContainer message={messages[0]} />
-                            <Button
-                                onClick={() => {
-                                    sendMessage({
-                                        role: "user",
-                                        content: `Generate a list of 5 things I could say to ${recipient.display_name} right now`,
-                                    });
-                                    setInitialPromptClicked(true);
-                                }}
-                                className={clsx(
-                                    initialPromptClicked && "hidden",
-                                    "max-w-[400px] h-auto w-full mx-auto bg-[rgb(83,116,161)] dark:bg-[rgb(22,40,65)] dark:hover:bg-[rgb(50,70,97)] hover:bg-[rgb(137,162,197)] text-zinc-200 dark:text-zinc-200 rounded-lg"
-                                )}
-                            >
-                                Generate a list of 5 things I could say to {recipient.display_name} right now
-                            </Button>
-                            {messages.slice(1).map((message, index) => (
+                            {messages.map((message, index) => (
                                 <MessageContainer message={message} key={index} />
                             ))}
+                            {!initialPromptClicked && (
+                                <Button
+                                    onClick={() => {
+                                        sendMessage({
+                                            role: "user",
+                                            content: `Generate a list of 5 things I could say to ${recipient.display_name} right now`,
+                                        });
+                                        setInitialPromptClicked(true);
+                                    }}
+                                    className="max-w-[400px] h-auto w-full mx-auto bg-[rgb(83,116,161)] dark:bg-[rgb(22,40,65)] dark:hover:bg-[rgb(50,70,97)] hover:bg-[rgb(137,162,197)] text-zinc-200 dark:text-zinc-200 rounded-lg"
+                                >
+                                    Generate a list of 5 things I could say to {recipient.display_name} right now
+                                </Button>
+                            )}
                         </>
                     </div>
                 </div>
