@@ -1,9 +1,11 @@
 "use server";
 
+import { ChatGPTMessage } from "@/types/chat-gpt-message";
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
 import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
+import formatSameRoleMessages from "@/utils/ai/helpers/formatSameRoleMessages";
 import initialPrompt from "@/utils/ai/prompts/auto-complete-prompt";
 import { randomUUID } from "crypto";
 
@@ -30,12 +32,14 @@ export default async function generatePrompt(currentUser: User, recipient: User,
 
     const actionName = "generatePrompt";
 
-    const formattedMessages = messages.map((message) => {
+    const formattedMessages: ChatGPTMessage[] = messages.map((message) => {
         return {
             role: message.sender.id === currentUser.id ? "assistant" : "user", // have current user be the assistant
             content: message.text,
         };
     });
+
+    formatSameRoleMessages(formattedMessages);
 
     try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {

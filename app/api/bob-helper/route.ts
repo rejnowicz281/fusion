@@ -1,4 +1,5 @@
 import { OpenAIStreamPayload } from "@/types/openai-stream-payload";
+import formatSameRoleMessages from "@/utils/ai/helpers/formatSameRoleMessages";
 import OpenAIStream from "@/utils/ai/openai/openai-stream";
 import bobHelperPrompt from "@/utils/ai/prompts/bob-helper-prompt";
 
@@ -6,6 +7,8 @@ export async function POST(req: Request) {
     const { chatMessages, bobMessages, currentUser, recipient } = await req.json();
 
     bobMessages.unshift(bobHelperPrompt(chatMessages, recipient, currentUser));
+
+    formatSameRoleMessages(bobMessages);
 
     const payload: OpenAIStreamPayload = {
         model: "gpt-3.5-turbo",

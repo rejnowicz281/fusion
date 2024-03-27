@@ -104,7 +104,7 @@ const BobSection = () => {
         },
         onError: (_, message) => {
             setMessages((prev) => prev.slice(0, -1));
-            console.log("There was an erorr sending the message.");
+            console.log("There was an error sending the message.");
         },
     });
 
