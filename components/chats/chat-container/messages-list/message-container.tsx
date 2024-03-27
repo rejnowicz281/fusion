@@ -58,7 +58,7 @@ const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
                 <TooltipTrigger asChild>
                     <div
                         className={clsx(
-                            "p-2 rounded-2xl flex items-center justify-center text-white",
+                            "p-2 rounded-2xl flex items-center justify-center text-white word-break xl:max-w-[700px]",
                             isSender ? "bg-blue-500" : "bg-zinc-600 dark:bg-[rgb(43,43,43)]"
                         )}
                     >
