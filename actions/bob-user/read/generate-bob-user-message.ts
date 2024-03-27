@@ -4,35 +4,14 @@ import { Message } from "@/types/message";
 import { User } from "@/types/user";
 import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
-import initialPrompt from "@/utils/prompts/initial-prompt";
-import { randomUUID } from "crypto";
+import bobUserPrompt from "@/utils/ai/prompts/bob-user-prompt";
 
-const promptTesting = async () => {
-    const actionName = "promptTesting";
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const prompt = randomUUID();
-
-    return actionSuccess(actionName, { prompt }, { logData: false });
-};
-
-export async function generateInitialPrompts(currentUser: User, recipient: User, messages: Message[], english = true) {
-    const actionName = "generateInitialPrompts";
-
-    const prompt = () => generatePrompt(currentUser, recipient, messages, english).then((res) => res.prompt);
-
-    const prompts = await Promise.all([prompt(), prompt(), prompt()]);
-
-    return actionSuccess(actionName, { prompts }, { log: false });
-}
-
-export default async function generatePrompt(currentUser: User, recipient: User, messages: Message[], english = true) {
-    // return await promptTesting();
-
-    const actionName = "generatePrompt";
+export default async function generateBobUserMessage(currentUser: User, messages: Message[]) {
+    const actionName = "generateBobUserMessage";
 
     const formattedMessages = messages.map((message) => {
         return {
-            role: message.sender.id === currentUser.id ? "assistant" : "user", // have current user be the assistant
+            role: message.sender.id === currentUser.id ? "user" : "assistant",
             content: message.text,
         };
     });
@@ -47,7 +26,7 @@ export default async function generatePrompt(currentUser: User, recipient: User,
             method: "POST",
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: [initialPrompt(currentUser, recipient, english), ...formattedMessages],
+                messages: [bobUserPrompt(currentUser), ...formattedMessages],
                 temperature: 0.4,
                 top_p: 1,
                 frequency_penalty: 0,

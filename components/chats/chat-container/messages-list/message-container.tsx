@@ -1,7 +1,9 @@
 import deleteMessage from "@/actions/chats/modify/delete-message";
+import BobAvatar from "@/components/general/bob-avatar";
 import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
 import { Message } from "@/types/message";
@@ -17,7 +19,7 @@ type MessageContainerProps = {
 
 const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
     const { user } = useAuthContext();
-    const { deleteOptimisticMessage } = useChatContext();
+    const { deleteOptimisticMessage, talkingToBob } = useChatContext();
 
     const isSender = message.sender.id === user.id;
 
@@ -37,12 +39,16 @@ const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
                     <TooltipContent>{message.sender.display_name}</TooltipContent>
                     <TooltipTrigger asChild>
                         <div>
-                            <PresenceAvatar
-                                avatarSize={40}
-                                src={message.sender.avatar_url}
-                                markerSize={12}
-                                userId={message.sender.id}
-                            />
+                            {talkingToBob ? (
+                                <BobAvatar size={40} />
+                            ) : (
+                                <PresenceAvatar
+                                    avatarSize={40}
+                                    src={message.sender.avatar_url}
+                                    markerSize={12}
+                                    userId={message.sender.id}
+                                />
+                            )}
                         </div>
                     </TooltipTrigger>
                 </Tooltip>
@@ -65,7 +71,7 @@ const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
                 {message.loading ? (
                     <AiOutlineLoading className="animate-spin" />
                 ) : (
-                    message.sender.id === user.id && (
+                    (message.sender.id === user.id || message.sender.email === bobEmail) && (
                         <form action={handleDelete}>
                             <input type="hidden" name="id" value={message.id} />
                             <SubmitButton

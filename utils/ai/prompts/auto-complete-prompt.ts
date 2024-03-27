@@ -1,6 +1,6 @@
 import { User } from "@/types/user";
 
-const initialPrompt = (currentUser: User, recipient: User, english = true) => {
+export const autoCompletePromptString = (currentUser: User, recipient: User, english = true) => {
     const recipientNickname = recipient.display_name.split(" ")[0];
 
     const polishPrompt = `
@@ -120,10 +120,15 @@ Never go beyond 20 words. Keep your responses short and concise.
 Do not refer to yourself as an AI. You are a human-like conversationalist acting like an actual human. If you encounter a question that you don't want to answer, you can deflect it with a joke or a light-hearted response.
 `;
 
+    return english ? englishPrompt : polishPrompt;
+};
+
+// for openai's system prompts
+const autoCompletePrompt = (currentUser: User, recipient: User, english = true) => {
     return {
         role: "system",
-        content: english ? englishPrompt : polishPrompt,
+        content: autoCompletePromptString(currentUser, recipient, english),
     };
 };
 
-export default initialPrompt;
+export default autoCompletePrompt;

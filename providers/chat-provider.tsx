@@ -1,6 +1,8 @@
 "use client";
 
-import _generatePrompt, { generateInitialPrompts as _generateInitialPrompts } from "@/actions/prompt";
+import _generatePrompt, {
+    generateInitialPrompts as _generateInitialPrompts,
+} from "@/actions/auto-complete/read/prompt-generation";
 import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
@@ -10,7 +12,7 @@ import { FC, ReactNode, createContext, useContext, useOptimistic, useState } fro
 import useSettingsContext from "./settings-provider";
 
 const ChatContext = createContext<{
-    addOptimisticMessage: (text: string, sender?: any) => void;
+    addOptimisticMessage: (text: string, loading?: boolean, sender?: any) => Message;
     deleteOptimisticMessage: (id: string) => void;
     optimisticMessages: Message[];
     recipient: User;
@@ -60,12 +62,12 @@ export const ChatProvider: FC<{
             );
     };
 
-    function addOptimisticMessage(text: string, sender = user) {
+    function addOptimisticMessage(text: string, loading = true, sender = user) {
         const message = {
             id: Math.random().toString(),
             text,
             sender,
-            loading: true,
+            loading,
             created_at: new Date().toISOString(),
         };
 
@@ -75,6 +77,8 @@ export const ChatProvider: FC<{
 
             return [...messages, message];
         });
+
+        return message;
     }
 
     function deleteOptimisticMessage(id: string) {

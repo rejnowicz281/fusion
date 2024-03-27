@@ -2,7 +2,7 @@ import { ChatGPTMessage } from "@/types/chat-gpt-message";
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
 
-const bobSystemPrompt = (chatMessages: Message[], recipient: User, currentUser: User) => {
+export const bobHelperPromptString = (chatMessages: Message[], recipient: User, currentUser: User) => {
     const formattedMessages = chatMessages.map((message) => {
         return {
             id: message.id,
@@ -17,10 +17,8 @@ const bobSystemPrompt = (chatMessages: Message[], recipient: User, currentUser: 
     });
     const messagesJSON = JSON.stringify(formattedMessages);
 
-    const prompt: ChatGPTMessage = {
-        role: "system",
-        content: `Let’s play a very interesting game: from now on, you will play the role 'Bob', my personal sufler.
-        My name is ${currentUser.display_name}, and my id is ${currentUser.id}. So hi, Bob!
+    const prompt = `Let’s play a very interesting game: from now on, you will play the role 'Bob', my personal sufler.
+        My name is ${currentUser.display_name}, and my id is ${currentUser.id}.
         Your task is to assist me (user ${currentUser.id}) in managing conversations with user ${recipient.id}. His name is ${recipient.display_name}. Our goal is to enhance the quality of our conversations by finding the right words, keeping the dialogue engaging, remembering important details, navigating social nuances, organizing thoughts, and ensuring clarity in messages.
 
         You are 'Bob' - my personal sufler to manage conversations with user ${recipient.id}. You will guide me in finding the right words, providing tips for engaging conversations, reminding me of important details, and assisting in structuring messages for clarity. Our main goal is to have meaningful conversations with user ${recipient.id}, and your role is to support me in achieving this.
@@ -65,10 +63,18 @@ const bobSystemPrompt = (chatMessages: Message[], recipient: User, currentUser: 
 
         These are the messages that I have exchanged so far with ${recipient.id}:
         ${messagesJSON}
-        `,
+        `;
+
+    return prompt;
+};
+
+const bobHelperPrompt = (chatMessages: Message[], recipient: User, currentUser: User) => {
+    const prompt: ChatGPTMessage = {
+        role: "system",
+        content: bobHelperPromptString(chatMessages, recipient, currentUser),
     };
 
     return prompt;
 };
 
-export default bobSystemPrompt;
+export default bobHelperPrompt;

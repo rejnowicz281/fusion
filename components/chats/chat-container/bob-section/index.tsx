@@ -47,7 +47,7 @@ const BobSection = () => {
         mutationKey: ["sendMessage"],
         // include message to later use it in onMutate
         mutationFn: async (message: ChatGPTMessage) => {
-            const response = await fetch("/api/bob", {
+            const response = await fetch("/api/bob-helper", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

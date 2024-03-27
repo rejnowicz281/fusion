@@ -1,11 +1,11 @@
 import { OpenAIStreamPayload } from "@/types/openai-stream-payload";
-import bobSystemPrompt from "@/utils/prompts/bob-system-prompt";
-import OpenAIStream from "@/utils/prompts/openai-stream";
+import OpenAIStream from "@/utils/ai/openai/openai-stream";
+import bobHelperPrompt from "@/utils/ai/prompts/bob-helper-prompt";
 
 export async function POST(req: Request) {
     const { chatMessages, bobMessages, currentUser, recipient } = await req.json();
 
-    bobMessages.unshift(bobSystemPrompt(chatMessages, recipient, currentUser));
+    bobMessages.unshift(bobHelperPrompt(chatMessages, recipient, currentUser));
 
     const payload: OpenAIStreamPayload = {
         model: "gpt-3.5-turbo",

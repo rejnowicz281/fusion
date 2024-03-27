@@ -1,5 +1,7 @@
 "use client";
 
+import generateBobUserMessage from "@/actions/bob-user/read/generate-bob-user-message";
+import createAiMessages from "@/actions/chats/modify/create-ai-messages";
 import createMessage from "@/actions/chats/modify/create-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +16,8 @@ const CreateMessage = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const { user } = useAuthContext();
-    const { addOptimisticMessage, recipient, expandPrompts, setExpandPrompts } = useChatContext();
+    const { addOptimisticMessage, recipient, expandPrompts, setExpandPrompts, talkingToBob, optimisticMessages } =
+        useChatContext();
     const { promptsOn } = useSettingsContext();
 
     const beforeSend = () => {
@@ -27,17 +30,28 @@ const CreateMessage = () => {
         }
     };
 
-    const handleSend = (formData: FormData) => {
+    const handleSend = async (formData: FormData) => {
         const textFormData = formData.get("text");
 
         const text = typeof textFormData === "string" ? textFormData.trim() : null;
 
         if (text) {
-            addOptimisticMessage(text);
-
-            createMessage(formData);
-
             formRef.current?.reset();
+
+            const message = addOptimisticMessage(text);
+
+            if (!talkingToBob) {
+                createMessage(formData);
+                return;
+            }
+
+            const freshMessages = [...optimisticMessages, message];
+
+            const bobMessage = await generateBobUserMessage(user, freshMessages);
+
+            formData.append("ai_text", bobMessage.prompt);
+
+            createAiMessages(formData); // create user message and AI response
         }
     };
 
