@@ -9,6 +9,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import MessageContainer from "./message-container";
+import ResetButton from "./reset-button";
+import SendButton from "./send-button";
 
 const BobSection = () => {
     const { user } = useAuthContext();
@@ -56,15 +58,22 @@ const BobSection = () => {
         });
     };
 
+    const resetChat = () => {
+        queryClient.setQueryData(["bobMessages", recipient.id], initialData);
+        setInitialPromptClicked(false);
+    };
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setInitialPromptClicked(true);
 
         if (formRef.current) {
             const formData = new FormData(formRef.current);
             const content = formData.get("content");
             if (typeof content === "string" && content.trim().length > 0) {
+                setInitialPromptClicked(true);
+
                 sendMessage({ role: "user", content });
+
                 formRef.current.reset();
             }
         }
@@ -188,15 +197,14 @@ const BobSection = () => {
                 onSubmit={handleSubmit}
                 className="flex items-center gap-3 justify-center p-6 border-t border-t-neutral-300 dark:border-t-neutral-800"
             >
+                <ResetButton disabled={isPending || isMessageUpdating} onClick={resetChat} />
                 <Input
                     disabled={isPending || isMessageUpdating}
                     name="content"
                     placeholder="Ask me anything..."
                     className="flex-1"
                 />
-                <Button type="submit" variant="ghost" disabled={isPending || isMessageUpdating}>
-                    Ask
-                </Button>
+                <SendButton disabled={isPending || isMessageUpdating} />
             </form>
         </div>
     );
