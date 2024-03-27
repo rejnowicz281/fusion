@@ -86,6 +86,7 @@ const BobSection = () => {
 
         mutationFn: async (message: ChatGPTMessage) => {
             const response = await fetch("/api/bob-helper", {
+                cache: "no-store",
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
