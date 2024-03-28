@@ -8,6 +8,7 @@ import { User } from "@/types/user";
 import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
+import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
 import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import bobUserPrompt, { bobUserPromptString } from "@/utils/ai/prompts/bob-user-prompt";
 import debug from "@/utils/general/debug";
@@ -21,6 +22,8 @@ export default async function generateBobUserMessage(currentUser: User, messages
             content: message.text,
         };
     });
+
+    formatAiMessages(formattedMessages);
 
     const gptFetch = () => {
         const messages = formatSameRoleMessages(formattedMessages);
@@ -62,9 +65,18 @@ export default async function generateBobUserMessage(currentUser: User, messages
 
         const data = await res.json();
 
-        const prompt = data.error ? data.error.message : data.choices[0].message.content;
+        if (data.error) {
+            if (fallback) {
+                debug(`GPT failed, falling back to Claude - ${data.error.message}`);
+                return claudeResponse();
+            }
 
-        return actionSuccess(actionName, { prompt, previousMessages: formattedMessages }, { logData: false });
+            return actionError(actionName, { prompt: data.error.message });
+        }
+
+        const prompt = data.choices[0].message.content;
+
+        return actionSuccess(actionName, { prompt }, { logData: true });
     };
 
     const claudeFetch = () => {
@@ -92,7 +104,7 @@ export default async function generateBobUserMessage(currentUser: User, messages
 
             const prompt = res.content[0].text;
 
-            return actionSuccess(actionName, { prompt, previousMessages: formattedMessages }, { logData: false });
+            return actionSuccess(actionName, { prompt }, { logData: true });
         } catch (e: any) {
             if (fallback) {
                 debug(`Claude failed, falling back to GPT - ${e.message}`);

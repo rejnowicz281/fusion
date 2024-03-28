@@ -2,6 +2,7 @@ import { AI } from "@/constants/ai";
 import { ClaudeMessage } from "@/types/claude-message";
 import { Message } from "@/types/message";
 import anthropic from "@/utils/ai/anthropic";
+import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
 import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import generateErrorStream from "@/utils/ai/helpers/generate-error-stream";
 import bobHelperPrompt, { bobHelperPromptString } from "@/utils/ai/prompts/bob-helper-prompt";
@@ -35,6 +36,8 @@ export async function POST(req: Request) {
 
     if (assistantMessage) assistantMessage.content = `${assistantMessage.content} \n\n --- ${chatHistory} ---`;
     else bobMessages.push({ role: "assistant", content: chatHistory });
+
+    formatAiMessages(bobMessages);
 
     const gptFetch = () => {
         const messages = formatSameRoleMessages(bobMessages);

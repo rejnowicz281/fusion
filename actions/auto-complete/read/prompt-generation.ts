@@ -8,6 +8,7 @@ import { User } from "@/types/user";
 import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
+import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
 import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import autoCompletePrompt, { autoCompletePromptString } from "@/utils/ai/prompts/auto-complete-prompt";
 import debug from "@/utils/general/debug";
@@ -38,7 +39,7 @@ export default async function generatePrompts(
 
     const actionName = `generatePrompts-${AI}`;
 
-    const formattedMessages = messages.map((message, idx) => {
+    const formattedMessages = messages.map((message) => {
         // have current user be the assistant
         const role = message.sender.id === currentUser.id ? "assistant" : "user";
 
@@ -48,24 +49,16 @@ export default async function generatePrompts(
         };
     });
 
-    const lastMessage = formattedMessages[formattedMessages.length - 1];
-
-    // make sure last message ends with a period
-    if (lastMessage && !lastMessage.content.endsWith(".")) lastMessage.content += ".";
-
-    // if last message is from the assistant, make ai continue from it's last message
-    if (lastMessage?.role === "assistant")
-        formattedMessages.push({
-            role: "user",
-            content: "(continue from last message - add something more to your last message)",
-        });
+    formatAiMessages(formattedMessages);
 
     const nPrompts = (prompt: string) => nStrings(n, prompt);
 
     const gptFetch = () => {
         const messages = formatSameRoleMessages(formattedMessages);
 
-        messages.unshift(autoCompletePrompt(currentUser, recipient, english));
+        const system = autoCompletePrompt(currentUser, recipient, english);
+
+        messages.unshift(system);
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -113,7 +106,7 @@ export default async function generatePrompts(
 
         const prompts = data.choices.map((choice: { message: { content: string } }) => choice.message.content);
 
-        return actionSuccess(actionName, { prompts, previousMessages: formattedMessages }, { logData: true });
+        return actionSuccess(actionName, { prompts }, { logData: true });
     };
 
     const claudeResponse = async (fallback = false): Promise<ActionResponse> => {
