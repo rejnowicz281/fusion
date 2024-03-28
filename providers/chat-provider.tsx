@@ -1,8 +1,6 @@
 "use client";
 
-import _generatePrompt, {
-    generateInitialPrompts as _generateInitialPrompts,
-} from "@/actions/auto-complete/read/prompt-generation";
+import _generatePrompts from "@/actions/auto-complete/read/prompt-generation";
 import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
@@ -19,8 +17,7 @@ const ChatContext = createContext<{
     expandPrompts: boolean;
     setExpandPrompts: React.Dispatch<React.SetStateAction<boolean>>;
     toggleExpandPrompts: () => void;
-    generatePrompt: () => Promise<string> | string;
-    generateInitialPrompts: () => Promise<string[]> | string[];
+    generatePrompts: (n: number) => Promise<string[]> | string[];
     showHelperSection: boolean;
     setShowHelperSection: React.Dispatch<React.SetStateAction<boolean>>;
     toggleHelperSection: () => void;
@@ -46,20 +43,20 @@ export const ChatProvider: FC<{
 
     const toggleHelperSection = () => setShowHelperSection((show) => !show);
 
-    const generatePrompt = () => {
-        if (talkingToSelf) return "Am I really talking to myself? I need to get some sleep.";
-        else return _generatePrompt(user, recipient, optimisticMessages, englishPrompts).then((res) => res.prompt);
-    };
-
-    const generateInitialPrompts = () => {
+    const generatePrompts = (n = 1) => {
         if (talkingToSelf) {
             const prompt = "Am I really talking to myself? I need to get some sleep.";
 
-            return [prompt, prompt, prompt];
-        } else
-            return _generateInitialPrompts(user, recipient, optimisticMessages, englishPrompts).then(
+            const prompts = Array.from({ length: n }, () => prompt);
+
+            return prompts;
+        } else {
+            const prompts = _generatePrompts(user, recipient, optimisticMessages, n, englishPrompts).then(
                 (res) => res.prompts
             );
+
+            return prompts;
+        }
     };
 
     function addOptimisticMessage(text: string, loading = true, sender = user) {
@@ -101,8 +98,7 @@ export const ChatProvider: FC<{
                 toggleExpandPrompts,
                 expandPrompts,
                 setExpandPrompts,
-                generatePrompt,
-                generateInitialPrompts,
+                generatePrompts,
                 showHelperSection,
                 setShowHelperSection,
                 talkingToBob,

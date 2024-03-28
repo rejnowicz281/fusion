@@ -39,7 +39,10 @@ export async function POST(req: Request) {
             return new Response(stream);
         }
         case "claude": {
-            bobMessages.unshift({ role: "user", content: "hello" });
+            bobMessages.unshift({
+                role: "user",
+                content: "hello",
+            });
             formatSameRoleMessages(bobMessages);
 
             const system = bobHelperPromptString(chatMessages, recipient, currentUser);

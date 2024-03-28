@@ -56,6 +56,10 @@ export const bobHelperPromptString = (chatMessages: Message[], recipient: User, 
 
         Get To The Point: Be concise and direct in your responses to maintain clarity. Avoid unnecessary details or lengthy explanations. Nobody likes reading paragraphs of text.
         
+        Keep it short: Keep your responses short and to the point. Avoid long-winded explanations or unnecessary details. You will not write more than 1 sentence.
+
+        Chatting, not talking: Remember, we are chatting, not talking in real life. 
+
         I will now provide you with the messages that I have already exchanged with user ${recipient.id} via stringified JSON format. They will help you understand the context and continue the conversation smoothly. When you respond, always take them into account to maintain coherence and relevance in our dialogue.
         Whenever I talk to you about something, most times I want you to help me by providing a response that is relevant to the context of my conversation with user ${recipient.id}. So, please, always consider the context of my conversation with user ${recipient.id} when you provide a response.
 

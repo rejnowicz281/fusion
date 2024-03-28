@@ -53,10 +53,12 @@ export default async function generateBobUserMessage(currentUser: User, messages
             return actionSuccess(actionName, { prompt, previousMessages: formattedMessages }, { logData: false });
         }
         case "claude": {
-            formattedMessages.unshift({ role: "user", content: "hello" });
+            formattedMessages.unshift({
+                role: "user",
+                content: "hello",
+            });
 
             formatSameRoleMessages(formattedMessages);
-
             const system = bobUserPromptString(currentUser);
 
             const res = await anthropic.messages
@@ -77,8 +79,10 @@ export default async function generateBobUserMessage(currentUser: User, messages
                     );
                 })
                 .catch((e) => {
-                    console.log(e);
-                    return actionSuccess(actionName, { prompt: "There was an error generating the prompt" });
+                    return actionSuccess(actionName, {
+                        prompt: "There was an error generating the prompt",
+                        error: e.message,
+                    });
                 });
 
             return res;
