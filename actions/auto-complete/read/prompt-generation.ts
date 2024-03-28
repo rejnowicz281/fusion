@@ -10,6 +10,7 @@ import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import autoCompletePrompt, { autoCompletePromptString } from "@/utils/ai/prompts/auto-complete-prompt";
+import debug from "@/utils/general/debug";
 import { randomUUID } from "crypto";
 
 const nStrings = (n: number, string: string) => Array.from({ length: n }, () => string);
@@ -39,17 +40,25 @@ export default async function generatePrompts(
 
     const formattedMessages = messages.map((message, idx) => {
         // have current user be the assistant
-        const role = message.sender.id === currentUser.id ? "user" : "assistant";
-
-        // make sure last message ends with a period
-        const isLastMessage = idx === messages.length - 1;
-        const content = message.text + (!message.text.endsWith(".") && isLastMessage ? "." : "");
+        const role = message.sender.id === currentUser.id ? "assistant" : "user";
 
         return {
             role,
-            content,
+            content: message.text,
         };
     });
+
+    const lastMessage = formattedMessages[formattedMessages.length - 1];
+
+    // make sure last message ends with a period
+    if (lastMessage && !lastMessage.content.endsWith(".")) lastMessage.content += ".";
+
+    // if last message is from the assistant, make ai continue from it's last message
+    if (lastMessage?.role === "assistant")
+        formattedMessages.push({
+            role: "user",
+            content: "(continue from last message - add something more to your last message)",
+        });
 
     const nPrompts = (prompt: string) => nStrings(n, prompt);
 
@@ -67,7 +76,7 @@ export default async function generatePrompts(
             method: "POST",
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: formattedMessages,
+                messages,
                 temperature: 0.4,
                 max_tokens: 200,
                 top_p: 1,
@@ -79,10 +88,14 @@ export default async function generatePrompts(
     };
 
     const gptResponse = async (fallback = false): Promise<ActionResponse> => {
+        debug("Running GPT Response");
         const res = await gptFetch();
 
         if (!res.ok) {
-            if (fallback) return claudeResponse();
+            if (fallback) {
+                debug(`GPT Failed, Falling back to Claude - ${res.statusText}`);
+                return claudeResponse();
+            }
 
             return actionError(actionName, { prompts: nPrompts(res.statusText) });
         }
@@ -90,17 +103,21 @@ export default async function generatePrompts(
         const data = await res.json();
 
         if (data.error) {
-            if (fallback) return claudeResponse();
+            if (fallback) {
+                debug(`GPT Failed, Falling back to Claude - ${data.error.message}`);
+                return claudeResponse();
+            }
 
             return actionError(actionName, { prompts: nPrompts(data.error.message) });
         }
 
         const prompts = data.choices.map((choice: { message: { content: string } }) => choice.message.content);
 
-        return actionSuccess(actionName, { prompts, previousMessages: formattedMessages }, { logData: false });
+        return actionSuccess(actionName, { prompts, previousMessages: formattedMessages }, { logData: true });
     };
 
     const claudeResponse = async (fallback = false): Promise<ActionResponse> => {
+        debug("Running Claude Response");
         const withUser = [{ role: "user", content: "hello" }, ...formattedMessages];
 
         const messages = formatSameRoleMessages(withUser);
@@ -132,7 +149,10 @@ export default async function generatePrompts(
 
             return actionSuccess(actionName, { prompts }, { logData: true });
         } catch (e: any) {
-            if (fallback) return gptResponse();
+            if (fallback) {
+                debug(`Claude Failed, Falling back to GPT - ${e.message}`);
+                return gptResponse();
+            }
 
             return actionError(actionName, {
                 prompts: nPrompts("There was an error generating the prompt"),
@@ -149,11 +169,7 @@ export default async function generatePrompts(
             return claudeResponse(true);
         }
         default: {
-            const prompt = "AI not found";
-
-            const prompts = nPrompts(prompt);
-
-            return actionError(actionName, { prompts });
+            return actionError(actionName, { prompts: nPrompts("AI Not Found") });
         }
     }
 }
