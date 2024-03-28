@@ -10,6 +10,7 @@ import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import bobUserPrompt, { bobUserPromptString } from "@/utils/ai/prompts/bob-user-prompt";
+import debug from "@/utils/general/debug";
 
 export default async function generateBobUserMessage(currentUser: User, messages: Message[]) {
     const actionName = `generateBobUserMessage-${AI}`;
@@ -35,7 +36,7 @@ export default async function generateBobUserMessage(currentUser: User, messages
             method: "POST",
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: formattedMessages,
+                messages,
                 temperature: 0.4,
                 top_p: 1,
                 frequency_penalty: 0,
@@ -46,10 +47,15 @@ export default async function generateBobUserMessage(currentUser: User, messages
     };
 
     const gptResponse = async (fallback = false): Promise<ActionResponse> => {
+        debug("Running GPT Response");
+
         const res = await gptFetch();
 
         if (!res.ok) {
-            if (fallback) return claudeResponse();
+            if (fallback) {
+                debug(`GPT failed, falling back to Claude - ${res.statusText}`);
+                return claudeResponse();
+            }
 
             return actionError(actionName, { prompt: res.statusText });
         }
@@ -79,6 +85,8 @@ export default async function generateBobUserMessage(currentUser: User, messages
     };
 
     const claudeResponse = async (fallback = false): Promise<ActionResponse> => {
+        debug("Running Claude Response");
+
         try {
             const res = await claudeFetch();
 
@@ -86,9 +94,12 @@ export default async function generateBobUserMessage(currentUser: User, messages
 
             return actionSuccess(actionName, { prompt, previousMessages: formattedMessages }, { logData: false });
         } catch (e: any) {
-            if (fallback) return gptResponse();
+            if (fallback) {
+                debug(`Claude failed, falling back to GPT - ${e.message}`);
+                return gptResponse();
+            }
 
-            return actionSuccess(actionName, {
+            return actionError(actionName, {
                 prompt: "There was an error generating the prompt",
                 error: e.message,
             });

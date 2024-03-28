@@ -50,7 +50,7 @@ export async function POST(req: Request) {
             method: "POST",
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: bobMessages,
+                messages,
                 temperature: 0.4,
                 max_tokens: 1024,
                 top_p: 1,
