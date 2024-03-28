@@ -1,18 +1,45 @@
 import { AI } from "@/constants/ai";
 import { ClaudeMessage } from "@/types/claude-message";
+import { Message } from "@/types/message";
 import anthropic from "@/utils/ai/anthropic";
 import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import generateErrorStream from "@/utils/ai/helpers/generate-error-stream";
 import bobHelperPrompt, { bobHelperPromptString } from "@/utils/ai/prompts/bob-helper-prompt";
+import debug from "@/utils/general/debug";
 import { AnthropicStream, OpenAIStream, StreamingTextResponse } from "ai";
 
 export async function POST(req: Request) {
     const { chatMessages, bobMessages, currentUser, recipient } = await req.json();
+    const formattedChatMessages = chatMessages.map((message: Message) => {
+        return {
+            id: message.id,
+            created_at: message.created_at,
+            text: message.text,
+            sender: {
+                id: message.sender.id,
+                name: message.sender.display_name,
+                email: message.sender.email,
+            },
+        };
+    });
+    const chatHistoryJSON = JSON.stringify(formattedChatMessages);
+
+    const chatHistory = `Here are the messages that you have exchanged so far with ${recipient.id}:
+    ${chatHistoryJSON}`;
+
+    // get the last assistant message and add chat history to it
+
+    const assistantMessage = bobMessages
+        .toReversed()
+        .find((message: { role: "assistant" | "user" }) => message.role === "assistant");
+
+    if (assistantMessage) assistantMessage.content = `${assistantMessage.content} \n\n --- ${chatHistory} ---`;
+    else bobMessages.push({ role: "assistant", content: chatHistory });
 
     const gptFetch = () => {
         const messages = formatSameRoleMessages(bobMessages);
 
-        messages.unshift(bobHelperPrompt(chatMessages, recipient, currentUser));
+        messages.unshift(bobHelperPrompt(recipient, currentUser));
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -40,7 +67,7 @@ export async function POST(req: Request) {
 
         const messages = formatSameRoleMessages(withUser);
 
-        const system = bobHelperPromptString(chatMessages, recipient, currentUser);
+        const system = bobHelperPromptString(recipient, currentUser);
 
         return anthropic.messages.create({
             system,
@@ -54,10 +81,14 @@ export async function POST(req: Request) {
     };
 
     const gptResponse = async (fallback = false): Promise<Response> => {
+        debug("Running GPT Response");
         const res = await gptFetch();
 
         if (!res.ok) {
-            if (fallback) return claudeResponse();
+            if (fallback) {
+                debug(`GPT Failed, Falling back to Claude - ${res.statusText}`);
+                return claudeResponse();
+            }
 
             return new Response(generateErrorStream(res.statusText));
         }
@@ -68,14 +99,18 @@ export async function POST(req: Request) {
     };
 
     const claudeResponse = async (fallback = false): Promise<Response> => {
+        debug("Running Claude Response");
         try {
             const res = await claudeFetch();
 
             const stream = AnthropicStream(res);
 
             return new StreamingTextResponse(stream);
-        } catch (_) {
-            if (fallback) return gptResponse();
+        } catch (e: any) {
+            if (fallback) {
+                debug(`Claude Failed, Falling back to GPT - ${e.message}`);
+                return gptResponse();
+            }
 
             return new Response(generateErrorStream());
         }

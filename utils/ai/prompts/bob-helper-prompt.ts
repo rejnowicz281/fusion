@@ -1,22 +1,7 @@
 import { ChatGPTMessage } from "@/types/chat-gpt-message";
-import { Message } from "@/types/message";
 import { User } from "@/types/user";
 
-export const bobHelperPromptString = (chatMessages: Message[], recipient: User, currentUser: User) => {
-    const formattedMessages = chatMessages.map((message) => {
-        return {
-            id: message.id,
-            created_at: message.created_at,
-            text: message.text,
-            sender: {
-                id: message.sender.id,
-                name: message.sender.display_name,
-                email: message.sender.email,
-            },
-        };
-    });
-    const messagesJSON = JSON.stringify(formattedMessages);
-
+export const bobHelperPromptString = (recipient: User, currentUser: User) => {
     const prompt = `Let’s play a very interesting game: from now on, you will play the role 'Bob', my personal sufler.
         My name is ${currentUser.display_name}, and my id is ${currentUser.id}.
         Your task is to assist me (user ${currentUser.id}) in managing conversations with user ${recipient.id}. His name is ${recipient.display_name}. Our goal is to enhance the quality of our conversations by finding the right words, keeping the dialogue engaging, remembering important details, navigating social nuances, organizing thoughts, and ensuring clarity in messages.
@@ -62,22 +47,18 @@ export const bobHelperPromptString = (chatMessages: Message[], recipient: User, 
 
         IMPORTANT: Never use chat emotes like *smiles*, *laughs*, *chuckles*, *winks* etc.
 
-        I will now provide you with the messages that I have already exchanged with user ${recipient.id} via stringified JSON format. They will help you understand the context and continue the conversation smoothly. When you respond, always take them into account to maintain coherence and relevance in our dialogue.
-        Whenever I talk to you about something, most times I want you to help me by providing a response that is relevant to the context of my conversation with user ${recipient.id}. So, please, always consider the context of my conversation with user ${recipient.id} when you provide a response.
+        You will provide me with the messages that I have already exchanged with user ${recipient.id} via stringified JSON format. They will help understand the context and continue the conversation smoothly. When you respond, always take them into account to maintain coherence and relevance in our dialogue.
 
         ALWAYS REMEMBER: It is user ${currentUser.id} that is talking to you, not user ${recipient.id}. You will only respond to user ${currentUser.id}.
-
-        These are the messages that I have exchanged so far with ${recipient.id}:
-        ${messagesJSON}
         `;
 
     return prompt;
 };
 
-const bobHelperPrompt = (chatMessages: Message[], recipient: User, currentUser: User) => {
+const bobHelperPrompt = (recipient: User, currentUser: User) => {
     const prompt: ChatGPTMessage = {
         role: "system",
-        content: bobHelperPromptString(chatMessages, recipient, currentUser),
+        content: bobHelperPromptString(recipient, currentUser),
     };
 
     return prompt;
