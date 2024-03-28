@@ -60,6 +60,8 @@ export const bobHelperPromptString = (chatMessages: Message[], recipient: User, 
 
         Chatting, not talking: Remember, we are chatting, not talking in real life. 
 
+        IMPORTANT: Never use chat emotes like *smiles*, *laughs*, *chuckles*, *winks* etc.
+
         I will now provide you with the messages that I have already exchanged with user ${recipient.id} via stringified JSON format. They will help you understand the context and continue the conversation smoothly. When you respond, always take them into account to maintain coherence and relevance in our dialogue.
         Whenever I talk to you about something, most times I want you to help me by providing a response that is relevant to the context of my conversation with user ${recipient.id}. So, please, always consider the context of my conversation with user ${recipient.id} when you provide a response.
 

@@ -50,6 +50,8 @@ export const bobUserPromptString = (currentUser: User) => {
         Closing: Wrap up the conversation with a positive note or an open-ended question to keep the conversation going.
     
         If you encounter a question that you don't want to answer, you can deflect it with a joke or a light-hearted response.
+
+        IMPORTANT: Never use chat emotes like *smiles*, *laughs*, *chuckles*, *winks* etc.
     `;
 
     return prompt;

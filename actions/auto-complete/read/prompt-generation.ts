@@ -7,7 +7,7 @@ import { User } from "@/types/user";
 import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
-import formatSameRoleMessages from "@/utils/ai/helpers/formatSameRoleMessages";
+import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import autoCompletePrompt, { autoCompletePromptString } from "@/utils/ai/prompts/auto-complete-prompt";
 import { randomUUID } from "crypto";
 
@@ -28,7 +28,7 @@ export default async function generatePrompts(
 ) {
     // return await promptTesting();
 
-    const actionName = "generatePrompts";
+    const actionName = `generatePrompts-${AI}`;
 
     const formattedMessages = messages.map((message) => {
         return {
