@@ -3,7 +3,6 @@ import { ClaudeMessage } from "@/types/claude-message";
 import { Message } from "@/types/message";
 import anthropic from "@/utils/ai/anthropic";
 import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
-import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import generateErrorStream from "@/utils/ai/helpers/generate-error-stream";
 import bobHelperPrompt, { bobHelperPromptString } from "@/utils/ai/prompts/bob-helper-prompt";
 import debug from "@/utils/general/debug";
@@ -37,12 +36,10 @@ export async function POST(req: Request) {
     if (assistantMessage) assistantMessage.content = `${assistantMessage.content} \n\n --- ${chatHistory} ---`;
     else bobMessages.push({ role: "assistant", content: chatHistory });
 
-    formatAiMessages(bobMessages);
-
     const gptFetch = () => {
-        const messages = formatSameRoleMessages(bobMessages);
+        const system = bobHelperPrompt(recipient, currentUser);
 
-        messages.unshift(bobHelperPrompt(recipient, currentUser));
+        const messages = formatAiMessages([system, ...bobMessages], currentUser.display_name);
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -68,7 +65,7 @@ export async function POST(req: Request) {
     const claudeFetch = () => {
         const withUser = [{ role: "user", content: "hello" }, ...bobMessages];
 
-        const messages = formatSameRoleMessages(withUser);
+        const messages = formatAiMessages(withUser, currentUser.display_name);
 
         const system = bobHelperPromptString(recipient, currentUser);
 

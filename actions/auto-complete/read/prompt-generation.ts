@@ -9,7 +9,6 @@ import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
-import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import autoCompletePrompt, { autoCompletePromptString } from "@/utils/ai/prompts/auto-complete-prompt";
 import debug from "@/utils/general/debug";
 import { randomUUID } from "crypto";
@@ -49,16 +48,12 @@ export default async function generatePrompts(
         };
     });
 
-    formatAiMessages(formattedMessages);
-
     const nPrompts = (prompt: string) => nStrings(n, prompt);
 
     const gptFetch = () => {
-        const messages = formatSameRoleMessages(formattedMessages);
-
         const system = autoCompletePrompt(currentUser, recipient, english);
 
-        messages.unshift(system);
+        const messages = formatAiMessages([system, ...formattedMessages], recipient.display_name);
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -106,14 +101,14 @@ export default async function generatePrompts(
 
         const prompts = data.choices.map((choice: { message: { content: string } }) => choice.message.content);
 
-        return actionSuccess(actionName, { prompts }, { logData: true });
+        return actionSuccess(actionName, { prompts }, { logData: false });
     };
 
     const claudeResponse = async (fallback = false): Promise<ActionResponse> => {
         debug("Running Claude Response");
         const withUser = [{ role: "user", content: "hello" }, ...formattedMessages];
 
-        const messages = formatSameRoleMessages(withUser);
+        const messages = formatAiMessages(withUser, recipient.display_name);
 
         const system = autoCompletePromptString(currentUser, recipient, english);
 
@@ -140,7 +135,7 @@ export default async function generatePrompts(
                 })
             );
 
-            return actionSuccess(actionName, { prompts }, { logData: true });
+            return actionSuccess(actionName, { prompts }, { logData: false });
         } catch (e: any) {
             if (fallback) {
                 debug(`Claude Failed, Falling back to GPT - ${e.message}`);

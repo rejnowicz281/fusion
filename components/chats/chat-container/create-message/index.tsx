@@ -47,7 +47,7 @@ const CreateMessage = () => {
 
             const freshMessages = [...optimisticMessages, message];
 
-            const bobMessage = await generateBobUserMessage(user, freshMessages);
+            const bobMessage = await generateBobUserMessage(user, recipient.id, freshMessages);
 
             formData.append("ai_text", bobMessage.prompt);
 

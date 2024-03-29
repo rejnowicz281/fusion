@@ -9,11 +9,10 @@ import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
-import formatSameRoleMessages from "@/utils/ai/helpers/format-same-role-messages";
 import bobUserPrompt, { bobUserPromptString } from "@/utils/ai/prompts/bob-user-prompt";
 import debug from "@/utils/general/debug";
 
-export default async function generateBobUserMessage(currentUser: User, messages: Message[]) {
+export default async function generateBobUserMessage(currentUser: User, bobId: string, messages: Message[]) {
     const actionName = `generateBobUserMessage-${AI}`;
 
     const formattedMessages = messages.map((message) => {
@@ -23,12 +22,10 @@ export default async function generateBobUserMessage(currentUser: User, messages
         };
     });
 
-    formatAiMessages(formattedMessages);
-
     const gptFetch = () => {
-        const messages = formatSameRoleMessages(formattedMessages);
+        const system = bobUserPrompt(currentUser);
 
-        messages.unshift(bobUserPrompt(currentUser));
+        const messages = formatAiMessages([system, ...formattedMessages], currentUser.display_name);
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -76,13 +73,13 @@ export default async function generateBobUserMessage(currentUser: User, messages
 
         const prompt = data.choices[0].message.content;
 
-        return actionSuccess(actionName, { prompt }, { logData: true });
+        return actionSuccess(actionName, { prompt }, { logData: false });
     };
 
     const claudeFetch = () => {
         const withUser = [{ role: "user", content: "hello" }, ...formattedMessages];
 
-        const messages = formatSameRoleMessages(withUser);
+        const messages = formatAiMessages(withUser, currentUser.display_name);
 
         const system = bobUserPromptString(currentUser);
 
@@ -104,7 +101,7 @@ export default async function generateBobUserMessage(currentUser: User, messages
 
             const prompt = res.content[0].text;
 
-            return actionSuccess(actionName, { prompt }, { logData: true });
+            return actionSuccess(actionName, { prompt }, { logData: false });
         } catch (e: any) {
             if (fallback) {
                 debug(`Claude failed, falling back to GPT - ${e.message}`);
