@@ -31,15 +31,27 @@ const MessagesList = () => {
     return (
         <div className={clsx(expandPrompts && promptsOn ? "hidden" : "flex", "flex-col flex-1 relative")}>
             {messages.length > 0 ? (
-                <div ref={messagesRef} className="p-4 absolute inset-0 overflow-auto flex flex-col flex-1 gap-5">
-                    {messages.map((message) => (
+                <div ref={messagesRef} className="p-4 absolute inset-0 overflow-auto flex flex-col flex-1">
+                    {messages.map((message, idx) => (
                         <Fragment key={message.id}>
                             {message.timestamp && (
-                                <div className="text-center text-neutral-600">
+                                <div className={clsx(idx !== 0 && "mt-4", "text-center text-neutral-600")}>
                                     {formatMessageDate(message.created_at)}
                                 </div>
                             )}
-                            <MessageContainer message={message} />
+                            <MessageContainer
+                                message={message}
+                                previousMessageCreatedDate={
+                                    idx > 0 && messages[idx - 1].sender.id === message.sender.id
+                                        ? messages[idx - 1].created_at
+                                        : null
+                                }
+                                nextMessageCreatedDate={
+                                    idx < messages.length - 1 && messages[idx + 1].sender.id === message.sender.id
+                                        ? messages[idx + 1].created_at
+                                        : null
+                                }
+                            />
                         </Fragment>
                     ))}
                 </div>

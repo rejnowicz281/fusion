@@ -15,9 +15,15 @@ import { FC } from "react";
 
 type MessageContainerProps = {
     message: Message;
+    previousMessageCreatedDate: string | null;
+    nextMessageCreatedDate: string | null;
 };
 
-const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
+const MessageContainer: FC<MessageContainerProps> = ({
+    message,
+    previousMessageCreatedDate,
+    nextMessageCreatedDate,
+}) => {
     const { user } = useAuthContext();
     const { deleteOptimisticMessage, talkingToBob } = useChatContext();
 
@@ -32,13 +38,34 @@ const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
         }
     };
 
+    const isContinuation = (date: string | null) => {
+        const timeSincePreviousMessage = date
+            ? Math.abs(new Date(message.created_at).getTime() - new Date(date).getTime())
+            : null;
+
+        // if date given is less than a minute from this message, it is a continuation of this message
+        return timeSincePreviousMessage ? timeSincePreviousMessage < 60000 : false;
+    };
+
+    const previousMessageContinuation = isContinuation(previousMessageCreatedDate);
+
+    const nextMessageContinuation = isContinuation(nextMessageCreatedDate);
+
+    const showAvatar = !isSender && !nextMessageContinuation;
+
     return (
-        <div className={clsx("group flex gap-4", isSender ? "flex-row-reverse" : "flex-row")}>
-            {message.sender.id !== user.id && (
+        <div
+            className={clsx(
+                previousMessageContinuation ? "mt-1" : "mt-4",
+                "group flex gap-4",
+                isSender ? "flex-row-reverse" : "flex-row"
+            )}
+        >
+            {showAvatar && (
                 <Tooltip>
                     <TooltipContent>{message.sender.display_name}</TooltipContent>
                     <TooltipTrigger asChild>
-                        <div>
+                        <div className="self-end">
                             {talkingToBob ? (
                                 <BobAvatar size={40} />
                             ) : (
@@ -58,8 +85,10 @@ const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
                 <TooltipTrigger asChild>
                     <div
                         className={clsx(
-                            "p-2 rounded-2xl flex items-center justify-center text-white word-break xl:max-w-[700px]",
-                            isSender ? "bg-blue-500" : "bg-zinc-600 dark:bg-[rgb(43,43,43)]"
+                            nextMessageContinuation && (isSender ? "rounded-br-md" : "rounded-bl-md ml-14"),
+                            previousMessageContinuation && (isSender ? "rounded-tr-md" : "rounded-tl-md"),
+                            isSender ? "bg-blue-500" : "bg-zinc-600 dark:bg-[rgb(43,43,43)]",
+                            "p-2.5 rounded-3xl flex items-center justify-center text-white word-break xl:max-w-[700px]"
                         )}
                     >
                         {message.text}
@@ -67,11 +96,11 @@ const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
                 </TooltipTrigger>
             </Tooltip>
 
-            <div className="self-center">
-                {message.loading ? (
-                    <AiOutlineLoading className="animate-spin" />
-                ) : (
-                    (message.sender.id === user.id || message.sender.email === bobEmail) && (
+            {(isSender || message.sender.email === bobEmail) && (
+                <div className={clsx(isSender && "ml-6", "self-center")}>
+                    {message.loading ? (
+                        <AiOutlineLoading className="animate-spin" />
+                    ) : (
                         <form action={handleDelete}>
                             <input type="hidden" name="id" value={message.id} />
                             <SubmitButton
@@ -80,9 +109,9 @@ const MessageContainer: FC<MessageContainerProps> = ({ message }) => {
                                 loading={<AiOutlineLoading className="animate-spin" />}
                             />
                         </form>
-                    )
-                )}
-            </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
