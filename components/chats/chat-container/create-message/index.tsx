@@ -10,6 +10,7 @@ import useChatContext from "@/providers/chat-provider";
 import useSettingsContext from "@/providers/settings-provider";
 import clsx from "clsx";
 import { useRef } from "react";
+import { useFormStatus } from "react-dom";
 import PromptsContainer from "./prompts-container";
 
 const CreateMessage = () => {
@@ -55,6 +56,31 @@ const CreateMessage = () => {
         }
     };
 
+    const InputContainer = () => {
+        const { pending } = useFormStatus();
+
+        return (
+            <>
+                <Input
+                    disabled={pending && talkingToBob}
+                    className="text-md py-8 rounded-none dark:bg-inherit border-none"
+                    placeholder="Type your message here..."
+                    type="text"
+                    name="text"
+                    ref={inputRef}
+                />
+                <Button
+                    disabled={pending && talkingToBob}
+                    className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
+                    variant="ghost"
+                    onClick={beforeSend}
+                >
+                    SEND
+                </Button>
+            </>
+        );
+    };
+
     return (
         <div
             className={clsx(
@@ -76,20 +102,7 @@ const CreateMessage = () => {
                 <form className="flex-1 flex items-center justify-center" ref={formRef} action={handleSend}>
                     <input type="hidden" name="sender_id" value={user.id} />
                     <input type="hidden" name="recipient_id" value={recipient.id} />
-                    <Input
-                        className="text-md py-8 rounded-none dark:bg-inherit border-none"
-                        placeholder="Type your message here..."
-                        type="text"
-                        name="text"
-                        ref={inputRef}
-                    />
-                    <Button
-                        className="text-md py-8 rounded-none rounded-tl-md text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
-                        variant="ghost"
-                        onClick={beforeSend}
-                    >
-                        SEND
-                    </Button>
+                    <InputContainer />
                 </form>
             </div>
         </div>
