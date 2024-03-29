@@ -10,7 +10,6 @@ import useChatContext from "@/providers/chat-provider";
 import useSettingsContext from "@/providers/settings-provider";
 import clsx from "clsx";
 import { useRef } from "react";
-import { useFormStatus } from "react-dom";
 import PromptsContainer from "./prompts-container";
 
 const CreateMessage = () => {
@@ -50,35 +49,12 @@ const CreateMessage = () => {
 
             const bobMessage = await generateBobUserMessage(user, recipient.id, freshMessages);
 
+            addOptimisticMessage(bobMessage.prompt, true, recipient);
+
             formData.append("ai_text", bobMessage.prompt);
 
             createAiMessages(formData); // create user message and AI response
         }
-    };
-
-    const InputContainer = () => {
-        const { pending } = useFormStatus();
-
-        return (
-            <>
-                <Input
-                    disabled={pending && talkingToBob}
-                    className="text-md py-8 rounded-none dark:bg-inherit border-none"
-                    placeholder="Type your message here..."
-                    type="text"
-                    name="text"
-                    ref={inputRef}
-                />
-                <Button
-                    disabled={pending && talkingToBob}
-                    className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
-                    variant="ghost"
-                    onClick={beforeSend}
-                >
-                    SEND
-                </Button>
-            </>
-        );
     };
 
     return (
@@ -102,7 +78,21 @@ const CreateMessage = () => {
                 <form className="flex-1 flex items-center justify-center" ref={formRef} action={handleSend}>
                     <input type="hidden" name="sender_id" value={user.id} />
                     <input type="hidden" name="recipient_id" value={recipient.id} />
-                    <InputContainer />
+
+                    <Input
+                        className="text-md py-8 rounded-none dark:bg-inherit border-none"
+                        placeholder="Type your message here..."
+                        type="text"
+                        name="text"
+                        ref={inputRef}
+                    />
+                    <Button
+                        className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
+                        variant="ghost"
+                        onClick={beforeSend}
+                    >
+                        SEND
+                    </Button>
                 </form>
             </div>
         </div>

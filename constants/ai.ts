@@ -1,1 +1,1 @@
-export const AI: "chatgpt" | "claude" = "claude";
+export const AI: "chatgpt" | "claude" = "chatgpt";
