@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     });
     const chatHistoryJSON = JSON.stringify(formattedChatMessages);
 
-    const chatHistory = `Here are the messages that you have exchanged so far with ${recipient.id}:
+    const chatHistory = `Here are the messages that you have exchanged so far with user ${recipient.id}:
     ${chatHistoryJSON}`;
 
     // get the last assistant message and add chat history to it
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     const gptFetch = () => {
         const system = bobHelperPrompt(recipient, currentUser);
 
-        const messages = formatAiMessages([system, ...bobMessages], currentUser.display_name);
+        const messages = formatAiMessages([system, ...bobMessages]);
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
     const claudeFetch = () => {
         const withUser = [{ role: "user", content: "hello" }, ...bobMessages];
 
-        const messages = formatAiMessages(withUser, currentUser.display_name);
+        const messages = formatAiMessages(withUser);
 
         const system = bobHelperPromptString(recipient, currentUser);
 
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
             top_p: 1,
             model: "claude-3-haiku-20240307",
             stream: true,
-            temperature: 0.4,
+            temperature: 0.2,
         });
     };
 

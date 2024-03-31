@@ -53,7 +53,7 @@ export default async function generatePrompts(
     const gptFetch = () => {
         const system = autoCompletePrompt(currentUser, recipient, english);
 
-        const messages = formatAiMessages([system, ...formattedMessages], recipient.display_name);
+        const messages = formatAiMessages([system, ...formattedMessages]);
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -108,7 +108,7 @@ export default async function generatePrompts(
         debug("Running Claude Response");
         const withUser = [{ role: "user", content: "hello" }, ...formattedMessages];
 
-        const messages = formatAiMessages(withUser, recipient.display_name);
+        const messages = formatAiMessages(withUser);
 
         const system = autoCompletePromptString(currentUser, recipient, english);
 
@@ -120,7 +120,7 @@ export default async function generatePrompts(
                     max_tokens: 200,
                     top_p: 1,
                     model: "claude-3-haiku-20240307",
-                    temperature: 0.4,
+                    temperature: 0.2,
                 })
                 .then((res) => {
                     const prompt = res.content[0].text;

@@ -25,7 +25,7 @@ export default async function generateBobUserMessage(currentUser: User, bobId: s
     const gptFetch = () => {
         const system = bobUserPrompt(currentUser);
 
-        const messages = formatAiMessages([system, ...formattedMessages], currentUser.display_name);
+        const messages = formatAiMessages([system, ...formattedMessages]);
 
         return fetch("https://api.openai.com/v1/chat/completions", {
             cache: "no-store",
@@ -79,7 +79,7 @@ export default async function generateBobUserMessage(currentUser: User, bobId: s
     const claudeFetch = () => {
         const withUser = [{ role: "user", content: "hello" }, ...formattedMessages];
 
-        const messages = formatAiMessages(withUser, currentUser.display_name);
+        const messages = formatAiMessages(withUser);
 
         const system = bobUserPromptString(currentUser);
 
@@ -89,7 +89,7 @@ export default async function generateBobUserMessage(currentUser: User, bobId: s
             max_tokens: 1024,
             top_p: 1,
             model: "claude-3-haiku-20240307",
-            temperature: 0.4,
+            temperature: 0.2,
         });
     };
 
