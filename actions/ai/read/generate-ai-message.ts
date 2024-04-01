@@ -10,6 +10,7 @@ import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
 import basicAiUserPrompt, { basicAiUserPromptString } from "@/utils/ai/prompts/basic-ai-user-prompt";
+import hydratePrompt from "@/utils/ai/prompts/hydrate-prompt";
 import debug from "@/utils/general/debug";
 import { randomUUID } from "crypto";
 
@@ -24,17 +25,16 @@ const promptTesting = async (n: number) => {
     return actionSuccess(actionName, { prompts }, { logData: false });
 };
 
-export default async function generatePrompts(currentUser: User, recipient: User, messages: Message[], initialN = 1) {
+const generateAiMessages = async (humanUser: User, aiUser: User, messages: Message[], initialN = 1) => {
     // make sure n can only be 1, 2 or 3
     const n = Math.min(Math.max(initialN, 1), 3);
 
     // return await promptTesting(n);
 
-    const actionName = `generatePrompts-${AI}`;
+    const actionName = `generateAiMessages-${AI}`;
 
     const formattedMessages = messages.map((message) => {
-        // have current user be the assistant
-        const role = message.sender.id === currentUser.id ? "assistant" : "user";
+        const role = message.sender.id === humanUser.id ? "user" : "assistant";
 
         return {
             role,
@@ -45,7 +45,12 @@ export default async function generatePrompts(currentUser: User, recipient: User
     const nPrompts = (prompt: string) => nStrings(n, prompt);
 
     const gptFetch = () => {
-        const system = basicAiUserPrompt(currentUser, recipient);
+        const system = aiUser.ai_prompt
+            ? {
+                  role: "system",
+                  content: hydratePrompt(aiUser.ai_prompt, humanUser, aiUser),
+              }
+            : basicAiUserPrompt(humanUser, aiUser);
 
         const messages = formatAiMessages([system, ...formattedMessages]);
 
@@ -104,7 +109,9 @@ export default async function generatePrompts(currentUser: User, recipient: User
 
         const messages = formatAiMessages(withUser);
 
-        const system = basicAiUserPromptString(currentUser, recipient);
+        const system = aiUser.ai_prompt
+            ? hydratePrompt(aiUser.ai_prompt, humanUser, aiUser)
+            : basicAiUserPromptString(humanUser, aiUser);
 
         const prompt = () =>
             anthropic.messages
@@ -154,4 +161,6 @@ export default async function generatePrompts(currentUser: User, recipient: User
             return actionError(actionName, { prompts: nPrompts("AI Not Found") });
         }
     }
-}
+};
+
+export default generateAiMessages;

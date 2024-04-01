@@ -13,13 +13,18 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import useAuthContext from "@/providers/auth-provider";
 import { FaEdit } from "@react-icons/all-files/fa/FaEdit";
 import { MdEdit } from "@react-icons/all-files/md/MdEdit";
 import { VscLoading } from "@react-icons/all-files/vsc/VscLoading";
 import { FC, useRef, useState } from "react";
-import SettingsButton from "../settings-button";
+import SettingsButton from "./settings-button";
 
-const AiPromptButton: FC<{ initialPrompt?: string; userId: string }> = ({ initialPrompt, userId }) => {
+const AiPromptButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
+    const { user } = useAuthContext();
+
+    if (user.id === demoUserId || user.email === "demo@demo.demo") return;
+
     const formRef = useRef<HTMLFormElement>(null);
 
     const [error, setError] = useState<string | null>(null);
@@ -61,12 +66,12 @@ const AiPromptButton: FC<{ initialPrompt?: string; userId: string }> = ({ initia
                     onSubmit={() => setError(null)}
                     action={handleUpdate}
                 >
-                    <input type="hidden" name="user_id" value={userId} />
+                    <input type="hidden" name="user_id" value={user.id} />
                     <Textarea
                         name="prompt"
-                        defaultValue={initialPrompt}
+                        defaultValue={user.ai_prompt}
                         rows={15}
-                        placeholder="Enter custom AI Prompt"
+                        placeholder={`Example prompt: Your name is ${user.display_name}, a friendly and non-formal conversationalist. You have the ability to generate sentences in a non-formal, friendly way, just like talking to a friend. Act like a human, not a robot. Feel free to make jokes and keep the conversation light-hearted. Your responses should reflect a human-like conversation. Remember to act like a friend, make jokes, and maintain a friendly tone. Keep your responses short and concise.`}
                     />
 
                     <DialogFooter className="gap-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import generateAiUserMessage from "@/actions/ai/ai-user/generate-ai-user-message";
+import generateAiMessages from "@/actions/ai/read/generate-ai-message";
 import createAiMessages from "@/actions/chats/modify/create-ai-messages";
 import createMessage from "@/actions/chats/modify/create-message";
 import { Button } from "@/components/ui/button";
@@ -43,11 +43,13 @@ const CreateMessage = () => {
             if (recipient.ai_mode && !talkingToSelf) {
                 const freshMessages = [...optimisticMessages, message];
 
-                const aiMessage = await generateAiUserMessage(user, recipient, freshMessages);
+                const aiMessage = await generateAiMessages(user, recipient, freshMessages).then(
+                    (res) => res.prompts[0]
+                );
 
-                addOptimisticMessage(aiMessage.prompt, false, recipient);
+                addOptimisticMessage(aiMessage, false, recipient);
 
-                formData.append("ai_text", aiMessage.prompt);
+                formData.append("ai_text", aiMessage);
 
                 createAiMessages(formData, true); // create user message and AI response
             } else {

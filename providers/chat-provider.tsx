@@ -1,6 +1,6 @@
 "use client";
 
-import _generatePrompts from "@/actions/ai/auto-complete/read/prompt-generation";
+import generateAiMessages from "@/actions/ai/read/generate-ai-message";
 import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
@@ -49,7 +49,7 @@ export const ChatProvider: FC<{
 
             return prompts;
         } else {
-            const prompts = _generatePrompts(user, recipient, optimisticMessages, n).then((res) => res.prompts);
+            const prompts = generateAiMessages(recipient, user, optimisticMessages, n).then((res) => res.prompts);
 
             return prompts;
         }

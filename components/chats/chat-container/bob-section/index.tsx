@@ -32,7 +32,7 @@ const BobSection = () => {
     ];
 
     const { data: messages } = useQuery({
-        queryKey: ["bobMessages", recipient.id],
+        queryKey: ["bobMessages", user.id, recipient.id],
         initialData,
     });
 
