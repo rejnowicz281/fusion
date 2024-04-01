@@ -9,7 +9,7 @@ import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
-import autoCompletePrompt, { autoCompletePromptString } from "@/utils/ai/prompts/auto-complete-prompt";
+import basicAiUserPrompt, { basicAiUserPromptString } from "@/utils/ai/prompts/basic-ai-user-prompt";
 import debug from "@/utils/general/debug";
 import { randomUUID } from "crypto";
 
@@ -45,7 +45,7 @@ export default async function generatePrompts(currentUser: User, recipient: User
     const nPrompts = (prompt: string) => nStrings(n, prompt);
 
     const gptFetch = () => {
-        const system = autoCompletePrompt(currentUser, recipient);
+        const system = basicAiUserPrompt(currentUser, recipient);
 
         const messages = formatAiMessages([system, ...formattedMessages]);
 
@@ -104,7 +104,7 @@ export default async function generatePrompts(currentUser: User, recipient: User
 
         const messages = formatAiMessages(withUser);
 
-        const system = autoCompletePromptString(currentUser, recipient);
+        const system = basicAiUserPromptString(currentUser, recipient);
 
         const prompt = () =>
             anthropic.messages

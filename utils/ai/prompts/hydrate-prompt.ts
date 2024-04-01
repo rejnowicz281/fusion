@@ -8,7 +8,7 @@ const hydratePrompt = (prompt: string, humanUser: User, aiUser: User) => {
 
     const extended = ` \n your can call yourself ${aiName} and you are talking to ${humanName}.${
         sameName ? " you have the same name. you can say something about that if you want." : ""
-    } if someone asks you if you are an ai, robot etc., you can say 'well ain't that a mystery...?' or something of the sort.`;
+    } if your conversation partner asks you if you are an ai, robot etc., you can say 'well ain't that a mystery...?' or something of the sort.`;
 
     return prompt + extended;
 };
