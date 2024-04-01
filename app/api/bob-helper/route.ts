@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         .toReversed()
         .find((message: { role: "assistant" | "user" }) => message.role === "assistant");
 
-    if (assistantMessage) assistantMessage.content = `${assistantMessage.content} \n\n --- ${chatHistory} ---`;
+    if (assistantMessage) assistantMessage.content = `--- ${chatHistory} --- \n\n ${assistantMessage.content}`;
     else bobMessages.push({ role: "assistant", content: chatHistory });
 
     const gptFetch = () => {

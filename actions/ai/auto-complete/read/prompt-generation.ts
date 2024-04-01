@@ -24,13 +24,7 @@ const promptTesting = async (n: number) => {
     return actionSuccess(actionName, { prompts }, { logData: false });
 };
 
-export default async function generatePrompts(
-    currentUser: User,
-    recipient: User,
-    messages: Message[],
-    initialN = 1,
-    english = true
-) {
+export default async function generatePrompts(currentUser: User, recipient: User, messages: Message[], initialN = 1) {
     // make sure n can only be 1, 2 or 3
     const n = Math.min(Math.max(initialN, 1), 3);
 
@@ -51,7 +45,7 @@ export default async function generatePrompts(
     const nPrompts = (prompt: string) => nStrings(n, prompt);
 
     const gptFetch = () => {
-        const system = autoCompletePrompt(currentUser, recipient, english);
+        const system = autoCompletePrompt(currentUser, recipient);
 
         const messages = formatAiMessages([system, ...formattedMessages]);
 
@@ -110,7 +104,7 @@ export default async function generatePrompts(
 
         const messages = formatAiMessages(withUser);
 
-        const system = autoCompletePromptString(currentUser, recipient, english);
+        const system = autoCompletePromptString(currentUser, recipient);
 
         const prompt = () =>
             anthropic.messages

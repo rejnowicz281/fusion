@@ -4,7 +4,7 @@ import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import { createClient } from "@/utils/supabase/server";
 
-const createAiMessages = async (formData: FormData) => {
+const createAiMessages = async (formData: FormData, recipientAiMode?: boolean) => {
     const actionName = "createAiMessages";
 
     const supabase = createClient();
@@ -14,14 +14,14 @@ const createAiMessages = async (formData: FormData) => {
     const recipient_id = formData.get("recipient_id");
     const ai_text = formData.get("ai_text");
 
-    const now = new Date();
-    const afterNow = new Date(now.getTime() + 1000); // 1 second after now
-
     // create two messages: user message and AI response
-    const { error } = await supabase.from("messages").insert([
-        { text, sender_id, recipient_id, created_at: now.toISOString() },
-        { text: ai_text, sender_id: recipient_id, recipient_id: sender_id, created_at: afterNow.toISOString() },
-    ]);
+    const { error } = await supabase.rpc("create_messages_if_ai", {
+        sender_id,
+        recipient_id,
+        recipient_ai_mode: recipientAiMode || false,
+        text,
+        ai_text,
+    });
 
     if (error) return actionError(actionName, { error: error.message });
 

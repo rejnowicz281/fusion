@@ -9,11 +9,11 @@ import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
-import bobUserPrompt, { bobUserPromptString } from "@/utils/ai/prompts/bob-user-prompt";
+import basicAiUserPrompt, { basicAiUserPromptString } from "@/utils/ai/prompts/basic-ai-user-prompt";
 import debug from "@/utils/general/debug";
 
-export default async function generateBobUserMessage(currentUser: User, bobId: string, messages: Message[]) {
-    const actionName = `generateBobUserMessage-${AI}`;
+export default async function generateAiUserMessage(currentUser: User, aiUser: User, messages: Message[]) {
+    const actionName = `generateAiUserMessage-${AI}`;
 
     const formattedMessages = messages.map((message) => {
         return {
@@ -23,7 +23,12 @@ export default async function generateBobUserMessage(currentUser: User, bobId: s
     });
 
     const gptFetch = () => {
-        const system = bobUserPrompt(currentUser);
+        const system = aiUser.ai_prompt
+            ? {
+                  role: "system",
+                  content: aiUser.ai_prompt,
+              }
+            : basicAiUserPrompt(currentUser, aiUser);
 
         const messages = formatAiMessages([system, ...formattedMessages]);
 
@@ -81,10 +86,8 @@ export default async function generateBobUserMessage(currentUser: User, bobId: s
 
         const messages = formatAiMessages(withUser);
 
-        const system = bobUserPromptString(currentUser);
-
         return anthropic.messages.create({
-            system,
+            system: aiUser.ai_prompt ? aiUser.ai_prompt : basicAiUserPromptString(currentUser, aiUser),
             messages: messages as ClaudeMessage[],
             max_tokens: 1024,
             top_p: 1,

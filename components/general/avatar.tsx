@@ -4,15 +4,16 @@ import usePresenceContext from "@/providers/presence-provider";
 import Image from "next/image";
 import { FC } from "react";
 
-type PresenceAvatarProps = {
+type AvatarProps = {
     userId: string;
+    aiMode?: boolean;
     src: string;
     alt?: string;
     avatarSize?: number;
     markerSize?: number;
 };
 
-const PresenceAvatar: FC<PresenceAvatarProps> = ({ userId, src, alt, avatarSize = 60, markerSize = 15 }) => {
+const Avatar: FC<AvatarProps> = ({ userId, aiMode, src, alt, avatarSize = 60, markerSize = 15 }) => {
     const { loggedUsers } = usePresenceContext();
 
     const isLogged = loggedUsers.includes(userId);
@@ -32,8 +33,14 @@ const PresenceAvatar: FC<PresenceAvatarProps> = ({ userId, src, alt, avatarSize 
                     style={{ width: markerSize, height: markerSize }}
                 />
             )}
+            {aiMode && (
+                <div
+                    className="absolute top-0 right-0 border-[1px] border-solid border-black rounded-[50%] bg-blue-500"
+                    style={{ width: markerSize, height: markerSize }}
+                />
+            )}
         </div>
     );
 };
 
-export default PresenceAvatar;
+export default Avatar;

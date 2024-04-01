@@ -1,6 +1,6 @@
 "use client";
 
-import generateBobUserMessage from "@/actions/bob-user/read/generate-bob-user-message";
+import generateAiUserMessage from "@/actions/ai/ai-user/generate-ai-user-message";
 import createAiMessages from "@/actions/chats/modify/create-ai-messages";
 import createMessage from "@/actions/chats/modify/create-message";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
 import useSettingsContext from "@/providers/settings-provider";
+import { bobUserPromptString } from "@/utils/ai/prompts/bob-user-prompt";
 import clsx from "clsx";
 import { useRef } from "react";
 import PromptsContainer from "./prompts-container";
@@ -40,20 +41,32 @@ const CreateMessage = () => {
 
             const message = addOptimisticMessage(text);
 
-            if (!talkingToBob) {
+            if (talkingToBob) {
+                const freshMessages = [...optimisticMessages, message];
+
+                const bob = { ...recipient, ai_prompt: bobUserPromptString(user) };
+
+                const bobMessage = await generateAiUserMessage(user, bob, freshMessages);
+
+                addOptimisticMessage(bobMessage.prompt, true, recipient);
+
+                formData.append("ai_text", bobMessage.prompt);
+
+                createAiMessages(formData, true); // create user message and bob AI response
+            } else if (recipient.ai_mode) {
+                const freshMessages = [...optimisticMessages, message];
+
+                const aiMessage = await generateAiUserMessage(user, recipient, freshMessages);
+
+                addOptimisticMessage(aiMessage.prompt, false, recipient);
+
+                formData.append("ai_text", aiMessage.prompt);
+
+                createAiMessages(formData, true); // create user message and AI response
+            } else {
                 createMessage(formData);
                 return;
             }
-
-            const freshMessages = [...optimisticMessages, message];
-
-            const bobMessage = await generateBobUserMessage(user, recipient.id, freshMessages);
-
-            addOptimisticMessage(bobMessage.prompt, true, recipient);
-
-            formData.append("ai_text", bobMessage.prompt);
-
-            createAiMessages(formData); // create user message and AI response
         }
     };
 

@@ -10,6 +10,20 @@ const useRealtime = () => {
     const supabase = createClientComponentClient();
 
     useEffect(() => {
+        const usersChannel = supabase.channel("users").on(
+            "postgres_changes",
+            {
+                schema: "public",
+                event: "*",
+                table: "users",
+                filter: `id=neq.${currentUser.id}`, // only listen for changes not related to the current user (those are revalidated on the server-side)
+            },
+            (payload) => {
+                console.log("User Change received, refreshing router", payload);
+                router.refresh();
+            }
+        );
+
         const messagesChannel = supabase
             .channel("messages")
             .on(
@@ -21,16 +35,18 @@ const useRealtime = () => {
                     filter: `sender_id=neq.${currentUser.id}`, // only listen for messages not sent by the current user (those are revalidated on the server-side)
                 },
                 (payload) => {
-                    console.log("Change received, refreshing router", payload);
+                    console.log("Messages Change received, refreshing router", payload);
                     router.refresh();
                 }
             )
             .subscribe();
 
         console.log("Connected to messages channel", messagesChannel.topic);
+        console.log("Connected to users channel", usersChannel.topic);
 
         return () => {
             supabase.removeChannel(messagesChannel);
+            supabase.removeChannel(usersChannel);
         };
     }, [supabase, router]);
 };

@@ -7,12 +7,6 @@ const getAllUsers = async () => {
 
     const supabase = createClient();
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) return actionError(actionName, { error: "You must be logged in to proceed" });
-
     const { data: users, error } = await supabase.from("users_with_details").select("*");
 
     if (error) return actionError(actionName, { error: error.message });

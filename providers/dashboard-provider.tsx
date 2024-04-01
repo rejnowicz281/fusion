@@ -25,7 +25,7 @@ export const DashboardProvider: FC<{ Menubar: React.JSX.Element; children: React
         setMenubarState(false);
     }, [pathname]);
 
-    useRealtime(); // Connect to supabase realtime to listen for message changes
+    useRealtime(); // Connect to supabase realtime to listen for database changes
 
     return (
         <DashboardContext.Provider value={{ menubarState, setMenubarState }}>

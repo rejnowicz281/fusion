@@ -1,6 +1,6 @@
 "use client";
 
-import PresenceAvatar from "@/components/general/presence-avatar";
+import Avatar from "@/components/general/avatar";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import useAuthContext from "@/providers/auth-provider";
@@ -17,7 +17,7 @@ const CurrentUser: FC<{
     return (
         <div className="flex items-center p-4 justify-between gap-4 transition-colors border-t border-t-neutral-300 dark:border-t-neutral-800">
             <div className="truncate flex items-center gap-3">
-                <PresenceAvatar avatarSize={40} markerSize={12} userId={user.id} src={user.avatar_url} />
+                <Avatar aiMode={user.ai_mode} avatarSize={40} markerSize={12} userId={user.id} src={user.avatar_url} />
                 <div className="truncate flex flex-col">
                     <div className="truncate dark:font-semibold">{user.display_name}</div>
                     <div className="truncate text-gray-500 text-sm font-semibold">FUSION ACCOUNT</div>

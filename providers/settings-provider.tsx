@@ -1,26 +1,18 @@
 import { FC, ReactNode, createContext, useContext, useState } from "react";
 
 const SettingsContext = createContext<{
-    englishPrompts: boolean;
-    setEnglishPrompts: React.Dispatch<React.SetStateAction<boolean>>;
-    toggleEnglishPrompts: () => void;
     promptsOn: boolean;
     setPromptsOn: React.Dispatch<React.SetStateAction<boolean>>;
     togglePrompts: () => void;
 } | null>(null);
 
 export const SettingsProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const [englishPrompts, setEnglishPrompts] = useState(true);
     const [promptsOn, setPromptsOn] = useState(true);
-
-    const toggleEnglishPrompts = () => setEnglishPrompts(!englishPrompts);
 
     const togglePrompts = () => setPromptsOn(!promptsOn);
 
     return (
-        <SettingsContext.Provider
-            value={{ englishPrompts, setEnglishPrompts, toggleEnglishPrompts, togglePrompts, setPromptsOn, promptsOn }}
-        >
+        <SettingsContext.Provider value={{ togglePrompts, setPromptsOn, promptsOn }}>
             {children}
         </SettingsContext.Provider>
     );

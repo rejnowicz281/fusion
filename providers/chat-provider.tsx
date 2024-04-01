@@ -1,13 +1,12 @@
 "use client";
 
-import _generatePrompts from "@/actions/auto-complete/read/prompt-generation";
+import _generatePrompts from "@/actions/ai/auto-complete/read/prompt-generation";
 import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";
 import { User } from "@/types/user";
 import { assignTimestamp } from "@/utils/general/generate-timestamps";
 import { FC, ReactNode, createContext, useContext, useOptimistic, useState } from "react";
-import useSettingsContext from "./settings-provider";
 
 const ChatContext = createContext<{
     addOptimisticMessage: (text: string, loading?: boolean, sender?: any) => Message;
@@ -34,7 +33,6 @@ export const ChatProvider: FC<{
     const [optimisticMessages, setOptimisticMessages] = useOptimistic(initialMessages);
     const [expandPrompts, setExpandPrompts] = useState(false);
     const [showHelperSection, setShowHelperSection] = useState(false);
-    const { englishPrompts } = useSettingsContext();
 
     const talkingToSelf = user.id === recipient.id;
     const talkingToBob = recipient.email === bobEmail;
@@ -51,9 +49,7 @@ export const ChatProvider: FC<{
 
             return prompts;
         } else {
-            const prompts = _generatePrompts(user, recipient, optimisticMessages, n, englishPrompts).then(
-                (res) => res.prompts
-            );
+            const prompts = _generatePrompts(user, recipient, optimisticMessages, n).then((res) => res.prompts);
 
             return prompts;
         }

@@ -2,8 +2,8 @@
 
 import createBookmark from "@/actions/bookmarks/modify/create-bookmark";
 import deleteBookmark from "@/actions/bookmarks/modify/delete-bookmark";
+import Avatar from "@/components/general/avatar";
 import BobAvatar from "@/components/general/bob-avatar";
-import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Button } from "@/components/ui/button";
 import useAuthContext from "@/providers/auth-provider";
@@ -32,10 +32,11 @@ const TopSection = () => {
                     {talkingToBob ? (
                         <BobAvatar size={50} />
                     ) : (
-                        <PresenceAvatar
+                        <Avatar
                             avatarSize={50}
                             markerSize={12}
                             src={recipient.avatar_url}
+                            aiMode={recipient.ai_mode}
                             userId={recipient.id}
                         />
                     )}

@@ -1,6 +1,6 @@
+import Avatar from "@/components/general/avatar";
 import BobAvatar from "@/components/general/bob-avatar";
 import NavLink from "@/components/general/nav-link";
-import PresenceAvatar from "@/components/general/presence-avatar";
 import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import { User } from "@/types/user";
@@ -38,7 +38,7 @@ const UserLink: FC<{ user: User }> = ({ user }) => {
                 {user.email === bobEmail ? (
                     <BobAvatar />
                 ) : (
-                    <PresenceAvatar userId={user.id} alt={user.display_name} src={user.avatar_url} />
+                    <Avatar aiMode={user.ai_mode} userId={user.id} alt={user.display_name} src={user.avatar_url} />
                 )}
                 <div className="truncate flex flex-col">
                     <div className="truncate">{user.display_name}</div>

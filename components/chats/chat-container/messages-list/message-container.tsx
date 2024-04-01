@@ -1,6 +1,6 @@
 import deleteMessage from "@/actions/chats/modify/delete-message";
+import Avatar from "@/components/general/avatar";
 import BobAvatar from "@/components/general/bob-avatar";
-import PresenceAvatar from "@/components/general/presence-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { bobEmail } from "@/constants/bob";
@@ -69,7 +69,8 @@ const MessageContainer: FC<MessageContainerProps> = ({
                             {talkingToBob ? (
                                 <BobAvatar size={40} />
                             ) : (
-                                <PresenceAvatar
+                                <Avatar
+                                    aiMode={message.sender.ai_mode}
                                     avatarSize={40}
                                     src={message.sender.avatar_url}
                                     markerSize={12}

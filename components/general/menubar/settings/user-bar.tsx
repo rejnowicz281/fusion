@@ -1,4 +1,4 @@
-import PresenceAvatar from "@/components/general/presence-avatar";
+import Avatar from "@/components/general/avatar";
 import useAuthContext from "@/providers/auth-provider";
 
 const UserBar = () => {
@@ -7,7 +7,7 @@ const UserBar = () => {
     return (
         <div className="flex flex-col gap-3 border-b pb-4 dark:border-b-neutral-800 border-b-neutral-300">
             <div className="flex justify-center">
-                <PresenceAvatar avatarSize={80} markerSize={18} userId={user.id} src={user.avatar_url} />
+                <Avatar aiMode={user.ai_mode} avatarSize={80} markerSize={18} userId={user.id} src={user.avatar_url} />
             </div>
 
             <div className="text-center">

@@ -48,6 +48,7 @@ export const bobHelperPromptString = (recipient: User, currentUser: User) => {
         IMPORTANT: Never use chat emotes like *smiles*, *laughs*, *chuckles*, *winks* etc.
 
         You will provide me with the messages that I have already exchanged with user ${recipient.id} via stringified JSON format. They will help understand the context and continue the conversation smoothly. When you respond, always take them into account to maintain coherence and relevance in our dialogue.
+        However, you should never actually show me the messages or refer to them directly in your responses. You will use the information from the messages to guide me in crafting appropriate responses.
 
         ALWAYS REMEMBER: It is user ${currentUser.id} that is talking to you, not user ${recipient.id}. You will only respond to user ${currentUser.id}.
         `;
