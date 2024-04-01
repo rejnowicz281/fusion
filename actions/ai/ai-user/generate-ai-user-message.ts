@@ -10,6 +10,7 @@ import actionSuccess from "@/utils/actions/action-success";
 import anthropic from "@/utils/ai/anthropic";
 import formatAiMessages from "@/utils/ai/helpers/format-ai-messages";
 import basicAiUserPrompt, { basicAiUserPromptString } from "@/utils/ai/prompts/basic-ai-user-prompt";
+import hydratePrompt from "@/utils/ai/prompts/hydrate-prompt";
 import debug from "@/utils/general/debug";
 
 export default async function generateAiUserMessage(currentUser: User, aiUser: User, messages: Message[]) {
@@ -26,7 +27,7 @@ export default async function generateAiUserMessage(currentUser: User, aiUser: U
         const system = aiUser.ai_prompt
             ? {
                   role: "system",
-                  content: aiUser.ai_prompt,
+                  content: hydratePrompt(aiUser.ai_prompt, currentUser, aiUser),
               }
             : basicAiUserPrompt(currentUser, aiUser);
 
@@ -86,8 +87,12 @@ export default async function generateAiUserMessage(currentUser: User, aiUser: U
 
         const messages = formatAiMessages(withUser);
 
+        const system = aiUser.ai_prompt
+            ? hydratePrompt(aiUser.ai_prompt, currentUser, aiUser)
+            : basicAiUserPromptString(currentUser, aiUser);
+
         return anthropic.messages.create({
-            system: aiUser.ai_prompt ? aiUser.ai_prompt : basicAiUserPromptString(currentUser, aiUser),
+            system,
             messages: messages as ClaudeMessage[],
             max_tokens: 1024,
             top_p: 1,

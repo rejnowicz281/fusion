@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
 import useSettingsContext from "@/providers/settings-provider";
-import { bobUserPromptString } from "@/utils/ai/prompts/bob-user-prompt";
 import clsx from "clsx";
 import { useRef } from "react";
 import PromptsContainer from "./prompts-container";
@@ -17,7 +16,7 @@ const CreateMessage = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const { user } = useAuthContext();
-    const { addOptimisticMessage, recipient, expandPrompts, setExpandPrompts, talkingToBob, optimisticMessages } =
+    const { addOptimisticMessage, recipient, expandPrompts, setExpandPrompts, optimisticMessages, talkingToSelf } =
         useChatContext();
     const { promptsOn } = useSettingsContext();
 
@@ -41,19 +40,7 @@ const CreateMessage = () => {
 
             const message = addOptimisticMessage(text);
 
-            if (talkingToBob) {
-                const freshMessages = [...optimisticMessages, message];
-
-                const bob = { ...recipient, ai_prompt: bobUserPromptString(user) };
-
-                const bobMessage = await generateAiUserMessage(user, bob, freshMessages);
-
-                addOptimisticMessage(bobMessage.prompt, true, recipient);
-
-                formData.append("ai_text", bobMessage.prompt);
-
-                createAiMessages(formData, true); // create user message and bob AI response
-            } else if (recipient.ai_mode) {
+            if (recipient.ai_mode && !talkingToSelf) {
                 const freshMessages = [...optimisticMessages, message];
 
                 const aiMessage = await generateAiUserMessage(user, recipient, freshMessages);

@@ -1,6 +1,5 @@
 import deleteMessage from "@/actions/chats/modify/delete-message";
 import Avatar from "@/components/general/avatar";
-import BobAvatar from "@/components/general/bob-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { bobEmail } from "@/constants/bob";
@@ -66,17 +65,13 @@ const MessageContainer: FC<MessageContainerProps> = ({
                     <TooltipContent>{message.sender.display_name}</TooltipContent>
                     <TooltipTrigger asChild>
                         <div className="self-end">
-                            {talkingToBob ? (
-                                <BobAvatar size={40} />
-                            ) : (
-                                <Avatar
-                                    aiMode={message.sender.ai_mode}
-                                    avatarSize={40}
-                                    src={message.sender.avatar_url}
-                                    markerSize={12}
-                                    userId={message.sender.id}
-                                />
-                            )}
+                            <Avatar
+                                aiMode={message.sender.ai_mode}
+                                avatarSize={40}
+                                src={message.sender.avatar_url}
+                                markerSize={12}
+                                userId={message.sender.id}
+                            />
                         </div>
                     </TooltipTrigger>
                 </Tooltip>

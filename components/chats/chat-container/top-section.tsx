@@ -3,7 +3,6 @@
 import createBookmark from "@/actions/bookmarks/modify/create-bookmark";
 import deleteBookmark from "@/actions/bookmarks/modify/delete-bookmark";
 import Avatar from "@/components/general/avatar";
-import BobAvatar from "@/components/general/bob-avatar";
 import SubmitButton from "@/components/general/submit-button";
 import { Button } from "@/components/ui/button";
 import useAuthContext from "@/providers/auth-provider";
@@ -29,21 +28,18 @@ const TopSection = () => {
                     <FaArrowLeft className={clsx(menubarState && "xl:rotate-180", "text-xl")} />
                 </Button>
                 <div className="truncate flex items-center gap-3 group">
-                    {talkingToBob ? (
-                        <BobAvatar size={50} />
-                    ) : (
-                        <Avatar
-                            avatarSize={50}
-                            markerSize={12}
-                            src={recipient.avatar_url}
-                            aiMode={recipient.ai_mode}
-                            userId={recipient.id}
-                        />
-                    )}
+                    <Avatar
+                        avatarSize={50}
+                        markerSize={12}
+                        src={recipient.avatar_url}
+                        aiMode={recipient.ai_mode}
+                        userId={recipient.id}
+                    />
+
                     <div className="truncate flex flex-col justify-evenly p-2 rounded-lg transition-colors">
                         <div className="truncate">{recipient.display_name}</div>
                         {talkingToBob ? (
-                            <div className="truncate text-zinc-500">AI Companion</div>
+                            <div className="truncate text-zinc-500">Your Personal Sufler</div>
                         ) : recipient.email !== recipient.display_name ? (
                             <div className="truncate text-zinc-500">{recipient.email}</div>
                         ) : null}
