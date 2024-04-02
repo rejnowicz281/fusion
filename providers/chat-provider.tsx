@@ -1,6 +1,6 @@
 "use client";
 
-import generateAiMessages from "@/actions/ai/read/generate-ai-message";
+import generateAiMessages from "@/actions/ai/read/generate-ai-messages";
 import { bobEmail } from "@/constants/bob";
 import useAuthContext from "@/providers/auth-provider";
 import { Message } from "@/types/message";

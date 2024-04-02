@@ -1,6 +1,6 @@
 "use client";
 
-import generateAiMessages from "@/actions/ai/read/generate-ai-message";
+import generateAiMessages from "@/actions/ai/read/generate-ai-messages";
 import createAiMessages from "@/actions/chats/modify/create-ai-messages";
 import createMessage from "@/actions/chats/modify/create-message";
 import { Button } from "@/components/ui/button";
