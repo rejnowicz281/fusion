@@ -65,7 +65,7 @@ const generateAiMessages = async (humanUser: User, aiUser: User, messages: Messa
                 model: "gpt-3.5-turbo",
                 messages,
                 temperature: 0.4,
-                max_tokens: 200,
+                max_tokens: 4096,
                 top_p: 1,
                 frequency_penalty: 0,
                 presence_penalty: 0.6,
@@ -118,7 +118,7 @@ const generateAiMessages = async (humanUser: User, aiUser: User, messages: Messa
                 .create({
                     system,
                     messages: messages as ClaudeMessage[],
-                    max_tokens: 200,
+                    max_tokens: 4096,
                     top_p: 1,
                     model: "claude-3-haiku-20240307",
                     temperature: 0.2,

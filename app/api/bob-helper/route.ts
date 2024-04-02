@@ -52,7 +52,7 @@ export async function POST(req: Request) {
                 model: "gpt-3.5-turbo",
                 messages,
                 temperature: 0.4,
-                max_tokens: 1024,
+                max_tokens: 4096,
                 top_p: 1,
                 frequency_penalty: 0,
                 presence_penalty: 0,
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
         return anthropic.messages.create({
             system,
             messages: messages as ClaudeMessage[],
-            max_tokens: 1024,
+            max_tokens: 4096,
             top_p: 1,
             model: "claude-3-haiku-20240307",
             stream: true,
