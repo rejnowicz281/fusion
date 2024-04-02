@@ -16,13 +16,21 @@ const BobSection = () => {
     const { user } = useAuthContext();
 
     const formRef = useRef<HTMLFormElement>(null);
-    const { toggleHelperSection, showHelperSection, recipient, optimisticMessages: chatMessages } = useChatContext();
+    const {
+        toggleHelperSection,
+        showHelperSection,
+        recipient,
+        optimisticMessages: chatMessages,
+        chatId,
+    } = useChatContext();
     const previousMessageCount = useRef(0);
     const messagesRef = useRef<HTMLDivElement>(null);
     const [initialPromptClicked, setInitialPromptClicked] = useState<boolean>(false);
     const [isMessageUpdating, setIsMessageUpdating] = useState<boolean>(false);
 
     const queryClient = useQueryClient();
+
+    const queryKey = ["bobMessages", chatId];
 
     const initialData: ChatGPTMessage[] = [
         {
@@ -32,18 +40,18 @@ const BobSection = () => {
     ];
 
     const { data: messages } = useQuery({
-        queryKey: ["bobMessages", user.id, recipient.id],
+        queryKey,
         initialData,
     });
 
     const addMessage = (message: ChatGPTMessage) => {
-        queryClient.setQueryData(["bobMessages", recipient.id], (prev: ChatGPTMessage[]) => {
+        queryClient.setQueryData(queryKey, (prev: ChatGPTMessage[]) => {
             return [...prev, message];
         });
     };
 
     const concatLastMessage = (text: string) => {
-        queryClient.setQueryData(["bobMessages", recipient.id], (prev: ChatGPTMessage[]) => {
+        queryClient.setQueryData(queryKey, (prev: ChatGPTMessage[]) => {
             const lastMessage = prev[prev.length - 1];
             return prev.slice(0, -1).concat({
                 ...lastMessage,
@@ -53,13 +61,13 @@ const BobSection = () => {
     };
 
     const removeLastMessage = () => {
-        queryClient.setQueryData(["bobMessages", recipient.id], (prev: ChatGPTMessage[]) => {
+        queryClient.setQueryData(queryKey, (prev: ChatGPTMessage[]) => {
             return prev.slice(0, -1);
         });
     };
 
     const resetChat = () => {
-        queryClient.setQueryData(["bobMessages", recipient.id], initialData);
+        queryClient.setQueryData(queryKey, initialData);
         setInitialPromptClicked(false);
     };
 

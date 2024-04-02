@@ -22,6 +22,7 @@ const ChatContext = createContext<{
     toggleHelperSection: () => void;
     talkingToBob: boolean;
     talkingToSelf: boolean;
+    chatId: string;
 } | null>(null);
 
 export const ChatProvider: FC<{
@@ -36,6 +37,7 @@ export const ChatProvider: FC<{
 
     const talkingToSelf = user.id === recipient.id;
     const talkingToBob = recipient.email === bobEmail;
+    const chatId = `${user.id}-${recipient.id}`;
 
     const toggleExpandPrompts = () => setExpandPrompts((expand) => !expand);
 
@@ -86,6 +88,7 @@ export const ChatProvider: FC<{
     return (
         <ChatContext.Provider
             value={{
+                chatId,
                 talkingToSelf,
                 addOptimisticMessage,
                 deleteOptimisticMessage,

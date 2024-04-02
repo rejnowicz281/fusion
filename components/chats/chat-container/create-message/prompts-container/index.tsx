@@ -8,10 +8,12 @@ import RefreshButton from "./refresh-button";
 const PromptsContainer: FC<{
     onPromptClick: (text: string) => void;
 }> = ({ onPromptClick }) => {
-    const { generatePrompts, recipient } = useChatContext();
+    const { generatePrompts, chatId } = useChatContext();
+
+    const queryKey = ["prompts", chatId];
 
     const { data, fetchNextPage, isFetching, isFetchingNextPage, isLoading } = useInfiniteQuery({
-        queryKey: ["prompts", recipient.id],
+        queryKey,
         queryFn: async ({ pageParam = 0 }) => {
             if (pageParam === 0) return generatePrompts(3);
             else return generatePrompts(1);
