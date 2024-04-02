@@ -35,6 +35,7 @@ const Users: FC<{ users: User[] }> = ({ users }) => {
         if (loggedUsers.includes(a.id) && !loggedUsers.includes(b.id)) return -1; // if a is logged in and b is not, put a first
         if (!loggedUsers.includes(a.id) && loggedUsers.includes(b.id)) return 1; // if b is logged in and a is not, put b first
         if (a.email === bobEmail && b.email !== bobEmail) return -1; // if a is Bob and b is not, put a first
+        if (a.ai_mode && !b.ai_mode) return -1; // if a has ai_mode enabled and b does not, put a first
         return a.display_name.localeCompare(b.display_name); // sort by display name
     });
 
