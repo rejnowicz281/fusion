@@ -71,7 +71,7 @@ const AiPromptButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                         name="prompt"
                         defaultValue={user.ai_prompt}
                         rows={15}
-                        placeholder={`Example prompt: Your name is ${user.display_name}, a friendly and non-formal conversationalist. You have the ability to generate sentences in a non-formal, friendly way, just like talking to a friend. Act like a human, not a robot. Feel free to make jokes and keep the conversation light-hearted. Your responses should reflect a human-like conversation. Remember to act like a friend, make jokes, and maintain a friendly tone. Keep your responses short and concise.`}
+                        placeholder={`Example prompt:\nYour name is ${user.display_name}, a friendly and non-formal conversationalist. You have the ability to generate sentences in a non-formal, friendly way, just like talking to a friend.\nAct like a human, not a robot. Feel free to make jokes and keep the conversation light-hearted. Your responses should reflect a human-like conversation. Remember to act like a friend, make jokes, and maintain a friendly tone.\nKeep your responses short and concise. Your replies are never longer than 70 words.`}
                     />
 
                     <DialogFooter className="gap-2">
