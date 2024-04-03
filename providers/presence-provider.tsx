@@ -35,7 +35,14 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     const supabase = createClientComponentClient();
     const { user } = useAuthContext();
     const [loggedUsers, setLoggedUsers] = useState<string[]>([]);
-    const [presenceEnabled, setPresenceEnabled] = useState<boolean>(true);
+    const [presenceEnabled, setPresenceEnabled] = useState<boolean>(() => {
+        if (typeof window === "undefined") return false;
+
+        const saved = localStorage.getItem("presenceEnabled");
+        const initial = JSON.parse(saved || "false");
+
+        return initial || false;
+    });
 
     useEffect(() => {
         const presenceChannel = supabase.channel("presence#public");
@@ -46,6 +53,7 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
 
                 const newStateArray = Object.values(newState).map((arr) => arr[0].user_id);
                 const pushArray = removeDuplicates(newStateArray);
+
                 setLoggedUsers(pushArray);
             })
             .subscribe(async (status) => {
@@ -63,6 +71,10 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     }, [supabase, router, presenceEnabled]);
 
     const togglePresence = () => setPresenceEnabled(!presenceEnabled);
+
+    useEffect(() => {
+        localStorage.setItem("presenceEnabled", JSON.stringify(presenceEnabled));
+    }, [presenceEnabled]);
 
     return (
         <PresenceContext.Provider
