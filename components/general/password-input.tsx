@@ -22,7 +22,7 @@ const PasswordInput: FC<{ placeholder?: string; className?: string }> = ({ place
             />
             <button
                 type="button"
-                className="shrink px-2 text-gray-500 hover:text-gray-400 transition-colors outline-none focus-visible:text-black"
+                className="shrink px-2 text-gray-500 hover:text-gray-400 transition-colors outline-none focus-visible:text-zinc-800 dark:focus-visible:text-zinc-200"
                 onClick={() => setType((prev) => (prev === "password" ? "text" : "password"))}
             >
                 {type === "password" ? <FaEyeSlash /> : <FaEye />}

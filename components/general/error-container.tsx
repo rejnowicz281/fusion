@@ -10,7 +10,7 @@ const ErrorContainer: FC<ErrorContainerProps> = ({ error }) => {
     return (
         <div className="flex-1 flex flex-col justify-center items-center gap-3 p-5">
             <h1 className="text-4xl font-bold">Error</h1>
-            <p className="text-gray-500">
+            <p className="text-gray-500 text-center">
                 {process.env.NODE_ENV !== "production" && error ? error : "An error has occured while loading the page"}{" "}
                 🤔
             </p>

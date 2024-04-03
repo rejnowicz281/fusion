@@ -26,7 +26,7 @@ const Avatar: FC<AvatarProps> = ({ userId, aiMode, src, alt, avatarSize = 60, ma
                 height: avatarSize,
             }}
         >
-            <Image sizes="100vw" fill className="rounded-[50%]" src={src} alt={alt || `User ${userId}`} />
+            <Image sizes="150px" fill className="rounded-[50%]" src={src} alt={alt || `User ${userId}`} />
             {isLogged && (
                 <div
                     className="absolute bottom-0 right-0 border-[1px] border-solid border-black rounded-[50%] bg-green-400"

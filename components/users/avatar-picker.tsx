@@ -48,6 +48,7 @@ const AvatarPicker: FC<{ defaultUrl: string }> = ({ defaultUrl }) => {
                 <Image
                     src={selectedImage}
                     fill
+                    sizes="150px"
                     alt="Your avatar"
                     className="rounded-[50%] cursor-pointer group-hover:opacity-30 transition-opacity"
                 />

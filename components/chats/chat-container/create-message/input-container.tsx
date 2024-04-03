@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ForwardRefRenderFunction, forwardRef } from "react";
 import { useFormStatus } from "react-dom";
@@ -14,21 +13,22 @@ const _PendingInputContainer: ForwardRefRenderFunction<
     return (
         <>
             <Input
-                disabled={pending}
-                className="text-md py-8 rounded-none dark:bg-inherit border-none"
+                className="text-md py-5 h-min rounded-none dark:bg-inherit border-none"
                 placeholder="Type your message here..."
                 type="text"
                 name="text"
                 ref={ref}
-            />
-            <Button
                 disabled={pending}
-                className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
-                variant="ghost"
+            />
+            <button
+                disabled={pending}
+                className="text-md flex group justify-center p-3 items-center disabled:pointer-events-none disabled:opacity-50"
                 onClick={beforeSend}
             >
-                SEND
-            </Button>
+                <div className="p-2 text-blue-500 rounded-md transition-colors group-hover:bg-zinc-100 dark:group-hover:bg-zinc-800 font-bold">
+                    SEND
+                </div>
+            </button>
         </>
     );
 };
@@ -40,22 +40,23 @@ const _InputContainer: ForwardRefRenderFunction<
     }
 > = ({ beforeSend }, ref) => {
     return (
-        <>
+        <div className="flex flex-1">
             <Input
-                className="text-md py-8 rounded-none dark:bg-inherit border-none"
+                className="text-md py-5 h-min rounded-none dark:bg-inherit border-none"
                 placeholder="Type your message here..."
                 type="text"
                 name="text"
                 ref={ref}
             />
-            <Button
-                className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
-                variant="ghost"
+            <button
+                className="text-md flex group justify-center p-3 items-center disabled:pointer-events-none disabled:opacity-50"
                 onClick={beforeSend}
             >
-                SEND
-            </Button>
-        </>
+                <div className="p-2 text-blue-500 rounded-md transition-colors group-hover:bg-zinc-100 dark:group-hover:bg-zinc-800 font-bold">
+                    SEND
+                </div>
+            </button>
+        </div>
     );
 };
 
