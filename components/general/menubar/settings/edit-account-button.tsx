@@ -107,7 +107,7 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                                 </div>
                                 <div className="flex items-center justify-end">
                                     <Checkbox name="reset_avatar" id="reset_avatar" />
-                                    <Label className="pl-2 text-zinc-800 dark:text-zinc-300" htmlFor="reset_avatar">
+                                    <Label className="pl-2" htmlFor="reset_avatar">
                                         Reset Avatar
                                     </Label>
                                 </div>

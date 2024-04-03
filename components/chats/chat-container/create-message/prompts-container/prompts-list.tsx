@@ -18,8 +18,8 @@ const PromptsList: FC<{
                 onPromptClick(text);
             }}
             className={clsx(
-                "text-start bg-[rgb(83,116,161)] dark:bg-[rgb(22,40,65)] dark:hover:bg-[rgb(50,70,97)] hover:bg-[rgb(137,162,197)] text-zinc-200 dark:text-zinc-200 rounded-lg",
-                expandPrompts ? "h-min py-5" : "truncate max-w-[40%]"
+                "bg-[rgb(83,116,161)] dark:bg-[rgb(22,40,65)] dark:hover:bg-[rgb(50,70,97)] hover:bg-[rgb(137,162,197)] text-zinc-200 dark:text-zinc-200 rounded-lg",
+                expandPrompts ? "h-min py-5" : "truncate flex-grow"
             )}
         >
             <span className={clsx(!expandPrompts && "truncate")}>{text}</span>
