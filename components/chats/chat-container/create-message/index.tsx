@@ -3,13 +3,12 @@
 import generateAiMessages from "@/actions/ai/read/generate-ai-messages";
 import createAiMessages from "@/actions/chats/modify/create-ai-messages";
 import createMessage from "@/actions/chats/modify/create-message";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
 import useSettingsContext from "@/providers/settings-provider";
 import clsx from "clsx";
 import { useRef } from "react";
+import { InputContainer, PendingInputContainer } from "./input-container";
 import PromptsContainer from "./prompts-container";
 
 const CreateMessage = () => {
@@ -52,10 +51,9 @@ const CreateMessage = () => {
                 formData.append("ai_text", aiMessage);
 
                 createAiMessages(formData, true); // create user message and AI response
-            } else {
-                createMessage(formData);
-                return;
-            }
+            } else createMessage(formData);
+
+            if (inputRef.current) inputRef.current.focus();
         }
     };
 
@@ -80,21 +78,11 @@ const CreateMessage = () => {
                 <form className="flex-1 flex items-center justify-center" ref={formRef} action={handleSend}>
                     <input type="hidden" name="sender_id" value={user.id} />
                     <input type="hidden" name="recipient_id" value={recipient.id} />
-
-                    <Input
-                        className="text-md py-8 rounded-none dark:bg-inherit border-none"
-                        placeholder="Type your message here..."
-                        type="text"
-                        name="text"
-                        ref={inputRef}
-                    />
-                    <Button
-                        className="text-md py-8 rounded-none text-blue-500 hover:text-blue-500 dark:hover:text-blue-500 font-bold"
-                        variant="ghost"
-                        onClick={beforeSend}
-                    >
-                        SEND
-                    </Button>
+                    {recipient.ai_mode ? (
+                        <PendingInputContainer beforeSend={beforeSend} ref={inputRef} />
+                    ) : (
+                        <InputContainer beforeSend={beforeSend} ref={inputRef} />
+                    )}
                 </form>
             </div>
         </div>
