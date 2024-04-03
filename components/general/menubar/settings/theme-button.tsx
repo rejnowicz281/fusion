@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import SettingsButton from "./settings-button";
 
-export default function ThemeButton() {
+const ThemeButton = () => {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
@@ -34,4 +34,6 @@ export default function ThemeButton() {
             )}
         </SettingsButton>
     );
-}
+};
+
+export default ThemeButton;

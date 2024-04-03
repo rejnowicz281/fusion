@@ -26,10 +26,10 @@ const DeleteAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
 
     const [open, setOpen] = useState(false);
 
-    async function handleDelete() {
+    const handleDelete = async () => {
         await deleteAccount();
         setOpen(false);
-    }
+    };
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>

@@ -57,7 +57,7 @@ export const ChatProvider: FC<{
         }
     };
 
-    function addOptimisticMessage(text: string, loading = true, sender = user) {
+    const addOptimisticMessage = (text: string, loading = true, sender = user) => {
         const message = {
             id: Math.random().toString(),
             text,
@@ -74,16 +74,16 @@ export const ChatProvider: FC<{
         });
 
         return message;
-    }
+    };
 
-    function deleteOptimisticMessage(id: string) {
+    const deleteOptimisticMessage = (id: string) => {
         setOptimisticMessages((messages) => {
             const messageIndex = messages.findIndex((message) => message.id === id);
             assignTimestamp(messages[messageIndex + 1], messages[messageIndex - 1]);
 
             return messages.filter((message) => message.id !== id);
         });
-    }
+    };
 
     return (
         <ChatContext.Provider
