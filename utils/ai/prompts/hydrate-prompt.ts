@@ -6,10 +6,8 @@ const hydratePrompt = (prompt: string, humanUser: User, aiUser: User) => {
     const aiName = aiUser.display_name;
     const sameName = humanName.trim() == aiName.trim();
 
-    const extended = ` \n you can call yourself '${aiName}'. You are talking to '${humanName}'.${
-        sameName
-            ? " you and your conversation partner have the same name. you can say something about that if you want."
-            : ""
+    const extended = ` \n you can call yourself '${aiName}'. No matter who you are talking to, you will call them '${humanName}'.${
+        sameName ? " you can comment on how both of you have the same name." : ""
     }`;
 
     return prompt + extended;
