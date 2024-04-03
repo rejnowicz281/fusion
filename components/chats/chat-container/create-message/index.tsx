@@ -3,12 +3,12 @@
 import generateAiMessages from "@/actions/ai/read/generate-ai-messages";
 import createAiMessages from "@/actions/chats/modify/create-ai-messages";
 import createMessage from "@/actions/chats/modify/create-message";
+import { Input } from "@/components/ui/input";
 import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
 import useSettingsContext from "@/providers/settings-provider";
 import clsx from "clsx";
-import { useRef } from "react";
-import { InputContainer, PendingInputContainer } from "./input-container";
+import { useOptimistic, useRef } from "react";
 import PromptsContainer from "./prompts-container";
 
 const CreateMessage = () => {
@@ -18,6 +18,7 @@ const CreateMessage = () => {
     const { addOptimisticMessage, recipient, expandPrompts, setExpandPrompts, optimisticMessages, talkingToSelf } =
         useChatContext();
     const { promptsOn } = useSettingsContext();
+    const [loading, setLoading] = useOptimistic(false);
 
     const beforeSend = () => {
         if (formRef.current) {
@@ -35,6 +36,8 @@ const CreateMessage = () => {
         const text = typeof textFormData === "string" ? textFormData.trim() : null;
 
         if (text) {
+            if (recipient.ai_mode) setLoading(true);
+
             formRef.current?.reset();
 
             const message = addOptimisticMessage(text);
@@ -46,7 +49,9 @@ const CreateMessage = () => {
                     (res) => res.prompts[0]
                 );
 
-                addOptimisticMessage(aiMessage, false, recipient);
+                if (recipient.ai_mode) setLoading(false);
+
+                addOptimisticMessage(aiMessage, true, recipient);
 
                 formData.append("ai_text", aiMessage);
 
@@ -78,11 +83,23 @@ const CreateMessage = () => {
                 <form className="flex-1 flex items-center justify-center" ref={formRef} action={handleSend}>
                     <input type="hidden" name="sender_id" value={user.id} />
                     <input type="hidden" name="recipient_id" value={recipient.id} />
-                    {recipient.ai_mode ? (
-                        <PendingInputContainer beforeSend={beforeSend} ref={inputRef} />
-                    ) : (
-                        <InputContainer beforeSend={beforeSend} ref={inputRef} />
-                    )}
+                    <Input
+                        className="text-md py-5 h-min rounded-none dark:bg-inherit border-none"
+                        placeholder="Type your message here..."
+                        type="text"
+                        name="text"
+                        ref={inputRef}
+                        disabled={loading}
+                    />
+                    <button
+                        disabled={loading}
+                        className="text-md flex group justify-center p-3 items-center disabled:pointer-events-none disabled:opacity-50"
+                        onClick={beforeSend}
+                    >
+                        <div className="p-2 text-blue-500 rounded-md transition-colors group-hover:bg-zinc-100 dark:group-hover:bg-zinc-800 font-bold">
+                            SEND
+                        </div>
+                    </button>
                 </form>
             </div>
         </div>
