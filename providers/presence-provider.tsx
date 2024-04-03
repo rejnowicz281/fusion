@@ -38,10 +38,11 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     const [presenceEnabled, setPresenceEnabled] = useState<boolean>(() => {
         if (typeof window === "undefined") return false;
 
-        const saved = localStorage.getItem("presenceEnabled");
-        const initial = JSON.parse(saved || "false");
+        const saved = localStorage.getItem(`presenceEnabled-${user.id}`);
 
-        return initial || false;
+        // if the user has never toggled presence, default to true
+
+        return saved ? JSON.parse(saved) : true;
     });
 
     useEffect(() => {
@@ -73,7 +74,7 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     const togglePresence = () => setPresenceEnabled(!presenceEnabled);
 
     useEffect(() => {
-        localStorage.setItem("presenceEnabled", JSON.stringify(presenceEnabled));
+        localStorage.setItem(`presenceEnabled-${user.id}`, JSON.stringify(presenceEnabled));
     }, [presenceEnabled]);
 
     return (
