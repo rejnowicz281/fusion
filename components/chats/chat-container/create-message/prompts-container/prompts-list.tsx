@@ -22,7 +22,7 @@ const PromptsList: FC<{
                 expandPrompts ? "h-min py-5" : "truncate flex-grow"
             )}
         >
-            <span className={clsx(!expandPrompts && "truncate")}>{text}</span>
+            <span className={clsx(expandPrompts ? "text-start" : "truncate")}>{text}</span>
         </Button>
     );
 
