@@ -7,7 +7,7 @@ const SettingsButton: ForwardRefRenderFunction<
 > = ({ children, onClick, asChild = false }, ref) => {
     return (
         <Button
-            className="flex items-center gap-1 rounded-none p-6 xl:rounded-md"
+            className="transition-none flex items-center gap-1 rounded-none p-6 xl:rounded-md"
             variant="ghost"
             asChild={asChild}
             onClick={onClick}

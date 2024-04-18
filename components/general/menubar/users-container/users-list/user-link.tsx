@@ -27,8 +27,8 @@ const UserLink: FC<{ user: User }> = ({ user }) => {
 
     return (
         <NavLink
-            className="flex items-center p-4 justify-between gap-4 transition-colors hover:bg-neutral-300 dark:hover:bg-neutral-800"
-            activeClassName="bg-neutral-300 dark:bg-neutral-800"
+            className="flex items-center p-4 justify-between gap-4 hover:bg-neutral-300 dark:hover:bg-neutral-700/70"
+            activeClassName="bg-neutral-200 dark:bg-neutral-800"
             href={`/users/${user.id}`}
             key={user.id}
         >
