@@ -22,19 +22,22 @@ export async function POST(req: Request) {
             },
         };
     });
-    const chatHistoryJSON = JSON.stringify(formattedChatMessages);
 
-    const chatHistory = `Here are the messages that you have exchanged so far with user ${recipient.id}:
+    if (chatMessages.length > 0) {
+        const chatHistoryJSON = JSON.stringify(formattedChatMessages);
+
+        const chatHistory = `Here are the messages that you have exchanged so far with user ${recipient.id}:
     ${chatHistoryJSON}`;
 
-    // get the last assistant message and add chat history to it
+        // get the last assistant message and add chat history to it
 
-    const assistantMessage = bobMessages
-        .toReversed()
-        .find((message: { role: "assistant" | "user" }) => message.role === "assistant");
+        const assistantMessage = bobMessages
+            .toReversed()
+            .find((message: { role: "assistant" | "user" }) => message.role === "assistant");
 
-    if (assistantMessage) assistantMessage.content = `--- ${chatHistory} --- \n\n ${assistantMessage.content}`;
-    else bobMessages.push({ role: "assistant", content: chatHistory });
+        if (assistantMessage) assistantMessage.content = `--- ${chatHistory} --- \n\n ${assistantMessage.content}`;
+        else bobMessages.push({ role: "assistant", content: chatHistory });
+    }
 
     const gptFetch = () => {
         const system = bobHelperPrompt(recipient, currentUser);
