@@ -1,8 +1,8 @@
 "use client";
 
 import generateAiMessages from "@/actions/ai/read/generate-ai-messages";
-import createAiMessages from "@/actions/chats/modify/create-ai-messages";
 import createMessage from "@/actions/chats/modify/create-message";
+import createMessageWithReply from "@/actions/chats/modify/create-message-with-reply";
 import { Input } from "@/components/ui/input";
 import useAuthContext from "@/providers/auth-provider";
 import useChatContext from "@/providers/chat-provider";
@@ -53,9 +53,9 @@ const CreateMessage = () => {
 
                 addOptimisticMessage(aiMessage, true, recipient);
 
-                formData.append("ai_text", aiMessage);
+                formData.append("reply_text", aiMessage);
 
-                createAiMessages(formData, true); // create user message and AI response
+                createMessageWithReply(formData); // create user message and AI response
             } else createMessage(formData);
 
             if (inputRef.current) inputRef.current.focus();
