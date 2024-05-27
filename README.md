@@ -1,7 +1,30 @@
 # blint
 
-Fuse mind and AI for better communication.
+Blend Human and AI Intelligence
 
 ## Overview
 
-Meeting new people on internet chats takes a lot of time. Over time, questions and answers repeat themselves. Typing text messages is time-consuming. Blint helps users have more engaging and productive conversations. The app uses artificial intelligence to suggest a series of questions and answers to users, based on their previous responses. This helps users to keep the conversation flowing and avoid awkward silences.
+Blint helps users have more engaging and productive conversations with the power of AI
+
+## Features
+
+-   Authentication (Demo, Google, Github, Email)
+-   Real-time conversations with other users
+-   Personal AI Assistant that helps you with anything related to your current conversation
+-   Quick AI-powered suggestions
+-   AI Mode - Respond to messages automatically with AI
+-   Customizable AI Prompt - Customize the AI prompt to your liking - make it funny, serious, or anything in between
+-   Light/Dark mode
+-   Fully Responsive design
+-   PWA Technology - Install the app on your phone or desktop
+
+## Technologies
+
+-   [NextJS](https://nextjs.org/)
+-   [TypeScript](https://www.typescriptlang.org/)
+-   [Supabase](https://supabase.io/)
+-   [TailwindCSS](https://tailwindcss.com/)
+-   [ShadcnUI](https://shadcnui.com/)
+-   [OpenAI API](https://openai.com/) - Main AI model
+-   [Anthropic API](https://anthropic.com/) - Backup to main OpenAI model
+-   [Vercel](https://vercel.com/) - Deployment
