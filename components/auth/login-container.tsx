@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { VscLoading } from "@react-icons/all-files/vsc/VscLoading";
 import { useSearchParams } from "next/navigation";
-import FusionSvg from "../general/fusion-svg";
+import BlintSvg from "../general/blint-svg";
 import DemoLoginButton from "./demo-login-button";
 import GithubLoginButton from "./github-login-button";
 import GoogleLoginButton from "./google-login-button";
@@ -21,7 +21,7 @@ const LoginContainer = () => {
             <div className="flex flex-col gap-3 items-center text-center">
                 <div className="flex items-center gap-3">
                     <div className="sm:hidden">
-                        <FusionSvg size={30} />
+                        <BlintSvg size={30} />
                     </div>
                     <h2 className="text-3xl font-semibold">Sign In</h2>
                 </div>

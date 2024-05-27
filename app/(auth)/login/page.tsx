@@ -1,5 +1,5 @@
 import LoginContainer from "@/components/auth/login-container";
-import FusionSvg from "@/components/general/fusion-svg";
+import BlintSvg from "@/components/general/blint-svg";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -11,8 +11,8 @@ const LoginPage = () => {
             </div>
             <div className="sm:p-4 flex justify-between items-center">
                 <div className="hidden sm:flex gap-3 text-3xl items-center">
-                    <FusionSvg />
-                    <h1 className="tracking-widest">fusion</h1>
+                    <BlintSvg />
+                    <h1 className="tracking-widest">blint</h1>
                 </div>
                 <Button
                     asChild

@@ -8,8 +8,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
     manifest: "/manifest.json",
-    title: "Fusion",
-    description: "Fuse mind and AI for better communication.",
+    title: "Blint",
+    description: "Blend Human and Artificial Intelligence",
 };
 
 export const viewport: Viewport = {

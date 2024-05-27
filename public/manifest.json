@@ -1,9 +1,9 @@
 {
     "id": "12232222",
-    "name": "Fusion",
+    "name": "Blint",
     "lang": "en",
-    "short_name": "Fusion",
-    "description": "A new way to chat",
+    "short_name": "Blint",
+    "description": "Blend Human and Artificial Intelligence",
     "icons": [
         {
             "src": "/icons/icon-72x72.png",

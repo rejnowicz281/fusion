@@ -10,7 +10,7 @@ import AvatarPicker from "@/components/users/avatar-picker";
 import { VscLoading } from "@react-icons/all-files/vsc/VscLoading";
 import { useSearchParams } from "next/navigation";
 import { FC } from "react";
-import FusionSvg from "../general/fusion-svg";
+import BlintSvg from "../general/blint-svg";
 import DemoLoginButton from "./demo-login-button";
 import GithubLoginButton from "./github-login-button";
 import GoogleLoginButton from "./google-login-button";
@@ -26,7 +26,7 @@ const RegisterContainer: FC<{ defaultUrl: string }> = ({ defaultUrl }) => {
             <div className="flex flex-col gap-3 items-center text-center">
                 <div className="flex items-center gap-3">
                     <div className="sm:hidden">
-                        <FusionSvg size={30} />
+                        <BlintSvg size={30} />
                     </div>
                     <h2 className="text-3xl font-semibold">Sign Up</h2>
                 </div>
