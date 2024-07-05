@@ -1,4 +1,4 @@
-const BlintSvg = ({ size = 35 }) => {
+const BlintSvg = ({ size = 30 }) => {
     return (
         <svg
             width={size}

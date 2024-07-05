@@ -16,12 +16,12 @@ const timePassedSinceDate = (date: string) => {
     if (secondsPassed < 60) return "Just now";
 
     if (minutesPassed < 60) {
-        const count = Math.floor(minutesPassed);
+        const count = Math.round(minutesPassed);
         return `${count} min ago`;
     }
 
     const pluralizedAgo = (number: number, word: string) => {
-        const count = Math.floor(number);
+        const count = Math.round(number);
 
         const pluralize = () => (count === 1 ? word : `${word}s`);
 

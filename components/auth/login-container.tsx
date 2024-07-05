@@ -21,7 +21,7 @@ const LoginContainer = () => {
             <div className="flex flex-col gap-3 items-center text-center">
                 <div className="flex items-center gap-3">
                     <div className="sm:hidden">
-                        <BlintSvg size={30} />
+                        <BlintSvg />
                     </div>
                     <h2 className="text-3xl font-semibold">Sign In</h2>
                 </div>
