@@ -13,15 +13,15 @@ const MessageContainer: FC<{ message: ChatGPTMessage }> = ({ message }) => {
                 <BobAvatar size={25} />
             ) : (
                 <Image
+                    unoptimized
                     className="rounded-[50%]"
                     src={user.avatar_url}
                     alt={user.display_name}
-                    sizes="100vw"
                     width={25}
                     height={25}
                     style={{
                         width: 25,
-                        height: 25,
+                        height: 25
                     }}
                 />
             )}
