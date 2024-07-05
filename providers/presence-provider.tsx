@@ -1,7 +1,6 @@
 "use client";
 
 import useAuthContext from "@/providers/auth-provider";
-import removeDuplicates from "@/utils/general/remove-duplicates";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { RealtimePresenceState } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
@@ -9,10 +8,11 @@ import { FC, createContext, useContext, useEffect, useState } from "react";
 
 type PresenceContextType = {
     togglePresence: () => void;
-    loggedUsers: string[];
-    setLoggedUsers: React.Dispatch<React.SetStateAction<string[]>>;
+    loggedUsers: Set<string>;
+    setLoggedUsers: React.Dispatch<React.SetStateAction<Set<string>>>;
     presenceEnabled: boolean;
     setPresenceEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+    isLoggedIn: (userId: string) => boolean;
 };
 
 type PresenceProviderProps = {
@@ -34,7 +34,7 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     const router = useRouter();
     const supabase = createClientComponentClient();
     const { user } = useAuthContext();
-    const [loggedUsers, setLoggedUsers] = useState<string[]>([]);
+    const [loggedUsers, setLoggedUsers] = useState<Set<string>>(new Set());
     const [presenceEnabled, setPresenceEnabled] = useState<boolean>(() => {
         if (typeof window === "undefined") return false;
 
@@ -52,10 +52,10 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
             .on("presence", { event: "sync" }, () => {
                 const newState: RealtimePresenceState<PresenceStateType> = presenceChannel.presenceState();
 
-                const newStateArray = Object.values(newState).map((arr) => arr[0].user_id);
-                const pushArray = removeDuplicates(newStateArray);
+                const newStateArray = Object.values(newState).map((arr) => arr[0].user_id) as unknown as string[];
+                const newSet = new Set(newStateArray);
 
-                setLoggedUsers(pushArray);
+                setLoggedUsers(newSet);
             })
             .subscribe(async (status) => {
                 if (status !== "SUBSCRIBED") {
@@ -71,6 +71,8 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
         };
     }, [supabase, router, presenceEnabled]);
 
+    const isLoggedIn = (userId: string) => loggedUsers.has(userId);
+
     const togglePresence = () => setPresenceEnabled(!presenceEnabled);
 
     useEffect(() => {
@@ -85,6 +87,7 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
                 setLoggedUsers,
                 presenceEnabled,
                 setPresenceEnabled,
+                isLoggedIn
             }}
         >
             {children}
