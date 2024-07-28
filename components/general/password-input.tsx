@@ -2,8 +2,13 @@ import { FaEye } from "@react-icons/all-files/fa/FaEye";
 import { FaEyeSlash } from "@react-icons/all-files/fa/FaEyeSlash";
 import clsx from "clsx";
 import { FC, useState } from "react";
+import { ControllerRenderProps } from "react-hook-form";
 
-const PasswordInput: FC<{ placeholder?: string; className?: string }> = ({ placeholder = "••••••••", className }) => {
+const PasswordInput: FC<{ placeholder?: string; className?: string; field?: ControllerRenderProps<any, any> }> = ({
+    placeholder = "••••••••",
+    className,
+    field = {}
+}) => {
     const [type, setType] = useState<"text" | "password">("password");
 
     return (
@@ -16,9 +21,10 @@ const PasswordInput: FC<{ placeholder?: string; className?: string }> = ({ place
             <input
                 className="min-w-0 flex-1 pl-3 rounded-tl-md rounded-bl-md text-sm placeholder:text-zinc-500 dark:placeholder:text-zinc-500 focus-visible:outline-none bg-inherit"
                 type={type}
+                placeholder={placeholder}
+                {...field}
                 id="password"
                 name="password"
-                placeholder={placeholder}
             />
             <button
                 type="button"

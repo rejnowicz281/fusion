@@ -2,41 +2,47 @@
 
 import actionError from "@/utils/actions/action-error";
 import actionSuccess from "@/utils/actions/action-success";
+import registerSchema from "@/utils/forms/schemas/register-schema";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 
 const signUp = async (formData: FormData) => {
     const actionName = "signUp";
 
-    const emailFormData = formData.get("email");
-    const displayNameFormData = formData.get("display_name");
-    const passwordFormData = formData.get("password");
+    const email = formData.get("email");
+    const display_name = formData.get("display_name");
+    const password = formData.get("password");
+
+    const parsed = registerSchema.safeParse({
+        email,
+        display_name,
+        password
+    });
+
+    const issues = parsed.error?.issues;
+
+    if (issues) {
+        const queryParams = new URLSearchParams();
+
+        issues.forEach((issue) => {
+            if (issue.path[0] === "email") queryParams.append("email-error", issue.message);
+            if (issue.path[0] === "display_name") queryParams.append("display-name-error", issue.message);
+            if (issue.path[0] === "password") queryParams.append("password-error", issue.message);
+        });
+
+        const queryParamsString = queryParams.toString();
+
+        return actionError(actionName, { queryParams }, { redirectPath: `/register?${queryParamsString}` });
+    }
+
     const avatarFileFormData = formData.get("avatar");
 
-    const email = typeof emailFormData === "string" ? emailFormData.trim() : null;
-    const display_name = typeof displayNameFormData === "string" ? displayNameFormData.trim() : null;
-    const password = typeof passwordFormData === "string" ? passwordFormData.trim() : null;
     const avatarFile =
         avatarFileFormData instanceof File && avatarFileFormData.type.startsWith("image/") ? avatarFileFormData : null;
 
     const origin = headers().get("origin");
 
     const supabase = createClient();
-
-    const queryParams = new URLSearchParams();
-
-    if (!email) queryParams.append("email-error", "Email is required");
-    else if (!email.includes("@")) queryParams.append("email-error", "Email must be valid");
-
-    if (!display_name) queryParams.append("display-name-error", "Name is required");
-
-    if (!password) queryParams.append("password-error", "Password is required");
-    else if (password.length < 6) queryParams.append("password-error", "Password must be at least 6 characters");
-
-    const queryParamsString = queryParams.toString();
-
-    if (queryParamsString)
-        return actionError(actionName, { queryParams }, { redirectPath: `/register?${queryParamsString}` });
 
     const avatarData = (() => {
         if (avatarFile) {
@@ -48,7 +54,7 @@ const signUp = async (formData: FormData) => {
         }
 
         return {
-            avatar_url: process.env.DEFAULT_AVATAR_URL,
+            avatar_url: process.env.DEFAULT_AVATAR_URL
         };
     })();
 
@@ -60,10 +66,10 @@ const signUp = async (formData: FormData) => {
         options: {
             data: {
                 display_name,
-                avatar_url,
+                avatar_url
             },
-            emailRedirectTo: `${origin}/auth/callback`,
-        },
+            emailRedirectTo: `${origin}/auth/callback`
+        }
     });
 
     if (error) return actionError(actionName, { error }, { redirectPath: `/register?error=${error.message}` });
