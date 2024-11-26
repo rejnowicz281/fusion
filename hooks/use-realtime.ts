@@ -34,8 +34,7 @@ const useRealtime = () => {
                 {
                     schema: "public",
                     event: "*",
-                    table: "messages",
-                    filter: `sender_id=neq.${currentUser.id}` // only listen for messages not sent by the current user (those are revalidated on the server-side)
+                    table: "messages"
                 },
                 (payload) => {
                     console.log("Messages Change received, refreshing router", payload);
