@@ -8,12 +8,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
     manifest: "/manifest.json",
-    title: "Blint",
-    description: "Blend Human and Artificial Intelligence",
+    title: "Fusion",
+    description: "Blend Human and Artificial Intelligence"
 };
 
 export const viewport: Viewport = {
-    themeColor: "#FFFFFF",
+    themeColor: "#FFFFFF"
 };
 
 const RootLayout: FC<{ children: ReactNode }> = ({ children }) => {

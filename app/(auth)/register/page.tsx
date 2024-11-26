@@ -1,5 +1,5 @@
 import RegisterContainer from "@/components/auth/register-container";
-import BlintSvg from "@/components/general/blint-svg";
+import FusionSvg from "@/components/general/fusion-svg";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -11,8 +11,8 @@ const RegisterPage = () => {
             </div>
             <div className="sm:p-4 flex justify-between items-center">
                 <div className="hidden sm:flex gap-3 text-3xl items-center">
-                    <BlintSvg />
-                    <h1 className="tracking-widest">blint</h1>
+                    <FusionSvg />
+                    <h1 className="tracking-widest">fusion</h1>
                 </div>
                 <Button
                     asChild

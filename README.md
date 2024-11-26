@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">blint</h1>
+  <h1 align="center">fusion</h1>
   <h4 align="center">Blend Human and AI Intelligence</h4>
 </p>
 <p align="center">
@@ -23,14 +23,14 @@
   </a>
 </p>
 <p align="center">
-  <img alt="Last commit" src="https://img.shields.io/github/last-commit/rejnowicz281/blint?color=%23B5CDA3&logo=github&logoColor=white" />
-  <img alt="Commit activity" src="https://img.shields.io/github/commit-activity/y/rejnowicz281/blint?color=%23A76844&logo=github&logoColor=white" />
-  <img alt="Repo size" src="https://img.shields.io/github/repo-size/rejnowicz281/blint?color=%23C1AC95&logo=github&logoColor=white" />
+  <img alt="Last commit" src="https://img.shields.io/github/last-commit/rejnowicz281/fusion?color=%23B5CDA3&logo=github&logoColor=white" />
+  <img alt="Commit activity" src="https://img.shields.io/github/commit-activity/y/rejnowicz281/fusion?color=%23A76844&logo=github&logoColor=white" />
+  <img alt="Repo size" src="https://img.shields.io/github/repo-size/rejnowicz281/fusion?color=%23C1AC95&logo=github&logoColor=white" />
 </p>
 
 ## About
 
-Blint helps users have more engaging and productive conversations with the power of AI. It features real-time communication, a personal AI assistant, AI-powered suggestions and other AI-powered features, making your interactions more dynamic and efficient.
+Fusion helps users have more engaging and productive conversations with the power of AI. It features real-time communication, a personal AI assistant, AI-powered suggestions and other AI-powered features, making your interactions more dynamic and efficient.
 
 ## Features
 
@@ -58,7 +58,7 @@ Blint helps users have more engaging and productive conversations with the power
 
 ## Demo
 
-Live demo here: [live demo](https://blint-two.vercel.app)
+Live demo here: [live demo](https://fusion-two.vercel.app)
 
 For ease of use, a 'Demo Login' button is available on the login page. Clicking it will log you in with a demo account.
 

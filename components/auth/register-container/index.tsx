@@ -1,6 +1,6 @@
 "use client";
 
-import BlintSvg from "@/components/general/blint-svg";
+import FusionSvg from "@/components/general/fusion-svg";
 import { useSearchParams } from "next/navigation";
 import { FC } from "react";
 import DemoLoginButton from "../demo-login-button";
@@ -16,7 +16,7 @@ const RegisterContainer: FC<{ defaultUrl: string }> = ({ defaultUrl }) => {
             <div className="flex flex-col gap-3 items-center text-center">
                 <div className="flex items-center gap-3">
                     <div className="sm:hidden">
-                        <BlintSvg />
+                        <FusionSvg />
                     </div>
                     <h2 className="text-3xl font-semibold">Sign Up</h2>
                 </div>

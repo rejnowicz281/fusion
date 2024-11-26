@@ -20,7 +20,7 @@ const CurrentUser: FC<{
                 <Avatar aiMode={user.ai_mode} avatarSize={40} markerSize={12} userId={user.id} src={user.avatar_url} />
                 <div className="truncate flex flex-col">
                     <div className="truncate dark:font-semibold">{user.display_name}</div>
-                    <div className="truncate text-gray-500 text-sm font-semibold">BLINT ACCOUNT</div>
+                    <div className="truncate text-gray-500 text-sm font-semibold">FUSION ACCOUNT</div>
                 </div>
             </div>
             <Tooltip>
