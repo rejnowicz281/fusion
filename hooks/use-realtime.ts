@@ -1,5 +1,5 @@
 import useAuthContext from "@/providers/auth-provider";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -7,7 +7,7 @@ const useRealtime = () => {
     const { user: currentUser } = useAuthContext();
 
     const router = useRouter();
-    const supabase = createClientComponentClient();
+    const supabase = createClient();
 
     useEffect(() => {
         const usersChannel = supabase
@@ -18,7 +18,7 @@ const useRealtime = () => {
                     schema: "public",
                     event: "*",
                     table: "users",
-                    filter: `id=neq.${currentUser.id}`, // only listen for changes not related to the current user (those are revalidated on the server-side)
+                    filter: `id=neq.${currentUser.id}` // only listen for changes not related to the current user (those are revalidated on the server-side)
                 },
                 (payload) => {
                     console.log("User Change received, refreshing router", payload);
@@ -35,7 +35,7 @@ const useRealtime = () => {
                     schema: "public",
                     event: "*",
                     table: "messages",
-                    filter: `sender_id=neq.${currentUser.id}`, // only listen for messages not sent by the current user (those are revalidated on the server-side)
+                    filter: `sender_id=neq.${currentUser.id}` // only listen for messages not sent by the current user (those are revalidated on the server-side)
                 },
                 (payload) => {
                     console.log("Messages Change received, refreshing router", payload);
