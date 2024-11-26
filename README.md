@@ -30,7 +30,7 @@
 
 ## About
 
-Fusion helps users have more engaging and productive conversations with the power of AI. It features real-time communication, a personal AI assistant, AI-powered suggestions and other AI-powered features, making your interactions more dynamic and efficient.
+Fusion helps users have more engaging and productive conversations with the power of AI. It features real-time communication, a personal AI assistant, AI-powered suggestions and other AI features, making your interactions more dynamic and efficient.
 
 ## Features
 
@@ -58,7 +58,7 @@ Fusion helps users have more engaging and productive conversations with the powe
 
 ## Demo
 
-Live demo here: [live demo](https://fusion-two.vercel.app)
+Live demo here: [live demo](https://fusion-seven.vercel.app)
 
 For ease of use, a 'Demo Login' button is available on the login page. Clicking it will log you in with a demo account.
 
@@ -73,7 +73,7 @@ To install all the dependencies
 ### `npm run dev`
 
 To open the app in development mode.\
-Open [http://localhost:5173](http://localhost:5173) to view it in your browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### `npm run prod`
 
