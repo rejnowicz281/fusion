@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 const getChat = async (userId: string) => {
     const actionName = "getChat";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { user: currentUser } = await getCurrentUser();
 
@@ -16,7 +16,7 @@ const getChat = async (userId: string) => {
     const [
         { data: messages, error: messagesError },
         { data: user, error: userError },
-        { data: bookmark, error: bookmarkError },
+        { data: bookmark, error: bookmarkError }
     ] = await Promise.all([
         supabase
             .from("messages")
@@ -28,12 +28,12 @@ const getChat = async (userId: string) => {
         isCurrentUser
             ? { data: currentUser, error: null }
             : supabase.from("users").select("*").eq("id", userId).single(),
-        supabase.from("bookmarks").select("id").eq("bookmarked_id", userId).eq("user_id", currentUser.id),
+        supabase.from("bookmarks").select("id").eq("bookmarked_id", userId).eq("user_id", currentUser.id)
     ]);
 
     if (messagesError || userError || bookmarkError)
         return actionError(actionName, {
-            error: messagesError?.message || userError?.message || bookmarkError?.message,
+            error: messagesError?.message || userError?.message || bookmarkError?.message
         });
 
     if (messages) {
@@ -47,7 +47,7 @@ const getChat = async (userId: string) => {
 
     const result = {
         messages,
-        user,
+        user
     };
 
     if (bookmark && bookmark.length > 0) result.user.bookmark_id = bookmark[0].id;

@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 const getCurrentUser = async () => {
     const actionName = "getCurrentUser";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data: user, error } = await supabase.rpc("get_current_user");
 

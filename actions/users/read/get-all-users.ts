@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 const getAllUsers = async () => {
     const actionName = "getAllUsers";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data: users, error } = await supabase.from("users_with_details").select("*");
 

@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 const createBookmark = async (formdata: FormData) => {
     const actionName = "createBookmark";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const bookmarked_id = formdata.get("bookmarked_id");
     const user_id = formdata.get("user_id");

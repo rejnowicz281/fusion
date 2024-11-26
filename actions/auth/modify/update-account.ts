@@ -7,10 +7,10 @@ import { createClient } from "@/utils/supabase/server";
 const updateAccount = async (formData: FormData) => {
     const actionName = "updateAccount";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const {
-        data: { user },
+        data: { user }
     } = await supabase.auth.getUser();
 
     if (!user) return actionError(actionName, { error: "You must be logged in to update your account." });
@@ -69,7 +69,7 @@ const updateAccount = async (formData: FormData) => {
 
         const [{ error: uploadError }, { error: removeError }] = await Promise.all([
             bucket.upload(fileName, avatarFile),
-            currentAvatar !== "default_avatar.jpg" ? bucket.remove([currentAvatar]) : { error: null },
+            currentAvatar !== "default_avatar.jpg" ? bucket.remove([currentAvatar]) : { error: null }
         ]);
 
         if (uploadError || removeError)

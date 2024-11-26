@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 const deleteBookmark = async (formData: FormData) => {
     const actionName = "deleteBookmark";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const id = formData.get("id");
 

@@ -49,7 +49,11 @@ const TopSection = () => {
 
             <div className="flex items-center gap-2">
                 {recipient.bookmark_id ? (
-                    <form action={deleteBookmark}>
+                    <form
+                        action={async (formData) => {
+                            await deleteBookmark(formData);
+                        }}
+                    >
                         <input type="hidden" name="id" value={recipient.bookmark_id} />
                         <Button asChild variant="ghost" size="icon">
                             <SubmitButton
@@ -59,7 +63,11 @@ const TopSection = () => {
                         </Button>
                     </form>
                 ) : (
-                    <form action={createBookmark}>
+                    <form
+                        action={async (formData) => {
+                            await createBookmark(formData);
+                        }}
+                    >
                         <input type="hidden" name="user_id" value={user.id} />
                         <input type="hidden" name="bookmarked_id" value={recipient.id} />
                         <Button asChild variant="ghost" size="icon">

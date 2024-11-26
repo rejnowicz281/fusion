@@ -14,7 +14,7 @@ export const updateAiPrompt = async (formData: FormData) => {
 
     if (ai_prompt === null) return actionError(actionName, { error: "Invalid Form Data" });
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { error } = await supabase.from("users").update({ ai_prompt }).eq("id", user_id);
 

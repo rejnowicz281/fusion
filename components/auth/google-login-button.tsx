@@ -6,7 +6,12 @@ import { VscLoading } from "@react-icons/all-files/vsc/VscLoading";
 
 const GoogleLoginButton = () => {
     return (
-        <form className="flex flex-col" action={googleSignIn}>
+        <form
+            className="flex flex-col"
+            action={async () => {
+                await googleSignIn();
+            }}
+        >
             <Button
                 asChild
                 className="bg-blue-500 hover:bg-blue-400 dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-white font-semibold flex flex-row items-center gap-1"

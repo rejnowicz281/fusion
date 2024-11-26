@@ -40,9 +40,9 @@ const signUp = async (formData: FormData) => {
     const avatarFile =
         avatarFileFormData instanceof File && avatarFileFormData.type.startsWith("image/") ? avatarFileFormData : null;
 
-    const origin = headers().get("origin");
+    const origin = (await headers()).get("origin");
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const avatarData = (() => {
         if (avatarFile) {

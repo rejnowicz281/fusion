@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/server";
 const signOut = async () => {
     const actionName = "signOut";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     await supabase.auth.signOut();
 

@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 const deleteAccount = async () => {
     const actionName = "deleteAccount";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data } = await supabase.auth.getUser();
 

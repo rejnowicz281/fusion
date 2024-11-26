@@ -6,7 +6,12 @@ import SettingsButton from "./settings-button";
 
 const SignOutButton = () => {
     return (
-        <form className="flex flex-col" action={signOut}>
+        <form
+            className="flex flex-col"
+            action={async () => {
+                await signOut();
+            }}
+        >
             <SettingsButton asChild={true}>
                 <SubmitButton
                     content={

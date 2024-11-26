@@ -9,7 +9,7 @@ export const enableAiMode = async (formData: FormData) => {
 
     const user_id = formData.get("user_id");
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { error } = await supabase.from("users").update({ ai_mode: true }).eq("id", user_id);
 

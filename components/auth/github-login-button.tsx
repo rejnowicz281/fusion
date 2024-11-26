@@ -6,7 +6,12 @@ import { VscLoading } from "@react-icons/all-files/vsc/VscLoading";
 
 const GithubLoginButton = () => {
     return (
-        <form className="flex flex-col" action={githubSignIn}>
+        <form
+            className="flex flex-col"
+            action={async () => {
+                await githubSignIn();
+            }}
+        >
             <Button
                 asChild
                 className="dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800 dark:border dark:border-neutral-700 flex flex-row font-semibold items-center gap-1"

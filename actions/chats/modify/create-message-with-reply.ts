@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 const createMessageWithReply = async (formData: FormData) => {
     const actionName = "createMessageWithReply";
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const first_message_text = formData.get("text");
     const sender_id = formData.get("sender_id");
@@ -19,7 +19,7 @@ const createMessageWithReply = async (formData: FormData) => {
         sender_id,
         recipient_id,
         first_message_text,
-        reply_text,
+        reply_text
     });
 
     if (error) return actionError(actionName, { error: error.message });

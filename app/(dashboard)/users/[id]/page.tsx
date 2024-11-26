@@ -4,7 +4,9 @@ import ErrorContainer from "@/components/general/error-container";
 import { ChatProvider } from "@/providers/chat-provider";
 import { FC } from "react";
 
-const UserChatPage: FC<{ params: { id: string } }> = async ({ params: { id } }) => {
+const UserChatPage: FC<{ params: Promise<{ id: string }> }> = async ({ params }) => {
+    const id = (await params).id;
+
     const { user, messages, error } = await getChat(id);
 
     if (error)

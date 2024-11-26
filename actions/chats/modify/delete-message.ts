@@ -5,7 +5,7 @@ import actionSuccess from "@/utils/actions/action-success";
 import { createClient } from "@/utils/supabase/server";
 
 const deleteMessage = async (formData: FormData) => {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const id = formData.get("id");
 

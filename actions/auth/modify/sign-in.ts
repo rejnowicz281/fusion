@@ -13,11 +13,11 @@ const signIn = async (formData: FormData) => {
     if (typeof email !== "string" || typeof password !== "string")
         return actionError(actionName, {}, { redirectPath: "/login?error=Invalid Email or Password" });
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { error } = await supabase.auth.signInWithPassword({
         email,
-        password,
+        password
     });
 
     if (error) return actionError(actionName, {}, { redirectPath: "/login?error=Invalid Email or Password" });

@@ -6,7 +6,12 @@ import { VscLoading } from "@react-icons/all-files/vsc/VscLoading";
 
 const DemoLoginButton = () => {
     return (
-        <form className="flex flex-col" action={demoLogin}>
+        <form
+            className="flex flex-col"
+            action={async () => {
+                await demoLogin();
+            }}
+        >
             <Button
                 asChild
                 className="bg-inherit hover:bg-gray-100 text-black border border-neutral-300 flex flex-row items-center gap-1"

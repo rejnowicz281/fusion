@@ -22,7 +22,12 @@ const RegisterForm: FC<{ defaultUrl: string }> = ({ defaultUrl }) => {
 
     return (
         <Form {...form}>
-            <form action={signUp} className="flex flex-col gap-6">
+            <form
+                action={async (formData) => {
+                    await signUp(formData);
+                }}
+                className="flex flex-col gap-6"
+            >
                 <div className="flex justify-center">
                     <AvatarPicker defaultUrl={defaultUrl} />
                 </div>

@@ -1,17 +1,8 @@
-import { createClient } from "@/utils/supabase/middleware";
-import { NextResponse, type NextRequest } from "next/server";
+import { updateSession } from "@/utils/supabase/middleware";
+import { type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-    const { supabase, response } = createClient(request);
-
-    // Refresh session if expired - required for Server Components
-    // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
-    const { data } = await supabase.auth.getUser();
-
-    // If user is not signed in redirect to /login
-    if (!data.user) return NextResponse.redirect(new URL("/login", request.url));
-
-    return response;
+    return await updateSession(request);
 }
 
 export const config = {
@@ -28,6 +19,6 @@ export const config = {
          * - manifest.json (web app manifest)
          * Feel free to modify this pattern to include more paths.
          */
-        "/((?!_next/static|_next/image|favicon.ico|login|register|auth/callback|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-    ],
+        "/((?!_next/static|_next/image|favicon.ico|login|register|auth/callback|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
+    ]
 };

@@ -29,7 +29,12 @@ const LoginContainer = () => {
                     {error ? error : "Enter your credentials below to sign in."}
                 </p>
             </div>
-            <form className="flex flex-col gap-6" action={signIn}>
+            <form
+                className="flex flex-col gap-6"
+                action={async (formData) => {
+                    await signIn(formData);
+                }}
+            >
                 <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-4 items-center gap-3">
                         <Label className="text-right" htmlFor="email">
