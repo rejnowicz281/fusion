@@ -38,7 +38,7 @@ const generateAiMessages = async (humanUser: User, aiUser: User, messages: Messa
 
         return {
             role,
-            content: message.text,
+            content: message.text
         };
     });
 
@@ -48,7 +48,7 @@ const generateAiMessages = async (humanUser: User, aiUser: User, messages: Messa
         const system = aiUser.ai_prompt
             ? {
                   role: "system",
-                  content: hydratePrompt(aiUser.ai_prompt, humanUser, aiUser),
+                  content: hydratePrompt(aiUser.ai_prompt, humanUser, aiUser)
               }
             : basicAiUserPrompt(humanUser, aiUser);
 
@@ -58,19 +58,19 @@ const generateAiMessages = async (humanUser: User, aiUser: User, messages: Messa
             cache: "no-store",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
             },
             method: "POST",
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",
+                model: "gpt-4o-mini",
                 messages,
                 temperature: 0.4,
                 max_tokens: 4096,
                 top_p: 1,
                 frequency_penalty: 0,
                 presence_penalty: 0.6,
-                n,
-            }),
+                n
+            })
         });
     };
 
@@ -121,7 +121,7 @@ const generateAiMessages = async (humanUser: User, aiUser: User, messages: Messa
                     max_tokens: 4096,
                     top_p: 1,
                     model: "claude-3-haiku-20240307",
-                    temperature: 0.2,
+                    temperature: 0.2
                 })
                 .then((res) => {
                     const prompt = res.content[0].text;
@@ -145,7 +145,7 @@ const generateAiMessages = async (humanUser: User, aiUser: User, messages: Messa
 
             return actionError(actionName, {
                 prompts: nPrompts("There was an error generating the prompt"),
-                error: e.message,
+                error: e.message
             });
         }
     };

@@ -18,8 +18,8 @@ export async function POST(req: Request) {
             sender: {
                 id: message.sender.id,
                 name: message.sender.display_name,
-                email: message.sender.email,
-            },
+                email: message.sender.email
+            }
         };
     });
 
@@ -48,11 +48,11 @@ export async function POST(req: Request) {
             cache: "no-store",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
             },
             method: "POST",
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",
+                model: "gpt-4o-mini",
                 messages,
                 temperature: 0.4,
                 max_tokens: 4096,
@@ -60,8 +60,8 @@ export async function POST(req: Request) {
                 frequency_penalty: 0,
                 presence_penalty: 0,
                 stream: true,
-                n: 1,
-            }),
+                n: 1
+            })
         });
     };
 
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
             top_p: 1,
             model: "claude-3-haiku-20240307",
             stream: true,
-            temperature: 0.2,
+            temperature: 0.2
         });
     };
 
