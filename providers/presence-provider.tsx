@@ -3,7 +3,6 @@
 import useAuthContext from "@/providers/auth-provider";
 import { createClient } from "@/utils/supabase/client";
 import { RealtimePresenceState } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
 import { createContext, FC, useContext, useEffect, useState } from "react";
 
 type PresenceContextType = {
@@ -31,7 +30,6 @@ type PresenceStateType = {
 const PresenceContext = createContext<PresenceContextType | null>(null);
 
 export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
-    const router = useRouter();
     const supabase = createClient();
     const { user } = useAuthContext();
     const [loggedUsers, setLoggedUsers] = useState<Set<string>>(new Set());
@@ -46,7 +44,7 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     });
 
     useEffect(() => {
-        supabase.realtime.setAuth();
+        supabase.realtime.setAuth(undefined);
         const presenceChannel = supabase.channel("presence#public");
 
         presenceChannel
