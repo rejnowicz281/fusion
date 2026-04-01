@@ -44,7 +44,7 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     });
 
     useEffect(() => {
-        supabase.realtime.setAuth(undefined);
+        supabase.realtime.setAuth(null);
         const presenceChannel = supabase.channel("presence#public");
 
         presenceChannel
