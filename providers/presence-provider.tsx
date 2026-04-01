@@ -4,7 +4,7 @@ import useAuthContext from "@/providers/auth-provider";
 import { createClient } from "@/utils/supabase/client";
 import { RealtimePresenceState } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import { FC, createContext, useContext, useEffect, useState } from "react";
+import { createContext, FC, useContext, useEffect, useState } from "react";
 
 type PresenceContextType = {
     togglePresence: () => void;
@@ -46,6 +46,7 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
     });
 
     useEffect(() => {
+        supabase.realtime.setAuth();
         const presenceChannel = supabase.channel("presence#public");
 
         presenceChannel
@@ -62,14 +63,16 @@ export const PresenceProvider: FC<PresenceProviderProps> = ({ children }) => {
                     return;
                 }
 
-                if (presenceEnabled && user) await presenceChannel.track({ user_id: user.id });
+                if (presenceEnabled && user) {
+                    await presenceChannel.track({ user_id: user.id });
+                }
             });
 
         return () => {
             presenceChannel.unsubscribe();
             presenceChannel.untrack();
         };
-    }, [supabase, router, presenceEnabled]);
+    }, [presenceEnabled]);
 
     const isLoggedIn = (userId: string) => loggedUsers.has(userId);
 
