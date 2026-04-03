@@ -12,7 +12,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,25 +94,36 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                                 className="col-span-3"
                             />
                         </div>
-                        {isEmailProvider && (
-                            <>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="password" className="text-right">
-                                        Password
-                                    </Label>
-                                    <PasswordInput
-                                        className="col-span-3"
-                                        placeholder="Must have at least 6 characters"
-                                    />
-                                </div>
-                                <div className="flex items-center justify-end">
-                                    <Checkbox name="reset_avatar" id="reset_avatar" />
-                                    <Label className="pl-2" htmlFor="reset_avatar">
-                                        Reset Avatar
-                                    </Label>
-                                </div>
-                            </>
-                        )}
+
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label
+                                htmlFor="password"
+                                className="text-right"
+                                variant={isEmailProvider ? undefined : "disabled"}
+                            >
+                                Password
+                            </Label>
+                            <PasswordInput
+                                className="col-span-3"
+                                placeholder="Must have at least 6 characters"
+                                disabled={!isEmailProvider}
+                                id={isEmailProvider ? "password" : null}
+                            />
+                        </div>
+                        <div className="flex items-center justify-end">
+                            <Checkbox
+                                name={isEmailProvider ? "reset_avatar" : ""}
+                                id="reset_avatar"
+                                disabled={!isEmailProvider}
+                            />
+                            <Label
+                                className="pl-2"
+                                htmlFor="reset_avatar"
+                                variant={isEmailProvider ? undefined : "disabled"}
+                            >
+                                Reset Avatar
+                            </Label>
+                        </div>
                     </div>
                     <DialogFooter className="gap-2">
                         {error && <div className="text-red-500 text-sm self-center">{error}</div>}

@@ -4,11 +4,14 @@ import clsx from "clsx";
 import { FC, useState } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 
-const PasswordInput: FC<{ placeholder?: string; className?: string; field?: ControllerRenderProps<any, any> }> = ({
-    placeholder = "••••••••",
-    className,
-    field = {}
-}) => {
+const PasswordInput: FC<{
+    placeholder?: string;
+    className?: string;
+    disabled?: boolean;
+    field?: ControllerRenderProps<any, any>;
+    id?: string | null;
+    name?: string | null;
+}> = ({ placeholder = "••••••••", className, id, name, disabled = false, field = {} }) => {
     const [type, setType] = useState<"text" | "password">("password");
 
     return (
@@ -19,16 +22,18 @@ const PasswordInput: FC<{ placeholder?: string; className?: string; field?: Cont
             )}
         >
             <input
-                className="min-w-0 flex-1 pl-3 rounded-tl-md rounded-bl-md text-sm placeholder:text-zinc-500 dark:placeholder:text-zinc-500 focus-visible:outline-none bg-inherit"
+                className="min-w-0 flex-1 pl-3 rounded-tl-md rounded-bl-md text-sm placeholder:text-zinc-500 dark:placeholder:text-zinc-500 focus-visible:outline-none bg-inherit disabled:opacity-50 disabled:cursor-not-allowed"
                 type={type}
                 placeholder={placeholder}
+                disabled={disabled}
                 {...field}
-                id="password"
-                name="password"
+                id={id ? id : id === null ? undefined : "password"}
+                name={name ? name : name === null ? undefined : "password"}
             />
             <button
+                disabled={disabled}
                 type="button"
-                className="shrink px-2 text-gray-500 hover:text-gray-400 transition-colors outline-none focus-visible:text-zinc-800 dark:focus-visible:text-zinc-200"
+                className="shrink px-2 text-gray-500 hover:text-gray-400 transition-colors outline-none focus-visible:text-zinc-800 dark:focus-visible:text-zinc-200 disabled:pointer-events-none"
                 onClick={() => setType((prev) => (prev === "password" ? "text" : "password"))}
             >
                 {type === "password" ? <FaEyeSlash /> : <FaEye />}
