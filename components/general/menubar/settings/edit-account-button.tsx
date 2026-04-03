@@ -142,7 +142,7 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                         {error && <div className="text-red-500 text-sm self-center">{error}</div>}
                         {isDemoUser ? (
                             <DialogClose asChild>
-                                <Button className="flex items-center gap-1">
+                                <Button type="button" className="flex items-center gap-1">
                                     <MdEdit />
                                     Save
                                 </Button>

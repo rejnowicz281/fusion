@@ -5,12 +5,13 @@ import SubmitButton from "@/components/general/submit-button";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import useAuthContext from "@/providers/auth-provider";
@@ -23,7 +24,7 @@ import SettingsButton from "./settings-button";
 const AiPromptButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
     const { user } = useAuthContext();
 
-    if (user.id === demoUserId || user.email === "demo@demo.demo") return;
+    const isDemoUser = user.id === demoUserId || user.email === "demo@demo.demo";
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -31,11 +32,21 @@ const AiPromptButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
     const [open, setOpen] = useState(false);
 
     const handleUpdate = async (formData: FormData) => {
+        if (isDemoUser) {
+            setOpen(false);
+            return;
+        }
+
         const res = await updateAiPrompt(formData);
 
         if (res.error) setError(res.error);
         else setOpen(false);
     };
+
+    const title = "Customize AI Prompt";
+    const description = isDemoUser
+        ? "As a demo user, you cannot customize the AI prompt. Please sign up for a new account to access this feature."
+        : "Here you can customize your AI Prompt. Leave it empty if you wish to use the default prompt provided by us.";
 
     return (
         <Dialog
@@ -53,11 +64,8 @@ const AiPromptButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Customize AI Prompt</DialogTitle>
-                    <DialogDescription>
-                        Here you can customize your AI Prompt. Leave it empty if you wish to use the default prompt
-                        provided by us.
-                    </DialogDescription>
+                    <DialogTitle>{title}</DialogTitle>
+                    <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
 
                 <form
@@ -68,6 +76,7 @@ const AiPromptButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                 >
                     <input type="hidden" name="user_id" value={user.id} />
                     <Textarea
+                        disabled={isDemoUser}
                         name="prompt"
                         defaultValue={user.ai_prompt}
                         rows={15}
@@ -76,22 +85,31 @@ const AiPromptButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
 
                     <DialogFooter className="gap-2">
                         {error && <div className="text-red-500 text-sm self-center">{error}</div>}
-                        <Button className="flex items-center gap-1" asChild type="submit">
-                            <SubmitButton
-                                content={
-                                    <>
-                                        <MdEdit />
-                                        Save
-                                    </>
-                                }
-                                loading={
-                                    <>
-                                        <VscLoading className="animate-spin" />
-                                        Save
-                                    </>
-                                }
-                            />
-                        </Button>
+                        {isDemoUser ? (
+                            <DialogClose asChild>
+                                <Button type="button" className="flex items-center gap-1">
+                                    <MdEdit />
+                                    Save
+                                </Button>
+                            </DialogClose>
+                        ) : (
+                            <Button className="flex items-center gap-1" asChild type="submit">
+                                <SubmitButton
+                                    content={
+                                        <>
+                                            <MdEdit />
+                                            Save
+                                        </>
+                                    }
+                                    loading={
+                                        <>
+                                            <VscLoading className="animate-spin" />
+                                            Save
+                                        </>
+                                    }
+                                />
+                            </Button>
+                        )}
                     </DialogFooter>
                 </form>
             </DialogContent>
