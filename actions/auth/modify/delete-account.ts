@@ -13,12 +13,18 @@ const deleteAccount = async () => {
 
     const id = data.user?.id;
 
-    if (id === process.env.DEMO_USER_ID)
+    if (id === process.env.DEMO_USER_ID || data.user?.email === "demo@demo.demo")
         return actionError(actionName, { error: "You cannot delete this demo account." });
 
-    const { data: user, error } = await supabase.from("users").delete().eq("id", id);
+    const avatarPath = data.user?.user_metadata.avatar_url?.split("/").slice(-1)[0];
+    const defaultAvatarName = process.env.DEFAULT_AVATAR_URL?.split("/").slice(-1)[0];
 
-    if (error) return actionError(actionName, { error });
+    const [{ error }, { error: storageError }] = await Promise.all([
+        supabase.from("users").delete().eq("id", id),
+        avatarPath === defaultAvatarName ? { error: null } : supabase.storage.from("avatars").remove([avatarPath])
+    ]);
+
+    if (storageError || error) return actionError(actionName, { error, storageError });
 
     await supabase.auth.signOut();
 
