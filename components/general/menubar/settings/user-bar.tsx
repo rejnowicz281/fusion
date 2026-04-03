@@ -14,9 +14,10 @@ const UserBar = () => {
                 <div className="truncate dark:font-semibold">{user.display_name}</div>
                 {user.email === "demo@demo.demo" ? (
                     <div className="text-sm font-semibold text-gray-500">
-                        You are using a demo account. Account updating, AI Mode and Custom AI Prompts are disabled.
+                        You are using a demo account. The AI Mode, Custom AI Prompts and Account Editing features are
+                        disabled.
                         <br />
-                        To enable these features, please log in using an email.
+                        To enable these features, please log in using an email and password.
                     </div>
                 ) : user.email !== user.display_name ? (
                     <div className="truncate text-sm font-semibold text-gray-500">{user.email}</div>
