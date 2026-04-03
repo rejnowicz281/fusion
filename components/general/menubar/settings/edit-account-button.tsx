@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -27,7 +28,7 @@ import SettingsButton from "./settings-button";
 const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
     const { user } = useAuthContext();
 
-    if (user.id === demoUserId || user.email === "demo@demo.demo") return;
+    const isDemoUser = user.id === demoUserId || user.email === "demo@demo.demo";
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -36,6 +37,8 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
     const isEmailProvider = user.provider === "email";
 
     const handleUpdate = async (formData: FormData) => {
+        if (isDemoUser) return;
+
         const password = formData.get("password");
 
         if (typeof password === "string" && password.length > 1 && password.length < 6)
@@ -48,6 +51,16 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
         }
     };
 
+    const description = isDemoUser
+        ? "As a demo user, you cannot edit your account. Please sign up for a new account to access this feature."
+        : isEmailProvider
+          ? "Here you can change your name, password, and avatar. To update the avatar, simply click on it. You can leave any field blank if you don't want to change it. Click Save when you're done."
+          : "Here you can change your name. Only users who signed up with an email provider can change their password and avatar. Click Save when you're done.";
+
+    const disablePasswordEdit = !isEmailProvider || isDemoUser;
+    const disableAvatarEdit = !isEmailProvider || isDemoUser;
+    const disableNameEdit = isDemoUser;
+
     return (
         <Dialog onOpenChange={() => setError(null)}>
             <DialogTrigger asChild>
@@ -59,19 +72,12 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Edit Account</DialogTitle>
-                    <DialogDescription>
-                        {isEmailProvider
-                            ? "Here you can change your name, password, and avatar. To update the avatar, simply click on it. You can leave any field blank if you don't want to change it."
-                            : "Here you can change your name. Only users who signed up with an email provider can change their password and avatar."}{" "}
-                        Click Save when you're done.
-                    </DialogDescription>
+                    <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
 
                 <form ref={formRef} onSubmit={() => setError(null)} action={handleUpdate}>
                     <div className="flex flex-col items-center gap-3">
-                        {isEmailProvider ? (
-                            <AvatarPicker defaultUrl={user.avatar_url} />
-                        ) : (
+                        {disableAvatarEdit ? (
                             <Image
                                 src={user.avatar_url}
                                 width={100}
@@ -79,17 +85,24 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                                 alt="Your avatar"
                                 className="rounded-[50%]"
                             />
+                        ) : (
+                            <AvatarPicker defaultUrl={user.avatar_url} />
                         )}
                         <div className="text-gray-500">{user.display_name}</div>
                     </div>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="display_name" className="text-right">
+                            <Label
+                                htmlFor="display_name"
+                                className="text-right"
+                                variant={disableNameEdit ? "disabled" : undefined}
+                            >
                                 Name
                             </Label>
                             <Input
+                                disabled={disableNameEdit}
                                 id="display_name"
-                                name="display_name"
+                                name={disableNameEdit ? undefined : "display_name"}
                                 placeholder={user.display_name}
                                 className="col-span-3"
                             />
@@ -99,27 +112,27 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                             <Label
                                 htmlFor="password"
                                 className="text-right"
-                                variant={isEmailProvider ? undefined : "disabled"}
+                                variant={disablePasswordEdit ? "disabled" : undefined}
                             >
                                 Password
                             </Label>
                             <PasswordInput
                                 className="col-span-3"
                                 placeholder="Must have at least 6 characters"
-                                disabled={!isEmailProvider}
-                                id={isEmailProvider ? "password" : null}
+                                disabled={disablePasswordEdit}
+                                name={disablePasswordEdit ? undefined : "password"}
                             />
                         </div>
                         <div className="flex items-center justify-end">
                             <Checkbox
-                                name={isEmailProvider ? "reset_avatar" : ""}
+                                name={disableAvatarEdit ? undefined : "reset_avatar"}
                                 id="reset_avatar"
-                                disabled={!isEmailProvider}
+                                disabled={disableAvatarEdit}
                             />
                             <Label
                                 className="pl-2"
                                 htmlFor="reset_avatar"
-                                variant={isEmailProvider ? undefined : "disabled"}
+                                variant={disableAvatarEdit ? "disabled" : undefined}
                             >
                                 Reset Avatar
                             </Label>
@@ -127,22 +140,31 @@ const EditAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                     </div>
                     <DialogFooter className="gap-2">
                         {error && <div className="text-red-500 text-sm self-center">{error}</div>}
-                        <Button className="flex items-center gap-1" asChild type="submit">
-                            <SubmitButton
-                                content={
-                                    <>
-                                        <MdEdit />
-                                        Save
-                                    </>
-                                }
-                                loading={
-                                    <>
-                                        <VscLoading className="animate-spin" />
-                                        Save
-                                    </>
-                                }
-                            />
-                        </Button>
+                        {isDemoUser ? (
+                            <DialogClose asChild>
+                                <Button className="flex items-center gap-1">
+                                    <MdEdit />
+                                    Save
+                                </Button>
+                            </DialogClose>
+                        ) : (
+                            <Button className="flex items-center gap-1" asChild type="submit">
+                                <SubmitButton
+                                    content={
+                                        <>
+                                            <MdEdit />
+                                            Save
+                                        </>
+                                    }
+                                    loading={
+                                        <>
+                                            <VscLoading className="animate-spin" />
+                                            Save
+                                        </>
+                                    }
+                                />
+                            </Button>
+                        )}
                     </DialogFooter>
                 </form>
             </DialogContent>
