@@ -11,7 +11,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import useAuthContext from "@/providers/auth-provider";
 import { IoWarningOutline } from "@react-icons/all-files/io5/IoWarningOutline";
@@ -22,14 +22,21 @@ import SettingsButton from "./settings-button";
 const DeleteAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
     const { user } = useAuthContext();
 
-    if (user.id === demoUserId || user.email === "demo@demo.demo") return;
+    const isDemoUser = user.id === demoUserId || user.email === "demo@demo.demo";
 
     const [open, setOpen] = useState(false);
 
     const handleDelete = async () => {
-        await deleteAccount();
+        if (!isDemoUser) await deleteAccount();
+
         setOpen(false);
     };
+
+    const description = isDemoUser
+        ? "The demo account cannot be deleted."
+        : "This action cannot be undone. This will permanently delete your account and remove all your data.";
+
+    const title = isDemoUser ? "Demo Account" : "Are you absolutely sure?";
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
@@ -41,10 +48,8 @@ const DeleteAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        You are about to permanently delete your account. Your chats and messages will be lost forever.
-                    </AlertDialogDescription>
+                    <AlertDialogTitle>{title}</AlertDialogTitle>
+                    <AlertDialogDescription>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
 
                 <AlertDialogFooter>
@@ -52,6 +57,7 @@ const DeleteAccountButton: FC<{ demoUserId: string }> = ({ demoUserId }) => {
                     <form className="flex flex-col" action={handleDelete}>
                         <AlertDialogAction className="flex gap-1 items-center" asChild>
                             <SubmitButton
+                                disabled={isDemoUser}
                                 content={
                                     <>
                                         <IoWarningOutline />
